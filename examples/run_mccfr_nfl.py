@@ -1,4 +1,4 @@
-asdf"""
+"""
 Run MCCFR (Monte Carlo CFR) on NFL Game
 
 MCCFR uses external sampling to dramatically speed up training compared
