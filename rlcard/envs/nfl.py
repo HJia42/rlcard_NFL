@@ -52,10 +52,13 @@ class NFLEnv(Env):
             legal_actions = {i: None for i in state['legal_actions']}
             
         elif phase == 'defense':
-            # Phase 1: Defense sees formation
+            # Phase 1: Defense sees formation (pad to 11 dims for consistency)
             formation = state.get('formation', 'SHOTGUN')
             formation_vec = self._encode_formation(formation)
-            obs = np.array([down, ydstogo, yardline] + formation_vec, dtype=np.float32)
+            obs = np.zeros(11, dtype=np.float32)
+            obs[:3] = [down, ydstogo, yardline]
+            obs[3:10] = formation_vec
+            # obs[10] left as 0 (no box info for defense)
             legal_actions = {i: None for i in state['legal_actions']}
             
         else:  # phase == 'play_type'
