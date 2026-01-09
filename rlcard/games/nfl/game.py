@@ -1,15 +1,13 @@
 """
 NFL Play-by-Play Game for RLCard
 
-A two-player imperfect information game:
-- Player 0 (Offense): Selects formation + play type
-- Player 1 (Defense): Sees formation, selects box count + personnel
+A two-player imperfect information game with 3 turns per play:
+- Turn 1 (Player 0): Offense selects formation
+- Turn 2 (Player 1): Defense sees formation, selects box count
+- Turn 3 (Player 0): Offense sees box count, selects play type (pass/rush)
+- Then outcome is resolved from historical data
 
-Game flow per play:
-1. Offense selects action (formation, play_type)
-2. Defense sees formation, selects (box_count, personnel)  
-3. Outcome sampled from historical data
-4. State updates, repeat until drive ends
+This models the NFL audible system where QB reads the defense.
 """
 
 import numpy as np
@@ -28,44 +26,50 @@ BOX_COUNTS = (4, 5, 6, 7, 8)
 PERSONNEL_TYPES = ("Standard",)
 
 # Build action maps
-OFFENSE_ACTIONS = []
-for formation in FORMATIONS:
-    for play_type in PLAY_TYPES:
-        OFFENSE_ACTIONS.append((formation, play_type))
+# Phase 1: Offense picks formation (7 actions)
+FORMATION_ACTIONS = list(FORMATIONS)
 
+# Phase 2: Defense picks box count (5 actions)
 DEFENSE_ACTIONS = []
 for box in BOX_COUNTS:
     for personnel in PERSONNEL_TYPES:
         DEFENSE_ACTIONS.append((box, personnel))
 
+# Phase 3: Offense picks play type (2 actions)
+PLAY_TYPE_ACTIONS = list(PLAY_TYPES)
+
 
 class NFLGame:
     """NFL Play-by-Play Game compatible with RLCard.
     
-    This is an imperfect information game where:
-    - Offense picks (formation, play_type) but defense only sees formation
-    - Defense then picks (box_count, personnel) 
-    - Outcome is sampled from historical NFL data
+    Three-phase game per play:
+    Phase 1: Offense picks formation
+    Phase 2: Defense sees formation, picks box count
+    Phase 3: Offense sees box count, picks pass/rush
     """
     
     def __init__(self, allow_step_back=False, data_path=None):
-        """Initialize NFL Game.
-        
-        Args:
-            allow_step_back: Whether to support step_back for CFR
-            data_path: Path to cleaned NFL data (optional)
-        """
+        """Initialize NFL Game."""
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
         
-        # Action spaces
-        self.offense_actions = OFFENSE_ACTIONS
-        self.defense_actions = DEFENSE_ACTIONS
-        self.num_offense_actions = len(OFFENSE_ACTIONS)
+        # Action spaces per phase
+        self.formation_actions = FORMATION_ACTIONS  # Phase 1
+        self.defense_actions = DEFENSE_ACTIONS      # Phase 2
+        self.play_type_actions = PLAY_TYPE_ACTIONS  # Phase 3
+        
+        self.num_formation_actions = len(FORMATION_ACTIONS)
         self.num_defense_actions = len(DEFENSE_ACTIONS)
+        self.num_play_type_actions = len(PLAY_TYPE_ACTIONS)
+        
+        # Max actions for RLCard compatibility
+        self.num_actions = max(
+            self.num_formation_actions,
+            self.num_defense_actions,
+            self.num_play_type_actions
+        )
         
         # Load data engine for outcomes
-        self.data_engine = None
         self._load_data(data_path)
         
         # Game state
@@ -74,7 +78,12 @@ class NFLGame:
         self.ydstogo = None
         self.yardline = None
         self.current_player = None
-        self.pending_offense_action = None
+        
+        # Phase tracking
+        self.phase = 0  # 0=formation, 1=defense, 2=play_type
+        self.pending_formation = None
+        self.pending_defense_action = None
+        
         self.is_over_flag = False
         self.payoffs = [0, 0]
         
@@ -84,7 +93,6 @@ class NFLGame:
     def _load_data(self, data_path):
         """Load historical play data for outcome sampling."""
         if data_path is None:
-            # Try to find data relative to this file
             possible_paths = [
                 Path(__file__).parent.parent.parent.parent.parent / "Code" / "data" / "cleaned_nfl_rl_data.csv",
                 Path.home() / "Projects" / "NFL_Playcalling" / "Code" / "data" / "cleaned_nfl_rl_data.csv",
@@ -108,65 +116,60 @@ class NFLGame:
     
     def configure(self, game_config):
         """Configure game parameters."""
-        pass  # No special configuration needed
+        pass
     
     def init_game(self):
-        """Initialize a new game (drive).
-        
-        Returns:
-            (state, player_id): Initial state and starting player (0=offense)
-        """
-        # Create players
+        """Initialize a new game (drive)."""
         self.players = [OffensePlayer(0), DefensePlayer(1)]
         
         # Initial state: 1st & 10 at own 25
         self.down = 1
         self.ydstogo = 10
-        self.yardline = 25  # Yards from own goal
+        self.yardline = 25
         
-        # Offense goes first
+        # Start with offense picking formation (phase 0)
         self.current_player = 0
-        self.pending_offense_action = None
+        self.phase = 0
+        self.pending_formation = None
+        self.pending_defense_action = None
         self.is_over_flag = False
         self.payoffs = [0, 0]
-        
-        # Clear history
         self.history = []
         
-        # Calculate initial EP
         self.ep_before = self._calculate_ep(self.down, self.ydstogo, self.yardline)
         
         state = self.get_state(self.current_player)
         return state, self.current_player
     
     def step(self, action):
-        """Process an action from current player.
-        
-        Args:
-            action: Action index or tuple
-            
-        Returns:
-            (next_state, next_player_id)
-        """
+        """Process an action from current player."""
         if self.allow_step_back:
             self._save_state()
         
-        if self.current_player == 0:
-            # Offense plays
-            self.pending_offense_action = action if isinstance(action, tuple) else self.offense_actions[action]
-            # Now defense's turn
-            self.current_player = 1
-            state = self.get_state(self.current_player)
-            return state, self.current_player
-        
-        else:
-            # Defense plays, resolve the play
-            defense_action = action if isinstance(action, tuple) else self.defense_actions[action]
+        if self.phase == 0:
+            # Phase 0: Offense picks formation
+            self.pending_formation = action if isinstance(action, str) else self.formation_actions[action]
+            self.phase = 1
+            self.current_player = 1  # Defense's turn
+            
+        elif self.phase == 1:
+            # Phase 1: Defense picks box count
+            self.pending_defense_action = action if isinstance(action, tuple) else self.defense_actions[action]
+            self.phase = 2
+            self.current_player = 0  # Back to offense
+            
+        elif self.phase == 2:
+            # Phase 2: Offense picks play type, then resolve
+            play_type = action if isinstance(action, str) else self.play_type_actions[action]
+            
+            # Build full actions
+            offense_action = (self.pending_formation, play_type)
+            defense_action = self.pending_defense_action
             
             # Get outcome
             outcome = self._get_outcome(
                 self.down, self.ydstogo, self.yardline,
-                self.pending_offense_action, defense_action
+                offense_action, defense_action
             )
             
             yards = outcome['yards_gained']
@@ -176,10 +179,8 @@ class NFLGame:
             old_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
             
             if turnover:
-                # Drive ends, offense loses
                 self.is_over_flag = True
-                new_ep = -old_ep  # Approximate turnover value
-                epa = new_ep - old_ep
+                epa = -old_ep * 2
             elif self.yardline + yards >= 100:
                 # Touchdown!
                 self.is_over_flag = True
@@ -198,27 +199,26 @@ class NFLGame:
                 self.ydstogo -= yards
                 
                 if self.down > 4:
-                    # Turnover on downs
                     self.is_over_flag = True
                     epa = -old_ep
                 else:
                     new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
                     epa = new_ep - old_ep
             
-            # Safety check
             if self.yardline <= 0:
                 self.is_over_flag = True
                 epa = -2.0 - old_ep
             
-            # Update payoffs
-            self.payoffs = [epa, -epa]  # Zero-sum
+            self.payoffs = [epa, -epa]
             
-            # Back to offense for next play
-            self.pending_offense_action = None
+            # Reset for next play
+            self.phase = 0
             self.current_player = 0
-            
-            state = self.get_state(self.current_player)
-            return state, self.current_player
+            self.pending_formation = None
+            self.pending_defense_action = None
+        
+        state = self.get_state(self.current_player)
+        return state, self.current_player
     
     def _get_outcome(self, down, ydstogo, yardline, offense_action, defense_action):
         """Sample outcome from historical data."""
@@ -236,7 +236,7 @@ class NFLGame:
                 variance = 3.0
                 int_prob = 0.01
             
-            # Adjust for box count
+            # Box count effects
             if play_type == "rush":
                 base_yards -= (box_count - 6) * 0.5
             else:
@@ -248,19 +248,17 @@ class NFLGame:
             
             return {'yards_gained': yards, 'turnover': turnover}
         
-        # Use real data - filter by play type using boolean columns
+        # Use real data
         if play_type == "pass":
             candidates = self.play_data[self.play_data['pass'] == 1]
         else:
             candidates = self.play_data[self.play_data['rush'] == 1]
         
-        # Filter by formation if column exists
         if 'offense_formation' in candidates.columns:
             form_matches = candidates[candidates['offense_formation'] == formation]
             if len(form_matches) > 10:
                 candidates = form_matches
         
-        # Filter by box count if column exists
         if 'defenders_in_box' in candidates.columns:
             box_matches = candidates[candidates['defenders_in_box'] == box_count]
             if len(box_matches) > 10:
@@ -269,10 +267,7 @@ class NFLGame:
         if len(candidates) == 0:
             return {'yards_gained': 0, 'turnover': False}
         
-        # Weight by similarity
         candidates = candidates.copy()
-        
-        # Use yardline_100 (yards from opponent's goal, so 100 - our yardline)
         yardline_100 = 100 - yardline
         
         candidates['similarity'] = 1.0 / (1.0 + 
@@ -281,7 +276,6 @@ class NFLGame:
             abs(candidates['yardline_100'] - yardline_100).clip(0, 50) * 0.5
         )
         
-        # Sample
         sampled = candidates.sample(n=1, weights='similarity').iloc[0]
         
         yards = sampled.get('yards_gained', 0)
@@ -290,12 +284,9 @@ class NFLGame:
         return {'yards_gained': float(yards), 'turnover': bool(turnover)}
     
     def _calculate_ep(self, down, ydstogo, yardline):
-        """Calculate expected points from this situation."""
-        # Simplified EP model
-        # Base EP increases as you get closer to goal
+        """Calculate expected points."""
         base_ep = (yardline / 100) * 7
         
-        # Adjust for down and distance
         if down == 1:
             modifier = 0.0
         elif down == 2:
@@ -314,7 +305,9 @@ class NFLGame:
             'ydstogo': self.ydstogo,
             'yardline': self.yardline,
             'current_player': self.current_player,
-            'pending_offense_action': self.pending_offense_action,
+            'phase': self.phase,
+            'pending_formation': self.pending_formation,
+            'pending_defense_action': self.pending_defense_action,
             'is_over_flag': self.is_over_flag,
             'payoffs': self.payoffs.copy()
         })
@@ -329,57 +322,72 @@ class NFLGame:
         self.ydstogo = state['ydstogo']
         self.yardline = state['yardline']
         self.current_player = state['current_player']
-        self.pending_offense_action = state['pending_offense_action']
+        self.phase = state['phase']
+        self.pending_formation = state['pending_formation']
+        self.pending_defense_action = state['pending_defense_action']
         self.is_over_flag = state['is_over_flag']
         self.payoffs = state['payoffs']
         return True
     
     def get_state(self, player_id):
-        """Get state from perspective of player.
-        
-        Args:
-            player_id: 0 for offense, 1 for defense
-            
-        Returns:
-            State dictionary
-        """
+        """Get state from perspective of player."""
         if player_id == 0:
-            # Offense doesn't see defense alignment
-            return self.players[0].get_state(
-                self.down, self.ydstogo, self.yardline,
-                list(range(self.num_offense_actions))
-            )
+            # Offense
+            if self.phase == 0:
+                # Picking formation - just see game state
+                return {
+                    'down': self.down,
+                    'ydstogo': self.ydstogo,
+                    'yardline': self.yardline,
+                    'phase': 'formation',
+                    'legal_actions': list(range(self.num_formation_actions)),
+                    'player_id': 0
+                }
+            else:
+                # Phase 2: Picking play type - see box count!
+                box_count = self.pending_defense_action[0] if self.pending_defense_action else 0
+                return {
+                    'down': self.down,
+                    'ydstogo': self.ydstogo,
+                    'yardline': self.yardline,
+                    'formation': self.pending_formation,
+                    'box_count': box_count,
+                    'phase': 'play_type',
+                    'legal_actions': list(range(self.num_play_type_actions)),
+                    'player_id': 0
+                }
         else:
-            # Defense sees formation
-            formation = self.pending_offense_action[0] if self.pending_offense_action else "UNKNOWN"
-            return self.players[1].get_state(
-                self.down, self.ydstogo, self.yardline, formation,
-                list(range(self.num_defense_actions))
-            )
+            # Defense - sees formation
+            return {
+                'down': self.down,
+                'ydstogo': self.ydstogo,
+                'yardline': self.yardline,
+                'formation': self.pending_formation,
+                'phase': 'defense',
+                'legal_actions': list(range(self.num_defense_actions)),
+                'player_id': 1
+            }
     
     def get_legal_actions(self):
         """Get legal actions for current player."""
-        if self.current_player == 0:
-            return list(range(self.num_offense_actions))
-        else:
+        if self.phase == 0:
+            return list(range(self.num_formation_actions))
+        elif self.phase == 1:
             return list(range(self.num_defense_actions))
+        else:
+            return list(range(self.num_play_type_actions))
     
     def is_over(self):
-        """Check if game (drive) is over."""
         return self.is_over_flag
     
     def get_payoffs(self):
-        """Get payoffs for both players."""
         return np.array(self.payoffs)
     
     def get_player_id(self):
-        """Get current player."""
         return self.current_player
     
     def get_num_players(self):
-        """Number of players (2: offense, defense)."""
         return 2
     
     def get_num_actions(self):
-        """Number of actions (max across players)."""
-        return max(self.num_offense_actions, self.num_defense_actions)
+        return self.num_actions

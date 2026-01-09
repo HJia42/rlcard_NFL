@@ -9,9 +9,10 @@ from rlcard.games.nfl import Game as NFLGame
 class NFLEnv(Env):
     """NFL Play-by-Play Environment for RLCard.
     
-    Two-player imperfect information game:
-    - Player 0: Offense (selects formation + play type)
-    - Player 1: Defense (sees formation, selects box + personnel)
+    Three-phase game per play:
+    - Phase 0 (Player 0): Offense picks formation
+    - Phase 1 (Player 1): Defense picks box count (sees formation)
+    - Phase 2 (Player 0): Offense picks pass/rush (sees box count!)
     """
     
     name = 'nfl'
@@ -19,63 +20,59 @@ class NFLEnv(Env):
     default_game_config = {}
     
     def __init__(self, config):
-        """Initialize NFL environment.
-        
-        Args:
-            config: Configuration dict with 'seed', 'allow_step_back', etc.
-        """
+        """Initialize NFL environment."""
         self.game = NFLGame(allow_step_back=config.get('allow_step_back', False))
         super().__init__(config)
         
-        # State dimensions
-        # Offense: [down, ydstogo, yardline] = 3 dims + one-hot formations (optional)
-        # Defense: [down, ydstogo, yardline, formation_one_hot] = 3 + 7 = 10 dims
-        self.state_shape = [[3], [10]]  # Different for each player
-        self.action_shape = [None, None]  # Discrete actions
+        # State dimensions vary by phase
+        # Phase 0 (formation): [down, ydstogo, yardline] = 3 dims
+        # Phase 1 (defense): [down, ydstogo, yardline, formation_one_hot] = 3 + 7 = 10 dims
+        # Phase 2 (play_type): [down, ydstogo, yardline, formation_one_hot, box_count] = 11 dims
+        self.state_shape = [[11], [10]]  # Max dims for each player
+        self.action_shape = [None, None]
         
-        # Action mappings (for decode)
-        self.offense_actions = self.game.offense_actions
-        self.defense_actions = self.game.defense_actions
-        
-        # Formation encoding
+        # Encoding mappings
         self.formations = ("SHOTGUN", "SINGLEBACK", "I_FORM", "PISTOL", "EMPTY", "JUMBO", "WILDCAT")
         self.formation_to_idx = {f: i for i, f in enumerate(self.formations)}
     
     def _extract_state(self, state):
-        """Extract state features for neural network.
-        
-        Args:
-            state: Raw game state dict
-            
-        Returns:
-            Dict with 'obs', 'legal_actions', 'raw_obs', 'raw_legal_actions'
-        """
+        """Extract state features for neural network."""
         player_id = state.get('player_id', 0)
+        phase = state.get('phase', 'formation')
         
-        # Base features
-        down = state['down'] / 4.0  # Normalize
+        # Base features (normalized)
+        down = state['down'] / 4.0
         ydstogo = min(state['ydstogo'], 30) / 30.0
         yardline = state['yardline'] / 100.0
         
-        if player_id == 0:
-            # Offense state
-            obs = np.array([down, ydstogo, yardline], dtype=np.float32)
-            legal_actions = self._encode_actions(state['legal_actions'], is_offense=True)
-        else:
-            # Defense state - includes formation
-            formation = state.get('formation', 'UNKNOWN')
-            formation_one_hot = self._encode_formation(formation)
-            obs = np.array([down, ydstogo, yardline] + formation_one_hot, dtype=np.float32)
-            legal_actions = self._encode_actions(state['legal_actions'], is_offense=False)
+        if phase == 'formation':
+            # Phase 0: Offense picks formation, just sees game state
+            obs = np.zeros(11, dtype=np.float32)
+            obs[:3] = [down, ydstogo, yardline]
+            legal_actions = {i: None for i in state['legal_actions']}
+            
+        elif phase == 'defense':
+            # Phase 1: Defense sees formation
+            formation = state.get('formation', 'SHOTGUN')
+            formation_vec = self._encode_formation(formation)
+            obs = np.array([down, ydstogo, yardline] + formation_vec, dtype=np.float32)
+            legal_actions = {i: None for i in state['legal_actions']}
+            
+        else:  # phase == 'play_type'
+            # Phase 2: Offense sees box count + own formation
+            formation = state.get('formation', 'SHOTGUN')
+            box_count = state.get('box_count', 6)
+            formation_vec = self._encode_formation(formation)
+            box_normalized = (box_count - 4) / 4.0  # Normalize 4-8 to 0-1
+            obs = np.array([down, ydstogo, yardline] + formation_vec + [box_normalized], dtype=np.float32)
+            legal_actions = {i: None for i in state['legal_actions']}
         
-        extracted_state = {
+        return {
             'obs': obs,
             'legal_actions': legal_actions,
             'raw_obs': state,
             'raw_legal_actions': state['legal_actions']
         }
-        
-        return extracted_state
     
     def _encode_formation(self, formation):
         """One-hot encode formation."""
@@ -84,20 +81,8 @@ class NFLEnv(Env):
             one_hot[self.formation_to_idx[formation]] = 1
         return one_hot
     
-    def _encode_actions(self, action_ids, is_offense):
-        """Create action mask."""
-        if is_offense:
-            mask = {i: None for i in action_ids}
-        else:
-            mask = {i: None for i in action_ids}
-        return mask
-    
     def _decode_action(self, action_id):
-        """Decode action ID to game action.
-        
-        RLCard passes action IDs; we return them as-is since
-        the game handles the mapping.
-        """
+        """Decode action ID to game action."""
         return action_id
     
     def _get_legal_actions(self):
@@ -109,12 +94,14 @@ class NFLEnv(Env):
         return self.game.get_payoffs()
     
     def get_perfect_information(self):
-        """Get perfect information state (for debugging)."""
+        """Get perfect information state."""
         return {
             'down': self.game.down,
             'ydstogo': self.game.ydstogo,
             'yardline': self.game.yardline,
-            'pending_offense_action': self.game.pending_offense_action,
+            'phase': self.game.phase,
+            'pending_formation': self.game.pending_formation,
+            'pending_defense_action': self.game.pending_defense_action,
             'current_player': self.game.current_player,
             'is_over': self.game.is_over()
         }
