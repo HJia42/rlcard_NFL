@@ -21,7 +21,10 @@ class NFLEnv(Env):
     
     def __init__(self, config):
         """Initialize NFL environment."""
-        self.game = NFLGame(allow_step_back=config.get('allow_step_back', False))
+        self.game = NFLGame(
+            allow_step_back=config.get('allow_step_back', False),
+            single_play=config.get('single_play', False)
+        )
         super().__init__(config)
         
         # State dimensions vary by phase

@@ -71,12 +71,14 @@ def main():
     print("MCCFR Training on NFL Game")
     print("=" * 60)
     
-    # Create environment with step_back enabled
+    # Create environment with step_back enabled and single_play mode
+    # single_play=True makes game end after one play (tree depth = 3)
     env = rlcard.make(
         'nfl',
         config={
             'seed': args.seed,
             'allow_step_back': True,
+            'single_play': True,  # Critical for CFR performance
         }
     )
     
@@ -86,6 +88,7 @@ def main():
         config={
             'seed': args.seed + 1000,
             'allow_step_back': False,
+            'single_play': True,  # Match training mode
         }
     )
 

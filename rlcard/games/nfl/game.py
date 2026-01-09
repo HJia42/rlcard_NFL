@@ -48,7 +48,7 @@ class NFLGame:
     Phase 3: Offense sees box count, picks pass/rush
     """
     
-    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None):
+    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, single_play=False):
         """Initialize NFL Game.
         
         Args:
@@ -56,8 +56,11 @@ class NFLGame:
             data_path: Path to cleaned NFL data (optional)
             use_simple_model: If True, skip pandas and use fast simplified model.
                              If None, auto-detect based on allow_step_back.
+            single_play: If True, game ends after one complete play (3 phases).
+                        This dramatically reduces tree depth for CFR algorithms.
         """
         self.allow_step_back = allow_step_back
+        self.single_play = single_play
         self.np_random = np.random.RandomState()
         
         # Action spaces per phase
@@ -228,7 +231,11 @@ class NFLGame:
             
             self.payoffs = [epa, -epa]
             
-            # Reset for next play
+            # In single_play mode, always end after one play
+            if self.single_play:
+                self.is_over_flag = True
+            
+            # Reset for next play (if not over)
             self.phase = 0
             self.current_player = 0
             self.pending_formation = None
