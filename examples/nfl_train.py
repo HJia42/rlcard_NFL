@@ -2,8 +2,7 @@
 Train agents on NFL game using RLCard
 
 Usage:
-    python examples/nfl_train.py --algorithm dqn --num_episodes 10000
-    python examples/nfl_train.py --algorithm dmc
+    python examples/nfl_train.py --num_episodes 10000
 """
 
 import sys
@@ -18,13 +17,13 @@ from rlcard.utils import get_device, reorganize
 
 
 def train_dqn(args):
-    """Train DQN agents."""
+    """Train DQN agents via self-play."""
     env = rlcard.make('nfl', config={'seed': args.seed})
     eval_env = rlcard.make('nfl', config={'seed': args.seed + 1})
     
     device = get_device()
     
-    # Create agents
+    # Create DQN agents for both players
     agents = []
     for i in range(env.num_players):
         agent = DQNAgent(
@@ -49,8 +48,7 @@ def train_dqn(args):
         # Run one episode
         trajectories, payoffs = env.run(is_training=True)
         
-        # Reorganize trajectories into (state, action, reward, next_state, done)
-        # The payoff is assigned to the final transition
+        # Reorganize trajectories into proper format
         trajectories = reorganize(trajectories, payoffs)
         
         # Feed transitions to agents
@@ -60,7 +58,6 @@ def train_dqn(args):
         
         # Evaluate periodically
         if ep % args.eval_every == 0:
-            # Run eval games
             eval_payoffs = []
             for _ in range(args.num_eval_games):
                 _, p = eval_env.run(is_training=False)
@@ -83,47 +80,17 @@ def train_dqn(args):
     print("Training complete!")
 
 
-def train_dmc(args):
-    """Train with Deep Monte Carlo."""
-    from rlcard.agents.dmc_agent import DMCTrainer
-    
-    env = rlcard.make('nfl')
-    
-    trainer = DMCTrainer(
-        env,
-        cuda=args.cuda,
-        xpid='nfl_dmc',
-        savedir=args.save_dir,
-        save_interval=args.save_interval_minutes,
-        num_actor_devices=1,
-        num_actors=5,
-        training_device="0" if args.cuda else "cpu",
-    )
-    
-    print("Starting DMC training...")
-    trainer.start()
-
-
 def main():
-    parser = argparse.ArgumentParser(description='Train agents on NFL')
-    parser.add_argument('--algorithm', type=str, default='dqn', choices=['dqn', 'dmc'])
+    parser = argparse.ArgumentParser(description='Train DQN agents on NFL')
     parser.add_argument('--num_episodes', type=int, default=10000)
     parser.add_argument('--eval_every', type=int, default=500)
     parser.add_argument('--save_every', type=int, default=2000)
     parser.add_argument('--num_eval_games', type=int, default=50)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--save_dir', type=str, default='models/nfl')
-    parser.add_argument('--cuda', type=str, default='')
-    parser.add_argument('--save_interval_minutes', type=int, default=30)
     
     args = parser.parse_args()
-    
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
-    
-    if args.algorithm == 'dqn':
-        train_dqn(args)
-    elif args.algorithm == 'dmc':
-        train_dmc(args)
+    train_dqn(args)
 
 
 if __name__ == '__main__':

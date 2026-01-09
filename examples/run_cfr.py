@@ -1,5 +1,8 @@
 ''' An example of solve Leduc Hold'em with CFR (chance sampling)
 '''
+import sys
+sys.path.insert(0, '.')
+
 import os
 import argparse
 

@@ -48,8 +48,15 @@ class NFLGame:
     Phase 3: Offense sees box count, picks pass/rush
     """
     
-    def __init__(self, allow_step_back=False, data_path=None):
-        """Initialize NFL Game."""
+    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None):
+        """Initialize NFL Game.
+        
+        Args:
+            allow_step_back: Whether to support step_back for CFR
+            data_path: Path to cleaned NFL data (optional)
+            use_simple_model: If True, skip pandas and use fast simplified model.
+                             If None, auto-detect based on allow_step_back.
+        """
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
         
@@ -69,8 +76,18 @@ class NFLGame:
             self.num_play_type_actions
         )
         
-        # Load data engine for outcomes
-        self._load_data(data_path)
+        # Use simple model for CFR (step_back) since pandas is too slow
+        if use_simple_model is None:
+            self.use_simple_model = allow_step_back
+        else:
+            self.use_simple_model = use_simple_model
+        
+        # Load data engine for outcomes (only if not using simple model)
+        self.play_data = None
+        if not self.use_simple_model:
+            self._load_data(data_path)
+        else:
+            print("Using simplified outcome model (fast mode for CFR)")
         
         # Game state
         self.players = None
