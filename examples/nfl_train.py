@@ -73,14 +73,12 @@ def train_dqn(args):
         if ep % args.save_every == 0:
             os.makedirs(args.save_dir, exist_ok=True)
             for i, agent in enumerate(agents):
-                save_path = os.path.join(args.save_dir, f'dqn_player_{i}_{ep}.pth')
-                agent.save(save_path)
+                agent.save_checkpoint(args.save_dir, filename=f'dqn_player_{i}_{ep}.pt')
             print(f"Saved models at episode {ep}")
     
     # Final save
     for i, agent in enumerate(agents):
-        save_path = os.path.join(args.save_dir, f'dqn_player_{i}_final.pth')
-        agent.save(save_path)
+        agent.save_checkpoint(args.save_dir, filename=f'dqn_player_{i}_final.pt')
     
     print("Training complete!")
 
