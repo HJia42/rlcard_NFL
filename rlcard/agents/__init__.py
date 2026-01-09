@@ -11,6 +11,7 @@ if 'torch' in installed_packages:
 
 from rlcard.agents.cfr_agent import CFRAgent
 from rlcard.agents.mccfr_agent import MCCFRAgent
+from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.agents.human_agents.limit_holdem_human_agent import HumanAgent as LimitholdemHumanAgent
 from rlcard.agents.human_agents.nolimit_holdem_human_agent import HumanAgent as NolimitholdemHumanAgent
 from rlcard.agents.human_agents.leduc_holdem_human_agent import HumanAgent as LeducholdemHumanAgent
