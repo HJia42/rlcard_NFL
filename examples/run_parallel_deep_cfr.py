@@ -55,8 +55,8 @@ def main():
                         help='Use GPU for training')
     parser.add_argument('--model_path', type=str, default='./models/parallel_deep_cfr',
                         help='Model save path')
-    parser.add_argument('--single_play', action='store_true', default=True,
-                        help='Use single-play mode (recommended)')
+    parser.add_argument('--full_game', action='store_true',
+                        help='Use full-game mode (entire drive, slower)')
     parser.add_argument('--seed', type=int, default=42)
     args = parser.parse_args()
     
@@ -67,14 +67,14 @@ def main():
     env_config = {
         'seed': args.seed,
         'allow_step_back': True,
-        'single_play': args.single_play,
+        'single_play': not args.full_game,
     }
     
     print(f"\nConfig:")
     print(f"  Actors: {args.num_actors}")
     print(f"  GPU: {args.cuda}")
     print(f"  Hidden Layers: {args.hidden_layers}")
-    print(f"  Single Play: {args.single_play}")
+    print(f"  Single Play: {not args.full_game}")
     
     # Create trainer
     trainer = ParallelDeepCFRTrainer(
@@ -92,7 +92,7 @@ def main():
     # Create eval env
     eval_env = rlcard.make('nfl', config={
         'seed': args.seed + 1000,
-        'single_play': args.single_play,
+        'single_play': not args.full_game,
     })
     
     print(f"\nStarting {args.num_actors} actor processes...")
