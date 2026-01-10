@@ -70,6 +70,161 @@ class SpecialTeamsEngine:
             }, f)
         print(f"Saved models to {self.model_path}")
 
+    def fetch_data(self, years=range(2010, 2025)):
+        """Fetch special teams data from nfl_data_py.
+        
+        Args:
+            years: Range of seasons to fetch (default 2010-2024)
+        
+        Returns:
+            DataFrame with punt and FG plays
+        """
+        try:
+            import nfl_data_py as nfl
+        except ImportError:
+            print("Error: nfl_data_py not installed. Run: pip install nfl_data_py")
+            return None
+        
+        print(f"Fetching Special Teams data for {list(years)}...")
+        cols = ['season', 'play_type', 'yardline_100', 'kick_distance', 
+                'field_goal_result', 'return_yards', 'touchback', 'punt_blocked']
+        
+        try:
+            df = nfl.import_pbp_data(years, columns=cols, downcast=True)
+            print(f"Data Loaded: {len(df):,} rows.")
+            return df
+        except Exception as e:
+            print(f"Error fetching data: {e}")
+            return None
+
+    def fit_models(self, df, s_fg=None, s_punt=None):
+        """Fit B-spline models for FG and Punt.
+        
+        Args:
+            df: DataFrame from fetch_data
+            s_fg: Smoothing parameter for FG spline (default: len(x))
+            s_punt: Smoothing parameter for punt spline (default: len(x)*5)
+        """
+        if not HAS_SCIPY:
+            print("Cannot fit models without scipy")
+            return
+            
+        if df is None:
+            print("No data provided")
+            return
+
+        # --- Field Goals ---
+        print("Fitting Field Goal Model (B-Spline) on kick distance...")
+        fg_data = df[(df['play_type'] == 'field_goal') & (df['kick_distance'].notnull())].copy()
+        
+        if len(fg_data) == 0:
+            print("No FG data found")
+            return
+        
+        fg_data['success'] = np.where(fg_data['field_goal_result'] == 'made', 1, 0)
+        
+        # Aggregate by kick distance
+        fg_stats = fg_data.groupby('kick_distance')['success'].agg(['mean', 'count'])
+        fg_stats = fg_stats[fg_stats['count'] >= 10]  # Filter for sample size
+        
+        x_fg = list(fg_stats.index.values)
+        y_fg = list(fg_stats['mean'].values)
+        w_fg = list(np.sqrt(fg_stats['count'].values))
+        
+        # Force probability to 0 at long distances (>= 65 yards)
+        synthetic_dists = [65, 68, 70, 75, 80]
+        for d in synthetic_dists:
+            x_fg.append(d)
+            y_fg.append(0.0)
+            w_fg.append(50.0)  # High weight to enforce
+            
+        # Re-sort
+        sorted_indices = np.argsort(x_fg)
+        x_fg = np.array(x_fg)[sorted_indices]
+        y_fg = np.array(y_fg)[sorted_indices]
+        w_fg = np.array(w_fg)[sorted_indices]
+        
+        s_fg_val = s_fg if s_fg is not None else len(x_fg)
+        self.fg_model = interpolate.splrep(x_fg, y_fg, w=w_fg, s=s_fg_val)
+        print(f"  FG model fitted on {len(fg_stats)} unique distances")
+        
+        # --- Punts ---
+        print("Fitting Punt Model (B-Spline)...")
+        punt_data = df[(df['play_type'] == 'punt') & (df['yardline_100'].notnull())].copy()
+        
+        if len(punt_data) == 0:
+            print("No punt data found")
+            return
+        
+        punt_data['return_yards'] = punt_data['return_yards'].fillna(0)
+        punt_data['kick_distance'] = punt_data['kick_distance'].fillna(0)
+        
+        def calc_opp_start(row):
+            if row.get('touchback', 0) == 1:
+                return 80  # Touchback -> Opp starts at own 20 (80 from goal)
+            
+            landing_spot = row['yardline_100'] - row['kick_distance']
+            final_spot = landing_spot + row['return_yards']
+            return 100 - final_spot
+            
+        punt_data['opp_start'] = punt_data.apply(calc_opp_start, axis=1)
+        punt_data = punt_data[(punt_data['opp_start'] > 0) & (punt_data['opp_start'] < 100)]
+        
+        # Aggregate by yardline
+        punt_stats = punt_data.groupby('yardline_100')['opp_start'].agg(['mean', 'count'])
+        punt_stats = punt_stats[punt_stats['count'] >= 10]
+        
+        x_pt = list(punt_stats.index.values)
+        y_pt = list(punt_stats['mean'].values)
+        w_pt = list(np.sqrt(punt_stats['count'].values))
+        
+        # Add synthetic boundary points to smooth edge behavior
+        # yardline_100 = yards to opponent's goal (high = deep in own territory)
+        # When punting from very close to opponent's goal (yardline_100 < 30),
+        # opponent should get ball fairly deep in their territory
+        synthetic_pts = [(10, 75), (5, 80)]  # yardline_100 -> opp_start (yards to their goal)
+        for x_val, y_val in synthetic_pts:
+            x_pt.append(x_val)
+            y_pt.append(y_val)
+            w_pt.append(30.0)  # Moderate weight
+        
+        # Re-sort by x
+        sorted_indices = np.argsort(x_pt)
+        x_pt = np.array(x_pt)[sorted_indices]
+        y_pt = np.array(y_pt)[sorted_indices]
+        w_pt = np.array(w_pt)[sorted_indices]
+        
+        s_punt_val = s_punt if s_punt is not None else len(x_pt) * 5
+        self.punt_model = interpolate.splrep(x_pt, y_pt, w=w_pt, s=s_punt_val)
+        print(f"  Punt model fitted on {len(punt_stats)} unique yardlines")
+        
+        self.use_simple_model = False
+        self.save_models()
+        self.validate_models()
+
+    def fetch_and_fit(self, years=range(2010, 2025), s_fg=None, s_punt=None):
+        """Convenience method to fetch data and fit models."""
+        df = self.fetch_data(years)
+        if df is not None:
+            self.fit_models(df, s_fg=s_fg, s_punt=s_punt)
+
+    def validate_models(self):
+        """Print sample predictions to validate models."""
+        print("\n--- Model Validation ---")
+        
+        # FG Check (using kick distance now)
+        print("FG Probabilities:")
+        for yl in [90, 80, 70, 60, 50]:  # yardline from own goal
+            prob = self.predict_fg_prob(yl)
+            kick_dist = (100 - yl) + 17
+            print(f"  At opp {100-yl} (kick {kick_dist}yd): {prob:.1%}")
+            
+        # Punt Check
+        print("Punt Outcomes (Opponent Start):")
+        for yl in [25, 35, 45, 55]:  # yardline from own goal
+            opp = self.predict_punt_outcome(yl)
+            print(f"  Punt from own {yl}: Opp starts at own {opp:.0f}")
+
     def predict_fg_prob(self, yardline):
         """Predict field goal success probability.
         
