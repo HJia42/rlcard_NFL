@@ -367,20 +367,57 @@ class NFLGame:
         
         return {'yards_gained': float(yards), 'turnover': bool(turnover)}
     
-    def _calculate_ep(self, down, ydstogo, yardline):
-        """Calculate expected points."""
-        base_ep = (yardline / 100) * 7
+    def _calculate_ep(self, down, ydstogo, yardline, goal_to_go=False):
+        """Calculate expected points using fitted OLS regression model.
         
-        if down == 1:
-            modifier = 0.0
-        elif down == 2:
-            modifier = -0.2
+        Model: EP = const + sum(coef_i * feature_i)
+        R² = 0.95 on 210,490 NFL plays
+        
+        Args:
+            down: Current down (1-4)
+            ydstogo: Yards to first down
+            yardline: Yards from own goal (1-99)
+            goal_to_go: Whether it's a goal-to-go situation
+        
+        Returns:
+            Expected points (-7 to 7 range)
+        """
+        # Fitted coefficients from OLS regression
+        # See examples/fit_ep_model.py for derivation
+        CONST = 0.2412
+        COEF_YARDLINE = 0.0571
+        COEF_YARDLINE_SQ = 5.853e-05
+        COEF_YDSTOGO = -0.0634
+        COEF_2ND_DOWN = -0.5528
+        COEF_3RD_DOWN = -1.2497
+        COEF_4TH_DOWN = -2.4989
+        COEF_REDZONE = -0.0255
+        COEF_GOAL_TO_GO = -0.1034
+        # score_diff coefficient is ~0 and not significant, so excluded
+        
+        # Build prediction
+        ep = CONST
+        ep += COEF_YARDLINE * yardline
+        ep += COEF_YARDLINE_SQ * (yardline ** 2)
+        ep += COEF_YDSTOGO * min(ydstogo, 20)  # Cap at 20 as in training
+        
+        # Down dummies (reference = 1st down)
+        if down == 2:
+            ep += COEF_2ND_DOWN
         elif down == 3:
-            modifier = -0.5 - (ydstogo - 5) * 0.05
-        else:
-            modifier = -1.0 - ydstogo * 0.1
+            ep += COEF_3RD_DOWN
+        elif down == 4:
+            ep += COEF_4TH_DOWN
         
-        return max(-2, min(7, base_ep + modifier))
+        # Red zone indicator
+        if yardline >= 80:
+            ep += COEF_REDZONE
+        
+        # Goal-to-go
+        if goal_to_go:
+            ep += COEF_GOAL_TO_GO
+        
+        return max(-7, min(7, ep))
     
     def _save_state(self):
         """Save current state for step_back."""
