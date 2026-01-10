@@ -17,25 +17,29 @@ import pickle
 from pathlib import Path
 
 from rlcard.games.nfl.player import OffensePlayer, DefensePlayer
+from rlcard.games.nfl.special_teams import get_special_teams_engine
 
 
-# Game constants
-FORMATIONS = ("SHOTGUN", "SINGLEBACK", "I_FORM", "PISTOL", "EMPTY", "JUMBO", "WILDCAT")
+# Game constants - these should match your cleaned_nfl_rl_data.csv
+FORMATIONS = ("SHOTGUN", "SINGLEBACK", "UNDER CENTER", "I_FORM", "EMPTY")
 PLAY_TYPES = ("pass", "rush")
 BOX_COUNTS = (4, 5, 6, 7, 8)
 PERSONNEL_TYPES = ("Standard",)
+SPECIAL_TEAMS = ("PUNT", "FG")  # These bypass defense
 
 # Build action maps
-# Phase 1: Offense picks formation (7 actions)
+# Phase 0: Offense picks formation OR special teams (7 actions total)
 FORMATION_ACTIONS = list(FORMATIONS)
+SPECIAL_TEAMS_ACTIONS = list(SPECIAL_TEAMS)
+INITIAL_ACTIONS = FORMATION_ACTIONS + SPECIAL_TEAMS_ACTIONS  # All Phase 0 options
 
-# Phase 2: Defense picks box count (5 actions)
+# Phase 1: Defense picks box count (5 actions)
 DEFENSE_ACTIONS = []
 for box in BOX_COUNTS:
     for personnel in PERSONNEL_TYPES:
         DEFENSE_ACTIONS.append((box, personnel))
 
-# Phase 3: Offense picks play type (2 actions)
+# Phase 2: Offense picks play type (2 actions)
 PLAY_TYPE_ACTIONS = list(PLAY_TYPES)
 
 
@@ -64,20 +68,26 @@ class NFLGame:
         self.np_random = np.random.RandomState()
         
         # Action spaces per phase
-        self.formation_actions = FORMATION_ACTIONS  # Phase 1
-        self.defense_actions = DEFENSE_ACTIONS      # Phase 2
-        self.play_type_actions = PLAY_TYPE_ACTIONS  # Phase 3
+        self.initial_actions = INITIAL_ACTIONS          # Phase 0: formations + special teams
+        self.formation_actions = FORMATION_ACTIONS      # Subset of phase 0
+        self.special_teams_actions = SPECIAL_TEAMS_ACTIONS  # Subset of phase 0
+        self.defense_actions = DEFENSE_ACTIONS          # Phase 1
+        self.play_type_actions = PLAY_TYPE_ACTIONS      # Phase 2
         
+        self.num_initial_actions = len(INITIAL_ACTIONS)
         self.num_formation_actions = len(FORMATION_ACTIONS)
         self.num_defense_actions = len(DEFENSE_ACTIONS)
         self.num_play_type_actions = len(PLAY_TYPE_ACTIONS)
         
         # Max actions for RLCard compatibility
         self.num_actions = max(
-            self.num_formation_actions,
-            self.num_defense_actions,
-            self.num_play_type_actions
+            self.num_initial_actions,  # 7 (5 formations + 2 special teams)
+            self.num_defense_actions,  # 5 box counts
+            self.num_play_type_actions # 2 play types
         )
+        
+        # Special teams engine for FG/Punt outcomes
+        self.special_teams = get_special_teams_engine()
         
         # Use simple model for CFR (step_back) since pandas is too slow
         if use_simple_model is None:
@@ -167,10 +177,17 @@ class NFLGame:
             self._save_state()
         
         if self.phase == 0:
-            # Phase 0: Offense picks formation
-            self.pending_formation = action if isinstance(action, str) else self.formation_actions[action]
-            self.phase = 1
-            self.current_player = 1  # Defense's turn
+            # Phase 0: Offense picks formation OR special teams
+            action_str = action if isinstance(action, str) else self.initial_actions[action]
+            
+            if action_str in SPECIAL_TEAMS:
+                # Special teams - skip defense, resolve immediately
+                self._resolve_special_teams(action_str)
+            else:
+                # Normal play - proceed to defense
+                self.pending_formation = action_str
+                self.phase = 1
+                self.current_player = 1  # Defense's turn
             
         elif self.phase == 1:
             # Phase 1: Defense picks box count
@@ -243,6 +260,49 @@ class NFLGame:
         
         state = self.get_state(self.current_player)
         return state, self.current_player
+    
+    def _resolve_special_teams(self, action_str):
+        """Resolve a special teams play (punt or field goal).
+        
+        Special teams plays skip the defense turn and resolve immediately.
+        """
+        old_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
+        
+        if action_str == "FG":
+            # Field Goal attempt
+            success_prob = self.special_teams.predict_fg_prob(self.yardline)
+            success = self.np_random.random() < success_prob
+            
+            if success:
+                # FG made: +3 points
+                epa = 3.0 - old_ep
+            else:
+                # FG missed: opponent gets ball at LOS or 20
+                opp_yardline = max(100 - self.yardline, 20)
+                opp_ep = (opp_yardline / 100) * 3
+                epa = -opp_ep - old_ep
+            
+            self.is_over_flag = True
+            
+        elif action_str == "PUNT":
+            # Punt: opponent gets ball at predicted position
+            opp_yardline = self.special_teams.predict_punt_outcome(self.yardline)
+            
+            # EPA is negative of opponent's expected points
+            opp_ep = (opp_yardline / 100) * 3
+            epa = -opp_ep - old_ep
+            
+            self.is_over_flag = True
+        else:
+            epa = 0
+        
+        self.payoffs = [epa, -epa]
+        
+        # Always end after special teams (no continuation)
+        self.phase = 0
+        self.current_player = 0
+        self.pending_formation = None
+        self.pending_defense_action = None
     
     def _get_outcome(self, down, ydstogo, yardline, offense_action, defense_action):
         """Sample outcome from historical data."""
@@ -358,13 +418,13 @@ class NFLGame:
         if player_id == 0:
             # Offense
             if self.phase == 0:
-                # Picking formation - just see game state
+                # Picking formation or special teams - just see game state
                 return {
                     'down': self.down,
                     'ydstogo': self.ydstogo,
                     'yardline': self.yardline,
                     'phase': 'formation',
-                    'legal_actions': list(range(self.num_formation_actions)),
+                    'legal_actions': list(range(self.num_initial_actions)),  # 5 formations + 2 special teams
                     'player_id': 0
                 }
             else:
@@ -395,7 +455,7 @@ class NFLGame:
     def get_legal_actions(self):
         """Get legal actions for current player."""
         if self.phase == 0:
-            return list(range(self.num_formation_actions))
+            return list(range(self.num_initial_actions))  # Formations + special teams
         elif self.phase == 1:
             return list(range(self.num_defense_actions))
         else:
