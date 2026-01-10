@@ -27,11 +27,11 @@ class NFLEnv(Env):
         )
         super().__init__(config)
         
-        # State dimensions vary by phase
-        # Phase 0 (formation): [down, ydstogo, yardline] = 3 dims
-        # Phase 1 (defense): [down, ydstogo, yardline, formation_one_hot] = 3 + 7 = 10 dims
-        # Phase 2 (play_type): [down, ydstogo, yardline, formation_one_hot, box_count] = 11 dims
-        self.state_shape = [[11], [10]]  # Max dims for each player
+        # State dimensions - use consistent 11 dims for both players
+        # This is needed for DMC compatibility (same shape for all players)
+        # Offense: [down, ydstogo, yardline, formation_one_hot, box_count] = 11 dims
+        # Defense: [down, ydstogo, yardline, formation_one_hot, 0] = padded to 11 dims
+        self.state_shape = [[11], [11]]  # Same dims for both players (DMC compatible)
         self.action_shape = [None, None]
         
         # Encoding mappings

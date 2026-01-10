@@ -52,3 +52,8 @@ register(
     env_id='nfl',
     entry_point='rlcard.envs.nfl:NFLEnv',
 )
+
+register(
+    env_id='nfl-bucketed',
+    entry_point='rlcard.envs.nfl_bucketed:NFLBucketedEnv',
+)

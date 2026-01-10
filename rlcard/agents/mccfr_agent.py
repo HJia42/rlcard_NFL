@@ -256,10 +256,15 @@ class MCCFRAgent:
             player_id: Player to get state for
             
         Returns:
-            Tuple of (obs_bytes, legal_actions_list)
+            Tuple of (obs_key, legal_actions_list)
         """
         state = self.env.get_state(player_id)
-        return state['obs'].tobytes(), list(state['legal_actions'].keys())
+        # Use obs_tuple if available (bucketed games), otherwise use obs.tobytes()
+        if 'obs_tuple' in state:
+            obs_key = state['obs_tuple']
+        else:
+            obs_key = state['obs'].tobytes()
+        return obs_key, list(state['legal_actions'].keys())
 
     def eval_step(self, state):
         """Predict action based on average policy (for evaluation).
@@ -270,10 +275,14 @@ class MCCFRAgent:
         Returns:
             Tuple of (action, info_dict)
         """
-        obs = state['obs'].tobytes()
+        # Use obs_tuple if available, otherwise obs.tobytes()
+        if 'obs_tuple' in state:
+            obs_key = state['obs_tuple']
+        else:
+            obs_key = state['obs'].tobytes()
         legal_actions = list(state['legal_actions'].keys())
         
-        probs = self._action_probs(obs, legal_actions, self.average_policy)
+        probs = self._action_probs(obs_key, legal_actions, self.average_policy)
         action = np.random.choice(len(probs), p=probs)
 
         info = {}

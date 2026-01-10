@@ -1,6 +1,8 @@
 ''' An example of training a Deep Monte-Carlo (DMC) Agent on the environments in RLCard
 '''
 import os
+import sys
+sys.path.insert(0, '.')
 import argparse
 
 import torch
@@ -43,7 +45,8 @@ if __name__ == '__main__':
             'mahjong',
             'no-limit-holdem',
             'uno',
-            'gin-rummy'
+            'gin-rummy',
+            'nfl',
         ],
     )
     parser.add_argument(
