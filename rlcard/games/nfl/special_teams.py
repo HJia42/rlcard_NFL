@@ -90,16 +90,12 @@ class SpecialTeamsEngine:
             # Simple linear model: 
             # At opp 20 (yardline=80, kick=37yd): ~90%
             # At opp 50 (yardline=50, kick=67yd): ~20%
-            if kick_distance <= 30:
-                prob = 0.95
-            elif kick_distance >= 60:
-                prob = 0.15
-            else:
-                prob = 0.95 - (kick_distance - 30) * 0.027
-            return float(np.clip(prob, 0.0, 1.0))
+            return float(np.clip(self._simple_fg_prob(kick_distance), 0.0, 1.0))
         
-        # B-spline evaluation - uses LOS distance (distance_to_goal)
-        prob = interpolate.splev(distance_to_goal, self.fg_model)
+        # B-spline evaluation - uses kick distance (LOS + 17 yards)
+        prob = interpolate.splev(kick_distance, self.fg_model)
+        if not np.isfinite(prob):
+            return float(np.clip(self._simple_fg_prob(kick_distance), 0.0, 1.0))
         return float(np.clip(prob, 0.0, 1.0))
         
     def predict_punt_outcome(self, yardline):
@@ -114,21 +110,39 @@ class SpecialTeamsEngine:
         yardline_100 = 100 - yardline  # Convert to yards from own goal
         
         if self.use_simple_model or self.punt_model is None:
-            # Simple model: net ~40 yards, min 20 (touchback)
-            net_yards = 40
-            landing = yardline + net_yards
-            
-            # Touchback if into end zone
-            if landing >= 100:
-                return 20.0  # Opponent starts at own 20
-            
-            # Opponent's yardline = where ball lands
-            opp_yardline = 100 - landing
+            opp_yardline = self._simple_punt_outcome(yardline)
             return float(np.clip(opp_yardline, 1.0, 99.0))
         
         # B-spline evaluation
         opp_start_y100 = interpolate.splev(yardline_100, self.punt_model)
+        if not np.isfinite(opp_start_y100):
+            return float(np.clip(self._simple_punt_outcome(yardline), 1.0, 99.0))
         opp_yardline = 100 - opp_start_y100
+        return float(np.clip(opp_yardline, 1.0, 99.0))
+
+    @staticmethod
+    def _simple_fg_prob(kick_distance):
+        """Simple linear FG model based on kick distance."""
+        if kick_distance <= 30:
+            prob = 0.95
+        elif kick_distance >= 60:
+            prob = 0.15
+        else:
+            prob = 0.95 - (kick_distance - 30) * 0.027
+        return float(np.clip(prob, 0.0, 1.0))
+
+    @staticmethod
+    def _simple_punt_outcome(yardline):
+        """Simple punt model: net ~40 yards, min 20 (touchback)."""
+        net_yards = 40
+        landing = yardline + net_yards
+
+        # Touchback if into end zone
+        if landing >= 100:
+            return 20.0
+
+        # Opponent's yardline = where ball lands
+        opp_yardline = 100 - landing
         return float(np.clip(opp_yardline, 1.0, 99.0))
     
     def calculate_fg_epa(self, yardline, current_ep):
