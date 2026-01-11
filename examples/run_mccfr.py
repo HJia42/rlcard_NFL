@@ -1,11 +1,9 @@
 """
-Run MCCFR on Bucketed NFL Game
-
-The bucketed game has only 80 base info sets (vs 12,000+), making 
-tabular CFR extremely efficient.
+Run MCCFR on NFL Game
 
 Usage:
-    python examples/run_mccfr_bucketed.py --iterations 1000
+    python examples/run_mccfr.py --game nfl-bucketed --iterations 1000
+    python examples/run_mccfr.py --game nfl --iterations 1000
 """
 import os
 import sys
@@ -34,37 +32,41 @@ def evaluate_vs_random(env, agent, num_games=500):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='MCCFR on Bucketed NFL')
+    parser = argparse.ArgumentParser(description='MCCFR on NFL')
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--iterations', type=int, default=1000)
     parser.add_argument('--eval_every', type=int, default=200)
-    parser.add_argument('--model_path', type=str, default='./models/mccfr_bucketed')
+    parser.add_argument('--model_path', type=str, default='./models/mccfr')
     parser.add_argument('--seed', type=int, default=42)
     args = parser.parse_args()
     
     print("=" * 60)
-    print("MCCFR on Bucketed NFL Game")
+    print(f"MCCFR on {args.game}")
     print("=" * 60)
     
-    # Use bucketed environment
-    env = rlcard.make('nfl-bucketed', config={
+    # Create environment
+    env = rlcard.make(args.game, config={
         'seed': args.seed,
         'allow_step_back': True,
         'single_play': True,
     })
     
-    eval_env = rlcard.make('nfl-bucketed', config={
+    eval_env = rlcard.make(args.game, config={
         'seed': args.seed + 1000,
         'single_play': True,
     })
     
-    # Print info set counts
-    from rlcard.games.nfl.game_bucketed import NFLGameBucketed
-    info_sets = NFLGameBucketed.count_info_sets()
-    print(f"\nInfo Set Counts:")
-    print(f"  Phase 0 (formation): {info_sets['phase_0']}")
-    print(f"  Phase 1 (defense):   {info_sets['phase_1']}")
-    print(f"  Phase 2 (play_type): {info_sets['phase_2']}")
-    print(f"  Total:               {info_sets['total']}")
+    # Print info set counts (only for bucketed game)
+    if args.game == 'nfl-bucketed':
+        from rlcard.games.nfl.game_bucketed import NFLGameBucketed
+        info_sets = NFLGameBucketed.count_info_sets()
+        print(f"\nInfo Set Counts:")
+        print(f"  Phase 0 (formation): {info_sets['phase_0']}")
+        print(f"  Phase 1 (defense):   {info_sets['phase_1']}")
+        print(f"  Phase 2 (play_type): {info_sets['phase_2']}")
+        print(f"  Total:               {info_sets['total']}")
     
     # Create MCCFR agent
     agent = MCCFRAgent(env, model_path=args.model_path)
