@@ -10,7 +10,7 @@ This makes tabular CFR algorithms (MCCFR) much more efficient.
 """
 
 import numpy as np
-from rlcard.games.nfl.game import NFLGame, FORMATION_ACTIONS, DEFENSE_ACTIONS, PLAY_TYPE_ACTIONS
+from rlcard.games.nfl.game import NFLGame, FORMATION_ACTIONS, DEFENSE_ACTIONS, PLAY_TYPE_ACTIONS, INITIAL_ACTIONS, SPECIAL_TEAMS
 
 
 # Distance buckets
@@ -21,13 +21,28 @@ DISTANCE_BUCKETS = {
     'very_long': (16, 99),  # 16+ yards
 }
 
-# Field position buckets
+# Field position buckets (5-yard increments = 20 buckets)
 FIELD_POSITION_BUCKETS = {
-    'own_deep':      (1, 20),    # Deep in own territory
-    'own_side':      (21, 40),   # Own side of field
-    'midfield':      (41, 60),   # Around midfield
-    'opp_side':      (61, 80),   # Opponent's side
-    'red_zone':      (81, 99),   # Red zone (scoring territory)
+    'own_1_5':    (1, 5),
+    'own_6_10':   (6, 10),
+    'own_11_15':  (11, 15),
+    'own_16_20':  (16, 20),
+    'own_21_25':  (21, 25),
+    'own_26_30':  (26, 30),
+    'own_31_35':  (31, 35),
+    'own_36_40':  (36, 40),
+    'own_41_45':  (41, 45),
+    'own_46_50':  (46, 50),
+    'opp_49_45':  (51, 55),
+    'opp_44_40':  (56, 60),
+    'opp_39_35':  (61, 65),
+    'opp_34_30':  (66, 70),
+    'opp_29_25':  (71, 75),
+    'opp_24_20':  (76, 80),
+    'opp_19_15':  (81, 85),
+    'opp_14_10':  (86, 90),
+    'opp_9_5':    (91, 95),
+    'opp_4_1':    (96, 99),
 }
 
 
@@ -40,11 +55,11 @@ def get_distance_bucket(ydstogo):
 
 
 def get_field_position_bucket(yardline):
-    """Convert yardline to bucket index (0-4)."""
+    """Convert yardline to bucket index (0-19)."""
     for i, (name, (low, high)) in enumerate(FIELD_POSITION_BUCKETS.items()):
         if low <= yardline <= high:
             return i
-    return 4  # Default to red_zone
+    return 19  # Default to goal line
 
 
 class NFLGameBucketed(NFLGame):
@@ -65,10 +80,10 @@ class NFLGameBucketed(NFLGame):
             allow_step_back: Support step_back for CFR
             single_play: End game after one play (recommended for CFR)
         """
-        # Call parent init with simple model (no data needed for bucketed version)
+        # Call parent init - will load B-spline models for special teams
         super().__init__(
             allow_step_back=allow_step_back, 
-            use_simple_model=True,
+            use_simple_model=False,  # Use fitted models for special teams
             single_play=single_play
         )
     
@@ -90,7 +105,8 @@ class NFLGameBucketed(NFLGame):
         
         # Construct raw_legal_actions based on phase
         if self.phase == 0:
-            raw_legal_actions = [FORMATION_ACTIONS[i] for i in legal_actions]
+            # Phase 0 now includes formations + PUNT + FG (7 total)
+            raw_legal_actions = [INITIAL_ACTIONS[i] for i in legal_actions]
         elif self.phase == 1:
             raw_legal_actions = [DEFENSE_ACTIONS[i] for i in legal_actions]
         else:
@@ -102,11 +118,12 @@ class NFLGameBucketed(NFLGame):
             obs_tuple = (self.phase, down_bucket, distance_bucket, field_bucket)
         elif self.phase == 1:
             # Defense phase: game state + formation
-            formation_idx = FORMATION_ACTIONS.index(self.pending_formation) if self.pending_formation else 0
+            # pending_formation could be a formation or None (if special teams was used)
+            formation_idx = INITIAL_ACTIONS.index(self.pending_formation) if self.pending_formation in INITIAL_ACTIONS else 0
             obs_tuple = (self.phase, down_bucket, distance_bucket, field_bucket, formation_idx)
         else:
             # Play type phase: game state + formation + box count
-            formation_idx = FORMATION_ACTIONS.index(self.pending_formation) if self.pending_formation else 0
+            formation_idx = INITIAL_ACTIONS.index(self.pending_formation) if self.pending_formation in INITIAL_ACTIONS else 0
             defense_idx = DEFENSE_ACTIONS.index(self.pending_defense_action) if self.pending_defense_action else 0
             obs_tuple = (self.phase, down_bucket, distance_bucket, field_bucket, formation_idx, defense_idx)
         
@@ -114,7 +131,7 @@ class NFLGameBucketed(NFLGame):
         obs_array = np.array([
             down_bucket / 3.0,          # Normalize to 0-1
             distance_bucket / 3.0,
-            field_bucket / 4.0,
+            field_bucket / 19.0,        # Now 20 buckets (0-19)
         ], dtype=np.float32)
         
         # Pad to consistent size
