@@ -39,6 +39,9 @@ def evaluate_against_random(env, agent, num_games=500):
 
 def main():
     parser = argparse.ArgumentParser(description='Parallel Deep CFR on NFL')
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--iterations', type=int, default=500,
                         help='Training iterations')
     parser.add_argument('--eval_every', type=int, default=100,
@@ -90,7 +93,7 @@ def main():
     print(f"  Device: {trainer.device}")
     
     # Create eval env
-    eval_env = rlcard.make('nfl', config={
+    eval_env = rlcard.make(args.game, config={
         'seed': args.seed + 1000,
         'single_play': not args.full_game,
     })

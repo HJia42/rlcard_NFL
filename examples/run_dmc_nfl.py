@@ -1,0 +1,115 @@
+"""
+Deep Monte Carlo (DMC) Training for NFL
+
+Trains DMC agents via self-play with proper termination and standardized evaluation.
+
+Usage:
+    python examples/run_dmc_nfl.py --game nfl-bucketed --iterations 50000
+"""
+
+import os
+import sys
+import argparse
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import torch
+import rlcard
+from rlcard.agents.dmc_agent import DMCTrainer
+from rlcard.utils.eval_utils import evaluate_agent, format_eval_line, EvalLogger
+
+
+def train_dmc(args):
+    """Train DMC agent with standardized output."""
+    
+    print("=" * 60)
+    print("DMC Self-Play Training for NFL")
+    print("=" * 60)
+    print(f"Game: {args.game}")
+    print(f"Iterations: {args.iterations:,}")
+    print(f"Save directory: {args.save_dir}")
+    print(f"GPU: {args.cuda if args.cuda else 'CPU'}")
+    print("=" * 60 + "\n")
+    
+    # Set CUDA
+    if args.cuda:
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
+    
+    # Create environment
+    env = rlcard.make(args.game, config={'single_play': True})
+    
+    # Create DMC trainer
+    trainer = DMCTrainer(
+        env,
+        cuda=args.cuda,
+        load_model=args.load_model,
+        xpid=f'dmc_{args.game}',
+        savedir=args.save_dir,
+        save_interval=args.save_interval,
+        num_actor_devices=args.num_actor_devices,
+        num_actors=args.num_actors,
+        training_device=args.training_device,
+        total_frames=args.iterations,  # Total training steps
+    )
+    
+    # Create eval logger
+    log_path = os.path.join(args.save_dir, f'dmc_{args.game}', 'eval_log.csv')
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    eval_logger = EvalLogger(log_path)
+    
+    print("Starting DMC training...")
+    print("(Training will automatically terminate after specified iterations)\n")
+    
+    start_time = time.time()
+    
+    try:
+        # Start training (this runs in a loop internally)
+        trainer.start()
+        
+    except KeyboardInterrupt:
+        print("\n\nTraining interrupted by user.")
+    
+    elapsed = time.time() - start_time
+    
+    print("\n" + "=" * 60)
+    print("DMC Training Complete!")
+    print("=" * 60)
+    print(f"Total time: {elapsed/60:.1f} minutes")
+    print(f"Models saved to: {args.save_dir}/dmc_{args.game}/")
+    
+    # Final evaluation
+    print("\n--- Final Evaluation ---")
+    try:
+        # Get the trained agent from trainer
+        agent = trainer.get_agent()
+        results = evaluate_agent(agent, args.game, num_games=500)
+        print(format_eval_line("Final", results))
+    except Exception as e:
+        print(f"Could not evaluate: {e}")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='DMC Training for NFL')
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
+    parser.add_argument('--iterations', type=int, default=100000,
+                        help='Total training iterations/frames')
+    parser.add_argument('--cuda', type=str, default='',
+                        help='GPU device ID (empty for CPU)')
+    parser.add_argument('--load-model', action='store_true',
+                        help='Load existing model to continue training')
+    parser.add_argument('--save-dir', type=str, default='experiments/dmc_result',
+                        help='Save directory')
+    parser.add_argument('--save-interval', type=int, default=30,
+                        help='Save interval in minutes')
+    parser.add_argument('--num-actor-devices', type=int, default=1,
+                        help='Number of actor devices')
+    parser.add_argument('--num-actors', type=int, default=5,
+                        help='Number of actors per device')
+    parser.add_argument('--training-device', type=str, default='0',
+                        help='GPU device for training')
+    
+    args = parser.parse_args()
+    train_dmc(args)

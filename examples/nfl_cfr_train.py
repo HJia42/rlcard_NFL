@@ -20,12 +20,12 @@ from rlcard.utils import set_seed, tournament, Logger, plot_curve
 
 def train(args):
     # Create environments with step_back enabled for CFR
-    env = rlcard.make('nfl', config={
+    env = rlcard.make(args.game, config={
         'seed': args.seed,
         'allow_step_back': True,
     })
     
-    eval_env = rlcard.make('nfl', config={'seed': args.seed})
+    eval_env = rlcard.make(args.game, config={'seed': args.seed})
     
     set_seed(args.seed)
     
@@ -71,6 +71,9 @@ def train(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("CFR training for NFL")
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--num_episodes', type=int, default=10000)
     parser.add_argument('--num_eval_games', type=int, default=200)

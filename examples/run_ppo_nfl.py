@@ -32,6 +32,7 @@ def train_ppo(
     rollout_size=256,
     hidden_dims=[128, 128],
     lr=3e-4,
+    entropy_coef=0.01,
     save_dir='models/ppo_nfl',
 ):
     """Train PPO agent via self-play.
@@ -75,7 +76,7 @@ def train_ppo(
         n_epochs=4,
         batch_size=64,
         clip_epsilon=0.2,
-        entropy_coef=0.01,
+        entropy_coef=entropy_coef,
     )
     
     # Register agent for both players (self-play)
@@ -206,6 +207,8 @@ if __name__ == '__main__':
                         help='Hidden layer dimensions')
     parser.add_argument('--save-dir', type=str, default='models/ppo_nfl',
                         help='Save directory')
+    parser.add_argument('--entropy-coef', type=float, default=0.01,
+                        help='Entropy coefficient for exploration (default: 0.01)')
     parser.add_argument('--eval-only', type=str, default=None,
                         help='Path to model for evaluation only')
     
@@ -229,5 +232,6 @@ if __name__ == '__main__':
             rollout_size=args.rollout,
             lr=args.lr,
             hidden_dims=args.hidden,
+            entropy_coef=args.entropy_coef,
             save_dir=args.save_dir,
         )
