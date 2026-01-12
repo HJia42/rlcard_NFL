@@ -29,7 +29,7 @@ GAMMA_PRIOR_ALPHA = 130
 GAMMA_PRIOR_BETA = 1300
 
 # Minimum plays threshold for direct fit vs KNN fallback
-MIN_PLAYS_THRESHOLD = 100
+MIN_PLAYS_THRESHOLD = 50
 
 
 class OutcomeModel:
@@ -94,13 +94,13 @@ class OutcomeModel:
         # Filter by formation
         if 'offense_formation' in candidates.columns:
             form_matches = candidates[candidates['offense_formation'] == formation]
-            if len(form_matches) > 20:
+            if len(form_matches) > 50:
                 candidates = form_matches
         
         # Filter by box count
         if 'defenders_in_box' in candidates.columns:
             box_matches = candidates[candidates['defenders_in_box'] == box_count]
-            if len(box_matches) > 20:
+            if len(box_matches) > 50:
                 candidates = box_matches
         
         return candidates
@@ -134,43 +134,62 @@ class OutcomeModel:
         return top_k
     
     def _sample_run(self, candidates, yardline):
-        """Sample run play outcome from skew-t distribution."""
+        """Sample run play outcome using categorical + empirical distribution."""
         yards_data = candidates['yards_gained'].values
         yards_data = yards_data[~np.isnan(yards_data)]
         
         if len(yards_data) < 10:
             return self._simple_outcome('rush', 6)
         
-        # Fit skew-t parameters using method of moments approximation
-        mean = np.mean(yards_data)
-        std = np.std(yards_data)
-        skew = stats.skew(yards_data) if len(yards_data) > 10 else 0
-        
-        # Use Biro & Walker defaults if data is insufficient
-        if std < 0.1:
-            std = SKEWT_DEFAULT['scale']
-        
-        # Calculate TD probability
         distance_to_goal = 100 - yardline
-        td_plays = np.sum(yards_data >= distance_to_goal)
-        td_prob = min(0.15, td_plays / len(yards_data) if len(yards_data) > 0 else 0.01)
         
-        # Generate outcome
-        if self.np_random.random() < td_prob:
-            # Touchdown
+        # Calculate outcome category probabilities from historical data
+        n_total = len(yards_data)
+        n_loss = int((yards_data < 0).sum())
+        n_zero = int((yards_data == 0).sum())
+        n_td = int((yards_data >= distance_to_goal).sum())
+        n_positive = n_total - n_loss - n_zero - n_td
+        
+        # Dirichlet-Multinomial with small prior
+        prior_weight = 5
+        counts = np.array([n_positive, n_zero, n_loss, n_td], dtype=float)
+        probs = (counts + prior_weight) / (counts.sum() + 4 * prior_weight)
+        
+        # Sample outcome category
+        outcome = self.np_random.choice(['positive', 'zero', 'loss', 'td'], p=probs)
+        
+        # Fumble probability
+        fumble_rate = candidates['fumble'].mean() if 'fumble' in candidates.columns else 0.01
+        
+        if outcome == 'td':
             return {'yards_gained': float(distance_to_goal), 'turnover': False}
         
-        # Sample from t-distribution (approximation of skew-t)
-        df = max(2.1, SKEWT_DEFAULT['df'])
-        yards = stats.t.rvs(df, loc=mean, scale=std, random_state=self.np_random)
+        if outcome == 'zero':
+            turnover = self.np_random.random() < fumble_rate
+            return {'yards_gained': 0.0, 'turnover': bool(turnover)}
         
-        # Clamp to reasonable range
-        yards = float(np.clip(yards, -10, distance_to_goal - 1))
+        if outcome == 'loss':
+            # Sample from historical losses
+            losses = yards_data[yards_data < 0]
+            if len(losses) > 0:
+                yards = float(self.np_random.choice(losses))
+            else:
+                yards = float(self.np_random.choice([-1, -2, -3, -4]))
+            turnover = self.np_random.random() < fumble_rate
+            return {'yards_gained': yards, 'turnover': bool(turnover)}
         
-        # Fumble probability based on historical rate
-        fumble_rate = candidates['fumble'].mean() if 'fumble' in candidates.columns else 0.01
+        # Positive gain - sample from historical positive gains
+        positive_gains = yards_data[(yards_data > 0) & (yards_data < distance_to_goal)]
+        if len(positive_gains) > 0:
+            yards = float(self.np_random.choice(positive_gains))
+        else:
+            # Fallback to t-distribution
+            mean = np.mean(yards_data[yards_data > 0])
+            std = np.std(yards_data[yards_data > 0])
+            yards = max(1, stats.t.rvs(5, loc=mean, scale=std/2, random_state=self.np_random))
+            yards = float(np.clip(yards, 1, distance_to_goal - 1))
+        
         turnover = self.np_random.random() < fumble_rate
-        
         return {'yards_gained': yards, 'turnover': bool(turnover)}
     
     def _sample_pass(self, candidates, yardline):
@@ -182,22 +201,28 @@ class OutcomeModel:
         if n == 0:
             return self._simple_outcome('pass', 6)
         
-        # Count categorical outcomes
-        incompletions = candidates[candidates['incomplete_pass'] == 1] if 'incomplete_pass' in candidates.columns else []
-        sacks = candidates[candidates['sack'] == 1] if 'sack' in candidates.columns else []
-        interceptions = candidates[candidates['interception'] == 1] if 'interception' in candidates.columns else []
-        touchdowns = candidates['yards_gained'] >= distance_to_goal
+        # Count categorical outcomes using available columns
+        yards = candidates['yards_gained'].values
         
-        n_inc = len(incompletions)
-        n_sack = len(sacks)
-        n_int = len(interceptions)
-        n_td = touchdowns.sum()
-        n_comp = n - n_inc - n_sack - n_int - n_td
+        # Incompletions: passes with exactly 0 yards gained (not negative/sack)
+        n_inc = int((yards == 0).sum())
+        
+        # Sacks: passes with negative yards 
+        n_sack = int((yards < 0).sum())
+        
+        # Interceptions
+        n_int = int(candidates['interception'].sum()) if 'interception' in candidates.columns else 0
+        
+        # Touchdowns: plays reaching the end zone
+        n_td = int((yards >= distance_to_goal).sum())
+        
+        # Completions: the rest (positive yards < touchdown)
+        n_comp = int(((yards > 0) & (yards < distance_to_goal)).sum())
         
         # Dirichlet-Multinomial with prior weighting (Biro & Walker)
         prior_weight = 10
-        probs = np.array([n_comp, n_inc, n_sack, n_int, n_td]) + prior_weight
-        probs = probs / probs.sum()
+        counts = np.array([n_comp, n_inc, n_sack, n_int, n_td], dtype=float)
+        probs = (counts + prior_weight) / (counts.sum() + 5 * prior_weight)
         
         # Sample outcome type
         outcome = self.np_random.choice(['completion', 'incomplete', 'sack', 'interception', 'td'], p=probs)
