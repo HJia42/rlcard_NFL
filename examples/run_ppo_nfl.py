@@ -38,6 +38,7 @@ def train_ppo(
     start_down=None,
     start_ydstogo=None,
     start_yardline=None,
+    use_distribution_model=False,
 ):
     """Train PPO agent via self-play.
     
@@ -76,8 +77,16 @@ def train_ppo(
     print(f"Single play mode: {use_single_play}")
     if start_down:
         print(f"Custom start: {start_down} & {start_ydstogo or 10} at {start_yardline or 25}")
+    if use_distribution_model:
+        print("Using Biro & Walker distribution model for outcomes")
     
-    env = rlcard.make(game, config={'single_play': use_single_play})
+    env = rlcard.make(game, config={
+        'single_play': use_single_play,
+        'start_down': start_down,
+        'start_ydstogo': start_ydstogo,
+        'start_yardline': start_yardline,
+        'use_distribution_model': use_distribution_model,
+    })
     
     # Determine max actions across all phases
     # Phase 0: 7 (formations + special teams)
@@ -251,6 +260,8 @@ if __name__ == '__main__':
                         help='Starting yards to go')
     parser.add_argument('--start-yardline', type=int, default=None,
                         help='Starting yardline (1-99, from own goal)')
+    parser.add_argument('--distribution-model', action='store_true',
+                        help='Use Biro & Walker distribution model for outcomes')
     
     args = parser.parse_args()
     
@@ -285,5 +296,6 @@ if __name__ == '__main__':
             start_down=args.start_down,
             start_ydstogo=args.start_ydstogo,
             start_yardline=args.start_yardline,
+            use_distribution_model=args.distribution_model,
         )
 

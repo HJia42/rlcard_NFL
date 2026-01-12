@@ -23,7 +23,8 @@ class NFLEnv(Env):
         """Initialize NFL environment."""
         self.game = NFLGame(
             allow_step_back=config.get('allow_step_back', False),
-            single_play=config.get('single_play', False)
+            single_play=config.get('single_play', False),
+            use_distribution_model=config.get('use_distribution_model', False),
         )
         super().__init__(config)
         
