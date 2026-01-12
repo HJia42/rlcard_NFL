@@ -52,7 +52,8 @@ class NFLGame:
     Phase 3: Offense sees box count, picks pass/rush
     """
     
-    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, single_play=False):
+    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
+                 single_play=False, use_distribution_model=False):
         """Initialize NFL Game.
         
         Args:
@@ -62,9 +63,12 @@ class NFLGame:
                              If None, auto-detect based on allow_step_back.
             single_play: If True, game ends after one complete play (3 phases).
                         This dramatically reduces tree depth for CFR algorithms.
+            use_distribution_model: If True, use Biro & Walker statistical distributions
+                        instead of random sampling for play outcomes.
         """
         self.allow_step_back = allow_step_back
         self.single_play = single_play
+        self.use_distribution_model = use_distribution_model
         self.np_random = np.random.RandomState()
         
         # Action spaces per phase
@@ -97,8 +101,14 @@ class NFLGame:
         
         # Load data engine for outcomes (only if not using simple model)
         self.play_data = None
+        self.outcome_model = None
         if not self.use_simple_model:
             self._load_data(data_path)
+            # Initialize statistical outcome model if enabled
+            if self.use_distribution_model and self.play_data is not None:
+                from rlcard.games.nfl.outcome_model import OutcomeModel
+                self.outcome_model = OutcomeModel(self.play_data, self.np_random)
+                print("Using Biro & Walker distribution model for outcomes")
         else:
             print("Using simplified outcome model (fast mode for CFR)")
         
@@ -313,9 +323,15 @@ class NFLGame:
         self.pending_defense_action = None
     
     def _get_outcome(self, down, ydstogo, yardline, offense_action, defense_action):
-        """Sample outcome from historical data."""
+        """Sample outcome from historical data or statistical distribution."""
         formation, play_type = offense_action
         box_count, _ = defense_action
+        
+        # Use distribution model if enabled and available
+        if self.outcome_model is not None:
+            return self.outcome_model.get_outcome(
+                down, ydstogo, yardline, formation, box_count, play_type
+            )
         
         if self.play_data is None:
             # Simplified model
