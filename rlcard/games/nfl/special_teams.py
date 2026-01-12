@@ -241,6 +241,11 @@ class SpecialTeamsEngine:
         distance_to_goal = 100 - yardline
         kick_distance = distance_to_goal + 17
         
+        # NFL record FG is 66 yards - anything over 65 is essentially 0%
+        # B-spline extrapolates poorly beyond training range, so clamp here
+        if kick_distance > 65:
+            return 0.0
+        
         if self.use_simple_model or self.fg_model is None:
             # Simple linear model: 
             # At opp 20 (yardline=80, kick=37yd): ~90%
