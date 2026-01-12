@@ -58,7 +58,10 @@ def train_ppo(
     print(f"Save directory: {save_dir}")
     print(f"{'='*60}\n")
     
-    env = rlcard.make(game, config={'single_play': True})
+    # Use full drives for bucketed game, single play for full game
+    use_single_play = (game == 'nfl')  # Only single play for full game
+    
+    env = rlcard.make(game, config={'single_play': use_single_play})
     
     # Determine max actions across all phases
     # Phase 0: 7 (formations + special teams)

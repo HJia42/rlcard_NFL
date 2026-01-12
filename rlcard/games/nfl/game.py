@@ -236,8 +236,13 @@ class NFLGame:
                 self.ydstogo -= yards
                 
                 if self.down > 4:
+                    # Turnover on downs: opponent gets ball here
+                    # Calculate opponent's EP from their new field position
+                    opp_yardline = 100 - self.yardline  # Convert to opponent's perspective
+                    opp_yardline = max(1, min(99, opp_yardline))
+                    opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
+                    epa = -opp_ep - old_ep
                     self.is_over_flag = True
-                    epa = -old_ep
                 else:
                     new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
                     epa = new_ep - old_ep

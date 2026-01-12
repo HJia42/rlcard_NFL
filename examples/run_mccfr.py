@@ -46,11 +46,14 @@ def main():
     print(f"MCCFR on {args.game}")
     print("=" * 60)
     
+    # Use full drives for bucketed game, single play for full game
+    use_single_play = (args.game == 'nfl')  # Only single play for full game
+    
     # Create environment
     env = rlcard.make(args.game, config={
         'seed': args.seed,
         'allow_step_back': True,
-        'single_play': True,
+        'single_play': use_single_play,
     })
     
     eval_env = rlcard.make(args.game, config={
