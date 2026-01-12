@@ -277,19 +277,23 @@ class NFLGame:
                 # FG made: +3 points
                 epa = 3.0 - old_ep
             else:
-                # FG missed: opponent gets ball at LOS or 20
+                # FG missed: opponent gets ball at LOS or 20 (their yardline)
                 opp_yardline = max(100 - self.yardline, 20)
-                opp_ep = (opp_yardline / 100) * 3
+                # Use full EP model for opponent's position (1st & 10)
+                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
                 epa = -opp_ep - old_ep
             
             self.is_over_flag = True
             
         elif action_str == "PUNT":
             # Punt: opponent gets ball at predicted position
-            opp_yardline = self.special_teams.predict_punt_outcome(self.yardline)
+            opp_raw_yardline = self.special_teams.predict_punt_outcome(self.yardline)
+            # Convert to opponent's perspective (their yards from their goal)
+            opp_yardline = 100 - opp_raw_yardline
+            opp_yardline = max(1, min(99, opp_yardline))  # Clamp to valid range
             
-            # EPA is negative of opponent's expected points
-            opp_ep = (opp_yardline / 100) * 3
+            # Use full EP model for opponent's position (1st & 10)
+            opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
             epa = -opp_ep - old_ep
             
             self.is_over_flag = True
