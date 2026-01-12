@@ -40,14 +40,34 @@ def main():
     parser.add_argument('--eval_every', type=int, default=200)
     parser.add_argument('--model_path', type=str, default='./models/mccfr')
     parser.add_argument('--seed', type=int, default=42)
+    # Custom starting state parameters
+    parser.add_argument('--single-play', action='store_true',
+                        help='End game after one play')
+    parser.add_argument('--full-drive', action='store_true',
+                        help='Run full drives (default for bucketed)')
+    parser.add_argument('--start-down', type=int, default=None, choices=[1, 2, 3, 4],
+                        help='Starting down (1-4)')
+    parser.add_argument('--start-ydstogo', type=int, default=None,
+                        help='Starting yards to go')
+    parser.add_argument('--start-yardline', type=int, default=None,
+                        help='Starting yardline (1-99, from own goal)')
     args = parser.parse_args()
     
     print("=" * 60)
     print(f"MCCFR on {args.game}")
     print("=" * 60)
     
-    # Use full drives for bucketed game, single play for full game
-    use_single_play = (args.game == 'nfl')  # Only single play for full game
+    # Determine single_play mode
+    if args.single_play:
+        use_single_play = True
+    elif args.full_drive:
+        use_single_play = False
+    else:
+        use_single_play = (args.game == 'nfl')  # Auto: bucketed=full drive, nfl=single
+    
+    print(f"Single play mode: {use_single_play}")
+    if args.start_down:
+        print(f"Custom start: {args.start_down} & {args.start_ydstogo or 10} at {args.start_yardline or 25}")
     
     # Create environment
     env = rlcard.make(args.game, config={

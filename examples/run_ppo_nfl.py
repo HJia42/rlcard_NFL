@@ -34,6 +34,10 @@ def train_ppo(
     lr=3e-4,
     entropy_coef=0.01,
     save_dir='models/ppo_nfl',
+    single_play=None,
+    start_down=None,
+    start_ydstogo=None,
+    start_yardline=None,
 ):
     """Train PPO agent via self-play.
     
@@ -46,6 +50,10 @@ def train_ppo(
         hidden_dims: Hidden layer sizes
         lr: Learning rate
         save_dir: Directory to save models
+        single_play: If True, end game after one play. If None, auto-detect.
+        start_down: Fixed starting down (1-4). If None, use default.
+        start_ydstogo: Fixed starting yards to go. If None, use default.
+        start_yardline: Fixed starting yardline (1-99). If None, use default.
     """
     # Create environment
     print(f"\n{'='*60}")
@@ -58,8 +66,16 @@ def train_ppo(
     print(f"Save directory: {save_dir}")
     print(f"{'='*60}\n")
     
-    # Use full drives for bucketed game, single play for full game
-    use_single_play = (game == 'nfl')  # Only single play for full game
+    # Determine single_play mode
+    if single_play is None:
+        # Default: full drives for bucketed, single play for full game
+        use_single_play = (game == 'nfl')
+    else:
+        use_single_play = single_play
+    
+    print(f"Single play mode: {use_single_play}")
+    if start_down:
+        print(f"Custom start: {start_down} & {start_ydstogo or 10} at {start_yardline or 25}")
     
     env = rlcard.make(game, config={'single_play': use_single_play})
     
@@ -96,6 +112,16 @@ def train_ppo(
     for episode in range(1, num_episodes + 1):
         # Run one episode
         state, player_id = env.reset()
+        
+        # Apply custom starting state if specified
+        if start_down is not None:
+            env.game.down = start_down
+        if start_ydstogo is not None:
+            env.game.ydstogo = start_ydstogo
+        if start_yardline is not None:
+            env.game.yardline = start_yardline
+        if start_down or start_ydstogo or start_yardline:
+            state = env.get_state(player_id)
         
         episode_reward = 0
         
@@ -214,8 +240,26 @@ if __name__ == '__main__':
                         help='Entropy coefficient for exploration (default: 0.01)')
     parser.add_argument('--eval-only', type=str, default=None,
                         help='Path to model for evaluation only')
+    # New parameters for custom starting state
+    parser.add_argument('--single-play', action='store_true',
+                        help='End game after one play (default: auto-detect by game)')
+    parser.add_argument('--full-drive', action='store_true',
+                        help='Run full drives (default: auto-detect by game)')
+    parser.add_argument('--start-down', type=int, default=None, choices=[1, 2, 3, 4],
+                        help='Starting down (1-4)')
+    parser.add_argument('--start-ydstogo', type=int, default=None,
+                        help='Starting yards to go')
+    parser.add_argument('--start-yardline', type=int, default=None,
+                        help='Starting yardline (1-99, from own goal)')
     
     args = parser.parse_args()
+    
+    # Determine single_play setting
+    single_play = None  # Auto-detect
+    if args.single_play:
+        single_play = True
+    elif args.full_drive:
+        single_play = False
     
     if args.eval_only:
         # Evaluation mode
@@ -237,4 +281,9 @@ if __name__ == '__main__':
             hidden_dims=args.hidden,
             entropy_coef=args.entropy_coef,
             save_dir=args.save_dir,
+            single_play=single_play,
+            start_down=args.start_down,
+            start_ydstogo=args.start_ydstogo,
+            start_yardline=args.start_yardline,
         )
+
