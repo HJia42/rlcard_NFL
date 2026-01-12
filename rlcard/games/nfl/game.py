@@ -287,9 +287,8 @@ class NFLGame:
             
         elif action_str == "PUNT":
             # Punt: opponent gets ball at predicted position
-            opp_raw_yardline = self.special_teams.predict_punt_outcome(self.yardline)
-            # Convert to opponent's perspective (their yards from their goal)
-            opp_yardline = 100 - opp_raw_yardline
+            # predict_punt_outcome returns opponent's yardline from THEIR own goal
+            opp_yardline = self.special_teams.predict_punt_outcome(self.yardline)
             opp_yardline = max(1, min(99, opp_yardline))  # Clamp to valid range
             
             # Use full EP model for opponent's position (1st & 10)
