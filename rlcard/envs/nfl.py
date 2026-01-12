@@ -27,6 +27,11 @@ class NFLEnv(Env):
         )
         super().__init__(config)
         
+        # Custom starting state (for targeted training)
+        self.start_down = config.get('start_down', None)
+        self.start_ydstogo = config.get('start_ydstogo', None)
+        self.start_yardline = config.get('start_yardline', None)
+        
         # State dimensions - use consistent 11 dims for both players
         # This is needed for DMC compatibility (same shape for all players)
         # Offense: [down, ydstogo, yardline, formation_one_hot, box_count] = 11 dims
@@ -37,6 +42,24 @@ class NFLEnv(Env):
         # Encoding mappings
         self.formations = ("SHOTGUN", "SINGLEBACK", "I_FORM", "PISTOL", "EMPTY", "JUMBO", "WILDCAT")
         self.formation_to_idx = {f: i for i, f in enumerate(self.formations)}
+    
+    def reset(self):
+        """Reset the environment and apply custom starting position if configured."""
+        state, player_id = super().reset()
+        
+        # Apply custom starting position if configured
+        if self.start_down is not None:
+            self.game.down = self.start_down
+        if self.start_ydstogo is not None:
+            self.game.ydstogo = self.start_ydstogo
+        if self.start_yardline is not None:
+            self.game.yardline = self.start_yardline
+        
+        # Re-extract state if we modified game state
+        if self.start_down or self.start_ydstogo or self.start_yardline:
+            state = self._extract_state(self.game.get_state(player_id))
+        
+        return state, player_id
     
     def _extract_state(self, state):
         """Extract state features for neural network."""

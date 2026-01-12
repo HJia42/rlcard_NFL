@@ -16,9 +16,24 @@ from rlcard.utils.eval_utils import quick_eval, format_eval_line
 
 
 def train(args):
+    # Determine single_play mode
+    if args.single_play:
+        use_single_play = True
+    elif args.full_drive:
+        use_single_play = False
+    else:
+        use_single_play = (args.game == 'nfl')  # Default: bucketed=full drive
+    
     # Create environment
-    env = rlcard.make(args.game, config={'seed': args.seed})
-    eval_env = rlcard.make(args.game, config={'seed': args.seed + 1})
+    env_config = {
+        'seed': args.seed,
+        'single_play': use_single_play,
+        'start_down': args.start_down,
+        'start_ydstogo': args.start_ydstogo,
+        'start_yardline': args.start_yardline,
+    }
+    env = rlcard.make(args.game, config=env_config)
+    eval_env = rlcard.make(args.game, config={'seed': args.seed + 1, 'single_play': True})
     
     print(f"NFSP Training on {args.game}")
     print(f"  Players: {env.num_players}, Actions: {env.num_actions}")
@@ -90,6 +105,21 @@ if __name__ == '__main__':
     parser.add_argument('--save-dir', type=str, default='models/nfsp_nfl',
                         help='Save directory')
     parser.add_argument('--seed', type=int, default=42)
+    # Single-play and starting state parameters
+    parser.add_argument('--single-play', action='store_true',
+                        help='End game after one play')
+    parser.add_argument('--full-drive', action='store_true',
+                        help='Run full drives (default for bucketed)')
+    parser.add_argument('--start-down', type=int, default=None, choices=[1, 2, 3, 4],
+                        help='Starting down (1-4)')
+    parser.add_argument('--start-ydstogo', type=int, default=None,
+                        help='Starting yards to go')
+    parser.add_argument('--start-yardline', type=int, default=None,
+                        help='Starting yardline (1-99, from own goal)')
     
     args = parser.parse_args()
+    
+    if args.start_down:
+        print(f"Custom start: {args.start_down} & {args.start_ydstogo or 10} at {args.start_yardline or 25}")
+    
     train(args)

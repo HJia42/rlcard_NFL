@@ -61,6 +61,13 @@ def main():
     parser.add_argument('--full_game', action='store_true',
                         help='Use full-game mode (entire drive, slower)')
     parser.add_argument('--seed', type=int, default=42)
+    # Custom starting state parameters
+    parser.add_argument('--start-down', type=int, default=None, choices=[1, 2, 3, 4],
+                        help='Starting down (1-4)')
+    parser.add_argument('--start-ydstogo', type=int, default=None,
+                        help='Starting yards to go')
+    parser.add_argument('--start-yardline', type=int, default=None,
+                        help='Starting yardline (1-99, from own goal)')
     args = parser.parse_args()
     
     print("=" * 60)
@@ -71,6 +78,9 @@ def main():
         'seed': args.seed,
         'allow_step_back': True,
         'single_play': not args.full_game,
+        'start_down': args.start_down,
+        'start_ydstogo': args.start_ydstogo,
+        'start_yardline': args.start_yardline,
     }
     
     print(f"\nConfig:")
@@ -78,6 +88,8 @@ def main():
     print(f"  GPU: {args.cuda}")
     print(f"  Hidden Layers: {args.hidden_layers}")
     print(f"  Single Play: {not args.full_game}")
+    if args.start_down:
+        print(f"  Custom Start: {args.start_down} & {args.start_ydstogo or 10} at {args.start_yardline or 25}")
     
     # Create trainer
     trainer = ParallelDeepCFRTrainer(
