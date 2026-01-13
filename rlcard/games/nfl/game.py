@@ -94,21 +94,24 @@ class NFLGame:
         self.special_teams = get_special_teams_engine()
         
         # Use simple model for CFR (step_back) since pandas is too slow
+        # UNLESS distribution model is enabled (which is efficient)
         if use_simple_model is None:
-            self.use_simple_model = allow_step_back
+            self.use_simple_model = allow_step_back and not use_distribution_model
         else:
             self.use_simple_model = use_simple_model
         
-        # Load data engine for outcomes (only if not using simple model)
+        # Load data engine for outcomes (only if not using simple model OR using distribution model)
         self.play_data = None
         self.outcome_model = None
-        if not self.use_simple_model:
+        if not self.use_simple_model or self.use_distribution_model:
             self._load_data(data_path)
             # Initialize statistical outcome model if enabled
             if self.use_distribution_model and self.play_data is not None:
                 from rlcard.games.nfl.outcome_model import OutcomeModel
                 self.outcome_model = OutcomeModel(self.play_data, self.np_random)
                 print("Using Biro & Walker distribution model for outcomes")
+            elif not self.use_simple_model:
+                pass  # Will use data-based sampling
         else:
             print("Using simplified outcome model (fast mode for CFR)")
         
