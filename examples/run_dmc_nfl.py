@@ -37,7 +37,11 @@ def train_dmc(args):
         os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     
     # Create environment
-    env = rlcard.make(args.game, config={'single_play': True})
+    env_config = {
+        'single_play': True,
+        'use_distribution_model': args.distribution_model,
+    }
+    env = rlcard.make(args.game, config=env_config)
     
     # Create DMC trainer
     trainer = DMCTrainer(
@@ -110,6 +114,8 @@ if __name__ == '__main__':
                         help='Number of actors per device')
     parser.add_argument('--training-device', type=str, default='0',
                         help='GPU device for training')
+    parser.add_argument('--distribution-model', action='store_true',
+                        help='Use Biro & Walker distribution model for outcomes')
     
     args = parser.parse_args()
     train_dmc(args)

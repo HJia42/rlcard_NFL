@@ -68,6 +68,8 @@ def main():
                         help='Starting yards to go')
     parser.add_argument('--start-yardline', type=int, default=None,
                         help='Starting yardline (1-99, from own goal)')
+    parser.add_argument('--distribution-model', action='store_true',
+                        help='Use Biro & Walker distribution model for outcomes')
     args = parser.parse_args()
     
     print("=" * 60)
@@ -81,6 +83,7 @@ def main():
         'start_down': args.start_down,
         'start_ydstogo': args.start_ydstogo,
         'start_yardline': args.start_yardline,
+        'use_distribution_model': args.distribution_model,
     }
     
     print(f"\nConfig:")
@@ -104,10 +107,11 @@ def main():
     
     print(f"  Device: {trainer.device}")
     
-    # Create eval env
+    # Create eval env (with same config as training)
     eval_env = rlcard.make(args.game, config={
         'seed': args.seed + 1000,
         'single_play': not args.full_game,
+        'use_distribution_model': args.distribution_model,
     })
     
     print(f"\nStarting {args.num_actors} actor processes...")
