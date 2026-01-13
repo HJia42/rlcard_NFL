@@ -227,7 +227,12 @@ class NFLGame:
             
             if turnover:
                 self.is_over_flag = True
-                epa = -old_ep * 2
+                # Estimate opponent EP from turnover spot
+                turnover_spot = self.yardline + yards
+                turnover_spot = max(1, min(99, turnover_spot))
+                opp_yardline = 100 - turnover_spot
+                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
+                epa = -opp_ep - old_ep
             elif self.yardline + yards >= 100:
                 # Touchdown!
                 self.is_over_flag = True
