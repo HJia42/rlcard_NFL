@@ -42,8 +42,8 @@ def main():
         state_shape=env.state_shape[0],
         num_actions=7,
         hidden_dims=[128, 128],
-        lr=1e-3,  # Slightly higher for faster learning
-        entropy_coef=0.05,  # Moderate exploration
+        lr=1e-4,  # Slightly higher for faster learning
+        entropy_coef=0.2,  # Moderate exploration
     )
     
     # Self-play
@@ -51,8 +51,8 @@ def main():
     
     os.makedirs('models/ppo_curriculum', exist_ok=True)
     
-    num_episodes = 20000
-    eval_every = 1000
+    num_episodes = 50000
+    eval_every = 10000
     rollout_size = 256
     
     episode_rewards = []
