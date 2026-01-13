@@ -40,6 +40,7 @@ def train_dmc(args):
     env_config = {
         'single_play': True,
         'use_distribution_model': args.distribution_model,
+        'use_cached_model': args.cached_model,
     }
     env = rlcard.make(args.game, config=env_config)
     
@@ -116,6 +117,8 @@ if __name__ == '__main__':
                         help='GPU device for training')
     parser.add_argument('--distribution-model', action='store_true',
                         help='Use Biro & Walker distribution model for outcomes')
+    parser.add_argument('--cached-model', action='store_true',
+                        help='Use cached distribution model (O(1) lookup, faster)')
     
     args = parser.parse_args()
     train_dmc(args)

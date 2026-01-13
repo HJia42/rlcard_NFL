@@ -31,9 +31,16 @@ def train(args):
         'start_down': args.start_down,
         'start_ydstogo': args.start_ydstogo,
         'start_yardline': args.start_yardline,
+        'use_distribution_model': args.distribution_model,
+        'use_cached_model': args.cached_model,
     }
     env = rlcard.make(args.game, config=env_config)
-    eval_env = rlcard.make(args.game, config={'seed': args.seed + 1, 'single_play': True})
+    eval_env = rlcard.make(args.game, config={
+        'seed': args.seed + 1,
+        'single_play': True,
+        'use_distribution_model': args.distribution_model,
+        'use_cached_model': args.cached_model,
+    })
     
     print(f"NFSP Training on {args.game}")
     print(f"  Players: {env.num_players}, Actions: {env.num_actions}")
@@ -116,6 +123,10 @@ if __name__ == '__main__':
                         help='Starting yards to go')
     parser.add_argument('--start-yardline', type=int, default=None,
                         help='Starting yardline (1-99, from own goal)')
+    parser.add_argument('--distribution-model', action='store_true',
+                        help='Use Biro & Walker distribution model for outcomes')
+    parser.add_argument('--cached-model', action='store_true',
+                        help='Use cached distribution model (O(1) lookup, faster)')
     
     args = parser.parse_args()
     

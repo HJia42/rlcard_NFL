@@ -53,7 +53,7 @@ class NFLGame:
     """
     
     def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
-                 single_play=False, use_distribution_model=False):
+                 single_play=False, use_distribution_model=False, use_cached_model=False):
         """Initialize NFL Game.
         
         Args:
@@ -65,10 +65,13 @@ class NFLGame:
                         This dramatically reduces tree depth for CFR algorithms.
             use_distribution_model: If True, use Biro & Walker statistical distributions
                         instead of random sampling for play outcomes.
+            use_cached_model: If True, use pre-computed cached distributions for O(1) lookup.
+                        Overrides use_distribution_model if True.
         """
         self.allow_step_back = allow_step_back
         self.single_play = single_play
         self.use_distribution_model = use_distribution_model
+        self.use_cached_model = use_cached_model
         self.np_random = np.random.RandomState()
         
         # Action spaces per phase
@@ -93,25 +96,34 @@ class NFLGame:
         # Special teams engine for FG/Punt outcomes
         self.special_teams = get_special_teams_engine()
         
-        # Use simple model for CFR (step_back) since pandas is too slow
-        # UNLESS distribution model is enabled (which is efficient)
+        # Determine model to use
+        # Priority: cached > distribution > data-based > simple
         if use_simple_model is None:
-            self.use_simple_model = allow_step_back and not use_distribution_model
+            # Simple model only if step_back AND no advanced models requested
+            self.use_simple_model = allow_step_back and not use_distribution_model and not use_cached_model
         else:
             self.use_simple_model = use_simple_model
         
-        # Load data engine for outcomes (only if not using simple model OR using distribution model)
+        # Load data and outcome models
         self.play_data = None
         self.outcome_model = None
-        if not self.use_simple_model or self.use_distribution_model:
+        self.cached_model = None
+        
+        if not self.use_simple_model or self.use_distribution_model or self.use_cached_model:
             self._load_data(data_path)
-            # Initialize statistical outcome model if enabled
-            if self.use_distribution_model and self.play_data is not None:
+            
+            if self.use_cached_model and self.play_data is not None:
+                # Use cached model (O(1) lookup)
+                from rlcard.games.nfl.cached_outcome_model import get_cached_outcome_model
+                # For bucketed game, use bucketed cache; otherwise full
+                use_bucketed = hasattr(self, 'is_bucketed') and self.is_bucketed
+                self.cached_model = get_cached_outcome_model(self.play_data, self.np_random, use_bucketed=True)
+                print("Using cached distribution model (O(1) lookup)")
+            elif self.use_distribution_model and self.play_data is not None:
+                # Use Biro & Walker distribution model
                 from rlcard.games.nfl.outcome_model import OutcomeModel
                 self.outcome_model = OutcomeModel(self.play_data, self.np_random)
                 print("Using Biro & Walker distribution model for outcomes")
-            elif not self.use_simple_model:
-                pass  # Will use data-based sampling
         else:
             print("Using simplified outcome model (fast mode for CFR)")
         
@@ -334,6 +346,12 @@ class NFLGame:
         """Sample outcome from historical data or statistical distribution."""
         formation, play_type = offense_action
         box_count, _ = defense_action
+        
+        # Use cached model if enabled (O(1) lookup)
+        if self.cached_model is not None:
+            return self.cached_model.sample(
+                formation, play_type, box_count, yardline, down, ydstogo
+            )
         
         # Use distribution model if enabled and available
         if self.outcome_model is not None:

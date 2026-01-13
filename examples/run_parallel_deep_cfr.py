@@ -70,6 +70,8 @@ def main():
                         help='Starting yardline (1-99, from own goal)')
     parser.add_argument('--distribution-model', action='store_true',
                         help='Use Biro & Walker distribution model for outcomes')
+    parser.add_argument('--cached-model', action='store_true',
+                        help='Use cached distribution model (O(1) lookup, faster)')
     args = parser.parse_args()
     
     print("=" * 60)
@@ -84,6 +86,7 @@ def main():
         'start_ydstogo': args.start_ydstogo,
         'start_yardline': args.start_yardline,
         'use_distribution_model': args.distribution_model,
+        'use_cached_model': args.cached_model,
     }
     
     print(f"\nConfig:")
@@ -112,6 +115,7 @@ def main():
         'seed': args.seed + 1000,
         'single_play': not args.full_game,
         'use_distribution_model': args.distribution_model,
+        'use_cached_model': args.cached_model,
     })
     
     print(f"\nStarting {args.num_actors} actor processes...")
