@@ -53,7 +53,7 @@ def train(args):
             state_shape=[11],  # Fixed state size (padded)
             hidden_layers_sizes=args.hidden,
             q_mlp_layers=args.hidden,
-            anticipatory_param=0.1,
+            anticipatory_param=args.anticipatory_param,
         )
         agents.append(agent)
     
@@ -127,6 +127,8 @@ if __name__ == '__main__':
                         help='Use Biro & Walker distribution model for outcomes')
     parser.add_argument('--cached-model', action='store_true',
                         help='Use cached distribution model (O(1) lookup, faster)')
+    parser.add_argument('--anticipatory-param', type=float, default=0.1,
+                        help='Exploration parameter (0.1-0.3, higher=more exploration)')
     
     args = parser.parse_args()
     
