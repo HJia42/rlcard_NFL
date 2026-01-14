@@ -50,7 +50,7 @@ def train(args):
     for i in range(env.num_players):
         agent = NFSPAgent(
             num_actions=env.num_actions,
-            state_shape=[11],  # Fixed state size (padded)
+            state_shape=[12],  # Fixed state size (with phase encoding)
             hidden_layers_sizes=args.hidden,
             q_mlp_layers=args.hidden,
             anticipatory_param=args.anticipatory_param,

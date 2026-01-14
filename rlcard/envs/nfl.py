@@ -34,11 +34,10 @@ class NFLEnv(Env):
         self.start_ydstogo = config.get('start_ydstogo', None)
         self.start_yardline = config.get('start_yardline', None)
         
-        # State dimensions - use consistent 11 dims for both players
+        # State dimensions - use consistent 12 dims for both players
         # This is needed for DMC compatibility (same shape for all players)
-        # Offense: [down, ydstogo, yardline, formation_one_hot, box_count] = 11 dims
-        # Defense: [down, ydstogo, yardline, formation_one_hot, 0] = padded to 11 dims
-        self.state_shape = [[11], [11]]  # Same dims for both players (DMC compatible)
+        # [down, ydstogo, yardline, formation_one_hot(7), box_count, phase] = 12 dims
+        self.state_shape = [[12], [12]]  # Same dims for both players (DMC compatible)
         self.action_shape = [None, None]
         
         # Encoding mappings
@@ -75,27 +74,35 @@ class NFLEnv(Env):
         
         if phase == 'formation':
             # Phase 0: Offense picks formation, just sees game state
-            obs = np.zeros(11, dtype=np.float32)
+            # Phase encoding: 0 for formation selection
+            obs = np.zeros(12, dtype=np.float32)
             obs[:3] = [down, ydstogo, yardline]
+            obs[11] = 0.0  # Phase 0 (formation)
             legal_actions = {i: None for i in state['legal_actions']}
             
         elif phase == 'defense':
-            # Phase 1: Defense sees formation (pad to 11 dims for consistency)
+            # Phase 1: Defense sees formation
+            # Phase encoding: 0.5 for defense selection
             formation = state.get('formation', 'SHOTGUN')
             formation_vec = self._encode_formation(formation)
-            obs = np.zeros(11, dtype=np.float32)
+            obs = np.zeros(12, dtype=np.float32)
             obs[:3] = [down, ydstogo, yardline]
             obs[3:10] = formation_vec
-            # obs[10] left as 0 (no box info for defense)
+            obs[11] = 0.5  # Phase 1 (defense)
             legal_actions = {i: None for i in state['legal_actions']}
             
         else:  # phase == 'play_type'
             # Phase 2: Offense sees box count + own formation
+            # Phase encoding: 1.0 for play type selection
             formation = state.get('formation', 'SHOTGUN')
             box_count = state.get('box_count', 6)
             formation_vec = self._encode_formation(formation)
             box_normalized = (box_count - 4) / 4.0  # Normalize 4-8 to 0-1
-            obs = np.array([down, ydstogo, yardline] + formation_vec + [box_normalized], dtype=np.float32)
+            obs = np.zeros(12, dtype=np.float32)
+            obs[:3] = [down, ydstogo, yardline]
+            obs[3:10] = formation_vec
+            obs[10] = box_normalized
+            obs[11] = 1.0  # Phase 2 (play_type)
             legal_actions = {i: None for i in state['legal_actions']}
         
         return {
