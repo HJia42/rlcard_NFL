@@ -142,16 +142,17 @@ def analyze_decisions(agent, env, player_id=0):
 
 def create_offense_state_phase0(down, ydstogo, yardline):
     """Create state array for offense formation phase."""
-    obs = np.zeros(11, dtype=np.float32)
+    obs = np.zeros(12, dtype=np.float32)
     obs[0] = down / 4.0
     obs[1] = min(ydstogo, 30) / 30.0
     obs[2] = yardline / 100.0
+    obs[11] = 0.0  # Phase = 0 (formation)
     return obs
 
 
 def create_offense_state_phase2(down, ydstogo, yardline, formation_idx, box_count):
     """Create state array for offense play type phase."""
-    obs = np.zeros(11, dtype=np.float32)
+    obs = np.zeros(12, dtype=np.float32)
     obs[0] = down / 4.0
     obs[1] = min(ydstogo, 30) / 30.0
     obs[2] = yardline / 100.0
@@ -159,17 +160,19 @@ def create_offense_state_phase2(down, ydstogo, yardline, formation_idx, box_coun
     obs[3 + formation_idx] = 1.0
     # Box count normalized
     obs[10] = (box_count - 4) / 4.0
+    obs[11] = 1.0  # Phase = 2 (play type)
     return obs
 
 
 def create_defense_state(down, ydstogo, yardline, formation_idx):
     """Create state array for defense."""
-    obs = np.zeros(11, dtype=np.float32)
+    obs = np.zeros(12, dtype=np.float32)
     obs[0] = down / 4.0
     obs[1] = min(ydstogo, 30) / 30.0
     obs[2] = yardline / 100.0
     # Formation one-hot
     obs[3 + formation_idx] = 1.0
+    obs[11] = 0.5  # Phase = 1 (defense)
     return obs
 
 
@@ -280,7 +283,7 @@ def main():
     
     # Load model and analyze decisions
     print("\n--- Loading Model ---")
-    env = rlcard.make('nfl', config={'single_play': True})
+    env = rlcard.make('nfl-bucketed', config={'single_play': True, 'use_cached_model': True})
     agents = load_dmc_model(args.model_path, env)
     
     if agents:
