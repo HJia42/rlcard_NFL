@@ -26,9 +26,9 @@ class NFLBucketedEnv(Env):
         super().__init__(config)
         
         # Bucketed observations are smaller
-        # 3 dims: [down_bucket, distance_bucket, field_bucket] 
-        # Padded to 11 for consistency with standard NFL env
-        self.state_shape = [[11], [11]]
+        # 3 dims: [down_bucket, distance_bucket, field_bucket] + phase
+        # Padded to 12 for consistency with standard NFL env (with phase encoding)
+        self.state_shape = [[12], [12]]
         self.action_shape = [None, None]
         
         # Encoding mappings

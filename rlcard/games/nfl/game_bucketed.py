@@ -134,9 +134,11 @@ class NFLGameBucketed(NFLGame):
             field_bucket / 19.0,        # Now 20 buckets (0-19)
         ], dtype=np.float32)
         
-        # Pad to consistent size
-        full_obs = np.zeros(11, dtype=np.float32)
+        # Pad to consistent size (12 dims with phase)
+        full_obs = np.zeros(12, dtype=np.float32)
         full_obs[:len(obs_array)] = obs_array
+        # Add phase encoding at position 11 (0=formation, 0.5=defense, 1=play_type)
+        full_obs[11] = self.phase / 2.0
         
         return {
             'obs': full_obs,           # Array for neural networks
