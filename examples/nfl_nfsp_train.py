@@ -56,8 +56,8 @@ def train(args):
             anticipatory_param=args.anticipatory_param,
             rl_learning_rate=args.rl_lr,
             sl_learning_rate=args.sl_lr,
-            epsilon_start=args.epsilon_start,
-            epsilon_end=args.epsilon_end,
+            q_epsilon_start=args.epsilon_start,
+            q_epsilon_end=args.epsilon_end,
         )
         agents.append(agent)
     
