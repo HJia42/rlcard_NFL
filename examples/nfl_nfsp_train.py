@@ -54,6 +54,10 @@ def train(args):
             hidden_layers_sizes=args.hidden,
             q_mlp_layers=args.hidden,
             anticipatory_param=args.anticipatory_param,
+            rl_learning_rate=args.rl_lr,
+            sl_learning_rate=args.sl_lr,
+            epsilon_start=args.epsilon_start,
+            epsilon_end=args.epsilon_end,
         )
         agents.append(agent)
     
@@ -128,7 +132,15 @@ if __name__ == '__main__':
     parser.add_argument('--cached-model', action='store_true',
                         help='Use cached distribution model (O(1) lookup, faster)')
     parser.add_argument('--anticipatory-param', type=float, default=0.1,
-                        help='Exploration parameter (0.1-0.3, higher=more exploration)')
+                        help='Exploration parameter (0.01-0.3, lower=more exploitation)')
+    parser.add_argument('--rl-lr', type=float, default=0.0001,
+                        help='RL (DQN) learning rate')
+    parser.add_argument('--sl-lr', type=float, default=0.0005,
+                        help='Supervised learning rate for policy network')
+    parser.add_argument('--epsilon-start', type=float, default=0.06,
+                        help='Starting epsilon for exploration')
+    parser.add_argument('--epsilon-end', type=float, default=0.0,
+                        help='Ending epsilon for exploration')
     
     args = parser.parse_args()
     
