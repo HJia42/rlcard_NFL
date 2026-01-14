@@ -10,11 +10,11 @@ echo ============================================
 
 cd /d %~dp0
 
-REM 1. Train PPO with distribution model
+REM 1. Train PPO with cached model (faster)
 echo.
 echo [1/2] Training PPO Agent...
 python examples/run_ppo_nfl.py --game nfl-bucketed --episodes 30000 ^
-    --distribution-model ^
+    --cached-model ^
     --lr 0.001 --entropy-coef 0.1 ^
     --save-dir models/ppo_overnight
 

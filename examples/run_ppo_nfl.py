@@ -39,6 +39,7 @@ def train_ppo(
     start_ydstogo=None,
     start_yardline=None,
     use_distribution_model=False,
+    use_cached_model=False,
 ):
     """Train PPO agent via self-play.
     
@@ -79,6 +80,8 @@ def train_ppo(
         print(f"Custom start: {start_down} & {start_ydstogo or 10} at {start_yardline or 25}")
     if use_distribution_model:
         print("Using Biro & Walker distribution model for outcomes")
+    if use_cached_model:
+        print("Using cached distribution model (O(1) lookup)")
     
     env = rlcard.make(game, config={
         'single_play': use_single_play,
@@ -86,6 +89,7 @@ def train_ppo(
         'start_ydstogo': start_ydstogo,
         'start_yardline': start_yardline,
         'use_distribution_model': use_distribution_model,
+        'use_cached_model': use_cached_model,
     })
     
     # Determine max actions across all phases
@@ -262,6 +266,8 @@ if __name__ == '__main__':
                         help='Starting yardline (1-99, from own goal)')
     parser.add_argument('--distribution-model', action='store_true',
                         help='Use Biro & Walker distribution model for outcomes')
+    parser.add_argument('--cached-model', action='store_true',
+                        help='Use cached distribution model (O(1) lookup, faster)')
     
     args = parser.parse_args()
     
@@ -297,5 +303,6 @@ if __name__ == '__main__':
             start_ydstogo=args.start_ydstogo,
             start_yardline=args.start_yardline,
             use_distribution_model=args.distribution_model,
+            use_cached_model=args.cached_model,
         )
 
