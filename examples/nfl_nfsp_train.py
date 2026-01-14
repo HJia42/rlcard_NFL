@@ -58,6 +58,8 @@ def train(args):
             sl_learning_rate=args.sl_lr,
             q_epsilon_start=args.epsilon_start,
             q_epsilon_end=args.epsilon_end,
+            q_epsilon_decay_steps=args.epsilon_decay_steps,
+            reservoir_buffer_capacity=args.reservoir_capacity,
         )
         agents.append(agent)
     
@@ -141,6 +143,10 @@ if __name__ == '__main__':
                         help='Starting epsilon for exploration')
     parser.add_argument('--epsilon-end', type=float, default=0.0,
                         help='Ending epsilon for exploration')
+    parser.add_argument('--epsilon-decay-steps', type=int, default=1000000,
+                        help='Steps to decay epsilon (lower=faster decay)')
+    parser.add_argument('--reservoir-capacity', type=int, default=20000,
+                        help='Reservoir buffer capacity (smaller=forget early history faster)')
     
     args = parser.parse_args()
     
