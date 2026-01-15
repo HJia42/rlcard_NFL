@@ -37,7 +37,7 @@ python3 examples/run_ppo_nfl.py --game nfl-bucketed --episodes 100000 \
 echo ""
 echo "[2/4] Training DMC Agent..."
 python3 examples/run_dmc_nfl.py --game nfl-bucketed --cached-model \
-    --num-episodes 500000 \
+    --iterations 500000 \
     --num-actors 4 \
     --cuda 0 \
     --save-dir models/dmc_cloud

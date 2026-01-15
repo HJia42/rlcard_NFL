@@ -92,6 +92,12 @@ def train_dmc(args):
         print(format_eval_line("Final", results))
     except Exception as e:
         print(f"Could not evaluate: {e}")
+    
+    # Clean exit - kill any remaining actor processes
+    print("\nCleaning up processes...")
+    import sys
+    import os
+    os._exit(0)  # Force exit to clean up multiprocessing actors
 
 
 if __name__ == '__main__':
@@ -122,3 +128,4 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     train_dmc(args)
+
