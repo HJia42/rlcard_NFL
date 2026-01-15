@@ -176,3 +176,73 @@ def plot_eval_history(csv_path: str, save_path: Optional[str] = None, title: Opt
         plt.savefig(save_path, dpi=150, bbox_inches='tight')
         print(f"Saved evaluation plot to {save_path}")
     return fig
+
+
+def plot_multi_agent_convergence(
+    csv_paths: list,
+    labels: list,
+    save_path: Optional[str] = None,
+    title: Optional[str] = None,
+    metric: str = 'offense_epa',
+):
+    """
+    Plot convergence comparison across multiple agents.
+    
+    Args:
+        csv_paths: List of paths to eval_log.csv files
+        labels: List of labels for each agent
+        save_path: Optional path to save the plot
+        title: Optional plot title
+        metric: Which metric to plot ('offense_epa', 'defense_epa', 'self_play_epa')
+    
+    Returns:
+        matplotlib figure or None
+    """
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        print("matplotlib is not available, skipping plot")
+        return None
+    
+    if len(csv_paths) != len(labels):
+        raise ValueError("Number of CSV paths must match number of labels")
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    colors = plt.cm.tab10.colors
+    
+    for i, (csv_path, label) in enumerate(zip(csv_paths, labels)):
+        try:
+            history = load_eval_history(csv_path)
+            ax.plot(
+                history['episode'], 
+                history[metric], 
+                label=label,
+                color=colors[i % len(colors)],
+                linewidth=2,
+            )
+        except Exception as e:
+            print(f"Could not load {csv_path}: {e}")
+    
+    metric_labels = {
+        'offense_epa': 'Offense EPA',
+        'defense_epa': 'Defense EPA',
+        'self_play_epa': 'Self-Play EPA',
+    }
+    
+    ax.set_xlabel('Episode')
+    ax.set_ylabel(metric_labels.get(metric, metric))
+    ax.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+    ax.grid(True, alpha=0.3)
+    ax.legend()
+    
+    if title:
+        ax.set_title(title)
+    else:
+        ax.set_title(f'{metric_labels.get(metric, metric)} Convergence Comparison')
+    
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+        print(f"Saved comparison plot to {save_path}")
+    
+    return fig
