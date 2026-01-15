@@ -105,7 +105,7 @@ if __name__ == '__main__':
                         help='GPU device ID (empty for CPU)')
     parser.add_argument('--load-model', action='store_true',
                         help='Load existing model to continue training')
-    parser.add_argument('--save-dir', type=str, default='experiments/dmc_result',
+    parser.add_argument('--save-dir', type=str, default='models/dmc',
                         help='Save directory')
     parser.add_argument('--save-interval', type=int, default=30,
                         help='Save interval in minutes')

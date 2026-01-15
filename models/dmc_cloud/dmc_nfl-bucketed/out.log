@@ -1,0 +1,5 @@
+Saving logs data to experiments/dmc_cloud/dmc_nfl-bucketed/logs.csv
+Saving logs' fields to experiments/dmc_cloud/dmc_nfl-bucketed/fields.csv
+Saving logs data to experiments/dmc_cloud/dmc_nfl-bucketed/logs.csv
+Saving logs' fields to experiments/dmc_cloud/dmc_nfl-bucketed/fields.csv
+Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_0', 'mean_episode_return_1', 'loss_1']
