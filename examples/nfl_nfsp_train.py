@@ -12,7 +12,7 @@ import argparse
 import rlcard
 from rlcard.agents import NFSPAgent
 from rlcard.utils import reorganize
-from rlcard.utils.eval_utils import quick_eval, format_eval_line
+from rlcard.utils.eval_utils import quick_eval, format_eval_line, EvalLogger
 
 
 def train(args):
@@ -35,12 +35,6 @@ def train(args):
         'use_cached_model': args.cached_model,
     }
     env = rlcard.make(args.game, config=env_config)
-    eval_env = rlcard.make(args.game, config={
-        'seed': args.seed + 1,
-        'single_play': True,
-        'use_distribution_model': args.distribution_model,
-        'use_cached_model': args.cached_model,
-    })
     
     print(f"NFSP Training on {args.game}")
     print(f"  Players: {env.num_players}, Actions: {env.num_actions}")
@@ -64,9 +58,10 @@ def train(args):
         agents.append(agent)
     
     env.set_agents(agents)
-    eval_env.set_agents(agents)
-    
     print(f"\nTraining NFSP for {args.episodes} episodes...")
+    os.makedirs(args.save_dir, exist_ok=True)
+    log_path = os.path.join(args.save_dir, 'eval_log.csv')
+    eval_logger = EvalLogger(log_path)
     
     for ep in range(1, args.episodes + 1):
         # Train one episode
@@ -84,6 +79,7 @@ def train(args):
         if ep % args.eval_every == 0:
             # Use first agent for evaluation (both are equivalent in self-play)
             results = quick_eval(agents[0], args.game, num_games=100)
+            eval_logger.log(ep, results)
             print(format_eval_line(ep, results))
         
         # Save periodically

@@ -20,35 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import rlcard
 from rlcard.agents.mccfr_agent import MCCFRAgent
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils import tournament
-
-
-def evaluate_against_random(env, agent, num_games=1000):
-    """Evaluate MCCFR agent against random agent.
-    
-    Args:
-        env: RLCard environment
-        agent: Trained MCCFR agent
-        num_games: Number of evaluation games
-        
-    Returns:
-        Dict with win rates for each player
-    """
-    random_agent = RandomAgent(num_actions=env.num_actions)
-    
-    # MCCFR as player 0 (offense)
-    env.set_agents([agent, random_agent])
-    result_as_offense = tournament(env, num_games)
-    
-    # MCCFR as player 1 (defense)  
-    env.set_agents([random_agent, agent])
-    result_as_defense = tournament(env, num_games)
-    
-    return {
-        'offense_payoff': result_as_offense[0],
-        'defense_payoff': result_as_defense[1],
-    }
+from rlcard.utils.eval_utils import evaluate_agent, format_eval_line, EvalLogger
 
 
 def main():
@@ -82,16 +54,6 @@ def main():
         }
     )
     
-    # Create evaluation environment (no step_back needed)
-    eval_env = rlcard.make(
-        'nfl', 
-        config={
-            'seed': args.seed + 1000,
-            'allow_step_back': False,
-            'single_play': True,  # Match training mode
-        }
-    )
-
     print(f"\nEnvironment Info:")
     print(f"  Game: nfl")
     print(f"  Num Actions: {env.num_actions}")
@@ -111,6 +73,9 @@ def main():
     print(f"\nTraining for {args.iterations} iterations...")
     print(f"  Evaluating every {args.eval_every} iterations")
     print()
+
+    os.makedirs(args.model_path, exist_ok=True)
+    eval_logger = EvalLogger(os.path.join(args.model_path, 'eval_log.csv'))
     
     start_time = time.time()
     total_nodes = 0
@@ -134,9 +99,9 @@ def main():
         # Evaluate periodically
         if (i + 1) % args.eval_every == 0:
             print(f"\n--- Evaluation at iteration {agent.iteration} ---")
-            eval_results = evaluate_against_random(eval_env, agent, args.eval_games)
-            print(f"  vs Random (as Offense): {eval_results['offense_payoff']:.3f} EPA")
-            print(f"  vs Random (as Defense): {eval_results['defense_payoff']:.3f} EPA")
+            eval_results = evaluate_agent(agent, game='nfl', num_games=args.eval_games, verbose=False)
+            eval_logger.log(agent.iteration, eval_results)
+            print(format_eval_line(agent.iteration, eval_results))
             print()
             
             # Save checkpoint
@@ -161,9 +126,8 @@ def main():
     
     # Final evaluation
     print("\n--- Final Evaluation ---")
-    eval_results = evaluate_against_random(eval_env, agent, args.eval_games * 2)
-    print(f"  vs Random (as Offense): {eval_results['offense_payoff']:.3f} EPA")
-    print(f"  vs Random (as Defense): {eval_results['defense_payoff']:.3f} EPA")
+    eval_results = evaluate_agent(agent, game='nfl', num_games=args.eval_games * 2, verbose=False)
+    print(format_eval_line("Final", eval_results))
     
     # Show sample policies
     print("\n--- Sample Learned Policies ---")
