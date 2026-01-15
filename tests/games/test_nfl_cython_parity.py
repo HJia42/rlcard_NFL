@@ -33,18 +33,22 @@ class TestNFLCythonParity(unittest.TestCase):
 
         return DeterministicSpecialTeams()
 
-    def _make_games(self, outcome_model=None, special_teams=None):
+    def _make_games(self, yards=None, turnover=None, special_teams=None):
         from rlcard.games.nfl.cython.game_fast import NFLGameFast
 
+        # Create separate outcome models for each game (both get same result)
+        python_model = self._make_outcome_model(yards, turnover) if yards is not None else None
+        cython_model = self._make_outcome_model(yards, turnover) if yards is not None else None
+
         python_game = NFLGame(single_play=True, use_simple_model=True)
-        if outcome_model is not None:
-            python_game.cached_model = outcome_model
+        if python_model is not None:
+            python_game.cached_model = python_model
         if special_teams is not None:
             python_game.special_teams = special_teams
 
         cython_game = NFLGameFast(
             single_play=True,
-            outcome_model=outcome_model,
+            outcome_model=cython_model,
             special_teams=special_teams,
             seed=123,
         )
@@ -79,40 +83,35 @@ class TestNFLCythonParity(unittest.TestCase):
             cython_game.step(action)
 
     def test_first_down_parity(self):
-        outcome_model = self._make_outcome_model(yards=10, turnover=False)
-        python_game, cython_game = self._make_games(outcome_model=outcome_model)
+        python_game, cython_game = self._make_games(yards=10, turnover=False)
 
         self._run_play(python_game, cython_game, down=1, ydstogo=10, yardline=25, actions=[0, 2, 0])
 
         self._assert_parity(python_game, cython_game)
 
     def test_turnover_parity(self):
-        outcome_model = self._make_outcome_model(yards=3, turnover=True)
-        python_game, cython_game = self._make_games(outcome_model=outcome_model)
+        python_game, cython_game = self._make_games(yards=3, turnover=True)
 
         self._run_play(python_game, cython_game, down=2, ydstogo=7, yardline=40, actions=[1, 3, 1])
 
         self._assert_parity(python_game, cython_game)
 
     def test_touchdown_parity(self):
-        outcome_model = self._make_outcome_model(yards=10, turnover=False)
-        python_game, cython_game = self._make_games(outcome_model=outcome_model)
+        python_game, cython_game = self._make_games(yards=10, turnover=False)
 
         self._run_play(python_game, cython_game, down=1, ydstogo=5, yardline=95, actions=[2, 1, 0])
 
         self._assert_parity(python_game, cython_game)
 
     def test_turnover_on_downs_parity(self):
-        outcome_model = self._make_outcome_model(yards=2, turnover=False)
-        python_game, cython_game = self._make_games(outcome_model=outcome_model)
+        python_game, cython_game = self._make_games(yards=2, turnover=False)
 
         self._run_play(python_game, cython_game, down=4, ydstogo=5, yardline=60, actions=[3, 0, 1])
 
         self._assert_parity(python_game, cython_game)
 
     def test_safety_parity(self):
-        outcome_model = self._make_outcome_model(yards=-5, turnover=False)
-        python_game, cython_game = self._make_games(outcome_model=outcome_model)
+        python_game, cython_game = self._make_games(yards=-5, turnover=False)
 
         self._run_play(python_game, cython_game, down=2, ydstogo=10, yardline=2, actions=[4, 4, 1])
 
