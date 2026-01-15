@@ -352,7 +352,8 @@ class DMCTrainer:
 
         timer = timeit.default_timer
         try:
-            last_checkpoint_time = timer() - self.save_interval * 60
+            # Don't save immediately at start - wait for save_interval
+            last_checkpoint_time = timer()
             while frames < self.total_frames:
                 start_frames = frames
                 start_time = timer()
@@ -371,11 +372,15 @@ class DMCTrainer:
                     pprint.pformat(stats),
                 )
         except KeyboardInterrupt:
+            # Save checkpoint on interrupt
+            log.info('Training interrupted, saving checkpoint...')
+            checkpoint(frames)
             return
         else:
             for thread in threads:
                 thread.join()
             log.info('Learning finished after %d frames.', frames)
 
+        # Always save final checkpoint
         checkpoint(frames)
         self.plogger.close()

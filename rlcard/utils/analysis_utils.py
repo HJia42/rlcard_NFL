@@ -76,6 +76,7 @@ def get_action_probs(agent, state: dict, agent_type: str = None) -> Optional[Dic
     Handles differences:
     - PPO: returns {int: float} (action index -> prob)
     - CFR/NFSP/Deep CFR: returns {'action_name': float}
+    - DMC: returns action directly, needs special handling
     
     Returns:
         Dict mapping action identifiers to probabilities, or None on error
@@ -85,16 +86,33 @@ def get_action_probs(agent, state: dict, agent_type: str = None) -> Optional[Dic
         
         # Handle different return formats
         if isinstance(result, tuple) and len(result) == 2:
-            _, info = result
+            action, info = result
         else:
             return None
         
         # Extract probabilities
         if isinstance(info, dict):
             if 'probs' in info:
-                return info['probs']
+                probs = info['probs']
+                # Check if probs values are dicts (DMC nested format)
+                if probs and isinstance(next(iter(probs.values())), dict):
+                    # DMC returns nested dicts - extract scalar logits/probs
+                    flat_probs = {}
+                    for k, v in probs.items():
+                        if isinstance(v, dict):
+                            # Use 'probs' or first numeric value
+                            flat_probs[k] = v.get('probs', v.get('logits', 0.0))
+                        else:
+                            flat_probs[k] = v
+                    return flat_probs
+                return probs
             # Some agents return probs directly in info
             return info
+        
+        # DMC returns just action - create uniform-ish probs with action having highest
+        if isinstance(action, (int, np.integer)):
+            # Can't recover full probs, return single action indicator
+            return {action: 1.0}
         
         return None
     except Exception as e:

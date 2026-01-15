@@ -74,8 +74,13 @@ class DMCAgent:
         action_idx = np.argmax(values)
         action = action_keys[action_idx]
 
+        # Convert values to probabilities via softmax for consistency with other agents
+        exp_values = np.exp(values - values.max())  # Numerical stability
+        probs = exp_values / exp_values.sum()
+
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: float(values[i]) for i in range(len(action_keys))}
+        info['probs'] = {action_keys[i]: float(probs[i]) for i in range(len(action_keys))}
+        info['values'] = {action_keys[i]: float(values[i]) for i in range(len(action_keys))}
 
         return action, info
 
