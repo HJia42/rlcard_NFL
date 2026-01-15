@@ -4,40 +4,60 @@
 
 set -e
 
-# Activate environment
-source ~/nfl_env/bin/activate
+# Activate environment (skip if using deep learning image)
+if [ -d ~/nfl_env ]; then
+    source ~/nfl_env/bin/activate
+fi
 cd ~/rlcard_NFL
 
 echo "============================================"
 echo "Starting Cloud Training"
 echo "Started at: $(date)"
+echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || echo 'None')"
 echo "============================================"
 
-# 1. Train PPO
+# Compile Cython if available
+if [ -f setup_cython.py ]; then
+    echo ""
+    echo "[Setup] Compiling Cython..."
+    pip install cython numpy -q
+    python setup_cython.py build_ext --inplace 2>/dev/null || echo "Cython build skipped"
+fi
+
+# 1. Train PPO (GPU)
 echo ""
-echo "[1/3] Training PPO Agent..."
-python examples/run_ppo_nfl.py --game nfl-bucketed --episodes 50000 \
+echo "[1/4] Training PPO Agent..."
+python examples/run_ppo_nfl.py --game nfl-bucketed --episodes 100000 \
     --cached-model \
     --lr 0.001 --entropy-coef 0.1 \
+    --device cuda \
     --save-dir models/ppo_cloud
 
-# 2. Train DMC (12 actors for 16 vCPU)
+# 2. Train DMC (GPU, 4 actors for memory efficiency)
 echo ""
-echo "[2/3] Training DMC Agent..."
+echo "[2/4] Training DMC Agent..."
 python examples/run_dmc_nfl.py --game nfl-bucketed --cached-model \
-    --iterations 100000 \
-    --num-actors 12 \
-    --save-dir experiments/dmc_cloud
+    --num-episodes 500000 \
+    --num-actors 4 \
+    --cuda 0 \
+    --save-dir models/dmc_cloud
 
-# 3. Train NFSP (optional - comment out if not needed)
+# 3. Train NFSP (GPU)
 echo ""
-echo "[3/3] Training NFSP Agent..."
-python examples/nfl_nfsp_train.py --cached-model --episodes 100000 \
+echo "[3/4] Training NFSP Agent..."
+python examples/nfl_nfsp_train.py --cached-model --episodes 500000 \
     --anticipatory-param 0.3 \
     --epsilon-decay-steps 10000 \
     --reservoir-capacity 5000 \
     --rl-lr 0.001 --sl-lr 0.001 \
+    --device cuda \
     --save-dir models/nfsp_cloud
+
+# 4. Train MCCFR (CPU, benefits from Cython)
+echo ""
+echo "[4/4] Training MCCFR Agent..."
+python examples/run_mccfr.py --iterations 50000 \
+    --model_path models/mccfr_cloud
 
 echo ""
 echo "============================================"
@@ -47,5 +67,6 @@ echo "============================================"
 echo ""
 echo "Models saved to:"
 echo "  - models/ppo_cloud"
-echo "  - experiments/dmc_cloud"
+echo "  - models/dmc_cloud"
 echo "  - models/nfsp_cloud"
+echo "  - models/mccfr_cloud"
