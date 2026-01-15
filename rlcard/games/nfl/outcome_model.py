@@ -32,6 +32,39 @@ GAMMA_PRIOR_BETA = 1300
 MIN_PLAYS_THRESHOLD = 50
 
 
+def skewt_rvs(location, scale, skewness, df, size=1, random_state=None):
+    """Sample from skew-t distribution.
+    
+    Based on Biro & Walker representation using normal/chi-squared mixture.
+    
+    Args:
+        location: Location parameter (mu)
+        scale: Scale parameter (sigma)
+        skewness: Skewness parameter (alpha)
+        df: Degrees of freedom (nu)
+        size: Number of samples
+        random_state: Numpy random state
+        
+    Returns:
+        Array of samples from skew-t distribution
+    """
+    rng = random_state if random_state is not None else np.random.default_rng()
+    
+    # Generate standard normal and chi-squared
+    z = rng.standard_normal(size)
+    v = rng.chisquare(df, size)
+    
+    # Skew-normal transformation
+    delta = skewness / np.sqrt(1 + skewness**2)
+    u = rng.standard_normal(size)
+    z_skew = delta * np.abs(u) + np.sqrt(1 - delta**2) * z
+    
+    # Scale by chi-squared for t-distribution tails
+    samples = location + scale * z_skew * np.sqrt(df / v)
+    
+    return samples
+
+
 class OutcomeModel:
     """Statistical model for NFL play outcomes."""
     
@@ -131,6 +164,16 @@ class OutcomeModel:
         k = min(200, len(candidates))
         top_k = candidates.nlargest(k, 'similarity')
         
+        # Scale yards_gained by ydstogo ratio (KNN adjustment)
+        # If historical play was on 3rd & 15 but current is 3rd & 5,
+        # scale yards proportionally
+        if 'ydstogo' in top_k.columns and ydstogo > 0:
+            top_k = top_k.copy()
+            scale_ratio = ydstogo / top_k['ydstogo'].clip(1, None)
+            # Apply mild scaling (sqrt to dampen extreme ratios)
+            scale_ratio = np.sqrt(scale_ratio).clip(0.5, 2.0)
+            top_k['yards_gained'] = top_k['yards_gained'] * scale_ratio
+        
         return top_k
     
     def _sample_run(self, candidates, yardline):
@@ -183,14 +226,45 @@ class OutcomeModel:
         if len(positive_gains) > 0:
             yards = float(self.np_random.choice(positive_gains))
         else:
-            # Fallback to t-distribution
-            mean = np.mean(yards_data[yards_data > 0])
-            std = np.std(yards_data[yards_data > 0])
-            yards = max(1, stats.t.rvs(5, loc=mean, scale=std/2, random_state=self.np_random))
+            # Fallback to skew-t distribution (Biro & Walker)
+            mean = np.mean(yards_data[yards_data > 0]) if len(yards_data[yards_data > 0]) > 0 else 4.0
+            std = np.std(yards_data[yards_data > 0]) if len(yards_data[yards_data > 0]) > 1 else 3.0
+            yards = skewt_rvs(
+                location=mean, 
+                scale=std/2,
+                skewness=SKEWT_DEFAULT['skewness'],
+                df=SKEWT_DEFAULT['df'],
+                size=1,
+                random_state=self.np_random
+            )[0]
             yards = float(np.clip(yards, 1, distance_to_goal - 1))
         
         turnover = self.np_random.random() < fumble_rate
         return {'yards_gained': yards, 'turnover': bool(turnover)}
+    
+    def _fit_sack_distribution(self, candidates):
+        """Fit sack yardage distribution from data."""
+        if 'sack' not in candidates.columns:
+            return np.array([-3, -5, -7, -10]), np.array([0.3, 0.35, 0.25, 0.1])
+        
+        sacks = candidates[candidates['sack'] == 1]['yards_gained'].values
+        sacks = sacks[sacks < 0]  # Only negative yards
+        
+        if len(sacks) < 10:
+            return np.array([-3, -5, -7, -10]), np.array([0.3, 0.35, 0.25, 0.1])
+        
+        # Bin into categories and compute Dirichlet posterior
+        bins = [-15, -10, -7, -5, -3, 0]
+        counts = np.histogram(sacks, bins=bins)[0]
+        
+        # Dirichlet prior (alpha=1 for each bin)
+        prior = np.ones(len(counts))
+        probs = (counts + prior) / (counts.sum() + prior.sum())
+        
+        # Representative values for each bin
+        bin_centers = np.array([-12, -8, -6, -4, -2])
+        
+        return bin_centers, probs
     
     def _sample_pass(self, candidates, yardline):
         """Sample pass play outcome from Gamma/categorical mixture."""
@@ -231,8 +305,10 @@ class OutcomeModel:
             return {'yards_gained': 0.0, 'turnover': False}
         
         if outcome == 'sack':
-            sack_yards = self.np_random.choice([-3, -5, -7, -10], p=[0.3, 0.35, 0.25, 0.1])
-            return {'yards_gained': float(sack_yards), 'turnover': False}
+            # Fit sack distribution from data
+            sack_yards, sack_probs = self._fit_sack_distribution(candidates)
+            sack_yardage = self.np_random.choice(sack_yards, p=sack_probs)
+            return {'yards_gained': float(sack_yardage), 'turnover': False}
         
         if outcome == 'interception':
             return {'yards_gained': 0.0, 'turnover': True}
