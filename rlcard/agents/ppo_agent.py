@@ -228,6 +228,60 @@ class PPOAgent:
         
         return action, probs
     
+    def batch_eval_step(self, states, deterministic=True):
+        """Batched evaluation for multiple states at once.
+        
+        More efficient than calling eval_step repeatedly when
+        evaluating against many opponents or simulating many games.
+        
+        Args:
+            states: List of state dictionaries
+            deterministic: If True, return argmax actions
+            
+        Returns:
+            actions: List of action indices
+            probs_list: List of probability dicts
+        """
+        if not states:
+            return [], []
+        
+        # Process all states to tensors
+        obs_list = []
+        mask_list = []
+        
+        for state in states:
+            obs = self._process_state(state)
+            mask = self._get_action_mask(state)
+            obs_list.append(obs)
+            mask_list.append(mask)
+        
+        # Stack into batches
+        batch_obs = torch.stack(obs_list)
+        
+        if mask_list[0] is not None:
+            batch_masks = torch.stack(mask_list)
+        else:
+            batch_masks = None
+        
+        # Single forward pass for all states
+        with torch.no_grad():
+            action_probs, _ = self.network(batch_obs, batch_masks)
+        
+        if deterministic:
+            actions = action_probs.argmax(dim=-1)
+        else:
+            from torch.distributions import Categorical
+            dist = Categorical(action_probs)
+            actions = dist.sample()
+        
+        actions_list = actions.cpu().tolist()
+        probs_list = [
+            {i: p for i, p in enumerate(probs)}
+            for probs in action_probs.cpu().numpy().tolist()
+        ]
+        
+        return actions_list, probs_list
+    
     def feed(self, ts):
         """Feed transition for training (RLCard interface).
         
@@ -241,9 +295,13 @@ class PPOAgent:
     def _process_state(self, state):
         """Convert state dict to tensor."""
         obs = state['obs']
+        if isinstance(obs, torch.Tensor):
+            return obs.to(self.device)
         if isinstance(obs, np.ndarray):
-            obs = torch.FloatTensor(obs)
-        return obs.to(self.device)
+            return torch.FloatTensor(obs).to(self.device)
+        if isinstance(obs, list):
+            return torch.FloatTensor(obs).to(self.device)
+        return torch.FloatTensor([obs]).to(self.device)
     
     def _get_action_mask(self, state):
         """Get action mask from state."""

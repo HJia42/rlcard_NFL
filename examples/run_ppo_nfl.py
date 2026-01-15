@@ -282,6 +282,9 @@ if __name__ == '__main__':
                         help='Use Biro & Walker distribution model for outcomes')
     parser.add_argument('--cached-model', action='store_true',
                         help='Use cached distribution model (O(1) lookup, faster)')
+    parser.add_argument('--device', type=str, default='auto',
+                        choices=['auto', 'cpu', 'cuda'],
+                        help='Device for training (auto: use GPU if available and beneficial)')
     
     args = parser.parse_args()
     

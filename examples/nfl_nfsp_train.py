@@ -143,6 +143,9 @@ if __name__ == '__main__':
                         help='Steps to decay epsilon (lower=faster decay)')
     parser.add_argument('--reservoir-capacity', type=int, default=20000,
                         help='Reservoir buffer capacity (smaller=forget early history faster)')
+    parser.add_argument('--device', type=str, default='auto',
+                        choices=['auto', 'cpu', 'cuda'],
+                        help='Device for training (auto: use GPU if available)')
     
     args = parser.parse_args()
     

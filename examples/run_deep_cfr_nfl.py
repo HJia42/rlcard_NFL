@@ -45,6 +45,9 @@ def main():
                         help='Load existing model and continue training')
     parser.add_argument('--seed', type=int, default=42,
                         help='Random seed')
+    parser.add_argument('--device', type=str, default='auto',
+                        choices=['auto', 'cpu', 'cuda'],
+                        help='Device for training (auto: use GPU if available)')
     args = parser.parse_args()
 
     print("=" * 60)
