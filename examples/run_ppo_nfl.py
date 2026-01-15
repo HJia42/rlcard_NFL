@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import rlcard
 from rlcard.agents.ppo_agent import PPOAgent
+from rlcard.utils.eval_utils import quick_eval, format_eval_line, format_step_line, EvalLogger
 
 
 def train_ppo(
@@ -116,6 +117,7 @@ def train_ppo(
     
     # Create save directory
     os.makedirs(save_dir, exist_ok=True)
+    eval_logger = EvalLogger(os.path.join(save_dir, 'eval_log.csv'))
     
     # Training loop
     episode_rewards = []
@@ -169,19 +171,31 @@ def train_ppo(
             step_count = 0
             
             if episode % 100 == 0 and stats:
-                print(f"[Update] Policy Loss: {stats['policy_loss']:.4f}, "
-                      f"Value Loss: {stats['value_loss']:.4f}, "
-                      f"Entropy: {stats['entropy']:.4f}")
+                print(format_step_line(
+                    label="[Update]",
+                    step=episode,
+                    metrics={
+                        'policy_loss': stats['policy_loss'],
+                        'value_loss': stats['value_loss'],
+                        'entropy': stats['entropy'],
+                    },
+                    precision=4,
+                ))
         
         # Logging
         if episode % eval_every == 0:
             avg_reward = np.mean(episode_rewards[-eval_every:])
             elapsed = time.time() - start_time
             eps_per_sec = episode / elapsed
-            
-            print(f"\n[Episode {episode:,}] "
-                  f"Avg EPA: {avg_reward:.3f}, "
-                  f"Speed: {eps_per_sec:.1f} eps/sec")
+            print(format_step_line(
+                label="[Episode]",
+                step=f"{episode:,}",
+                metrics={'avg_epa': avg_reward, 'eps_per_sec': eps_per_sec},
+                precision=3,
+            ))
+            eval_results = quick_eval(agent, game, num_games=100)
+            eval_logger.log(episode, eval_results)
+            print(format_eval_line(episode, eval_results))
         
         # Save checkpoint
         if episode % save_every == 0:
@@ -305,4 +319,3 @@ if __name__ == '__main__':
             use_distribution_model=args.distribution_model,
             use_cached_model=args.cached_model,
         )
-
