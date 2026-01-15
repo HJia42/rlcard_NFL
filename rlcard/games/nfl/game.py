@@ -257,7 +257,9 @@ class NFLGame:
                 self.yardline += yards
                 self.down = 1
                 self.ydstogo = min(10, 100 - self.yardline)
-                new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
+                # Check goal-to-go
+                is_goal_to_go = (100 - self.yardline) < self.ydstogo
+                new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline, goal_to_go=is_goal_to_go)
                 epa = new_ep - old_ep
             else:
                 # No first down
@@ -274,12 +276,24 @@ class NFLGame:
                     epa = -opp_ep - old_ep
                     self.is_over_flag = True
                 else:
-                    new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
+                    # Check goal-to-go for next down
+                    is_goal_to_go = (100 - self.yardline) < self.ydstogo
+                    new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline, goal_to_go=is_goal_to_go)
                     epa = new_ep - old_ep
             
             if self.yardline <= 0:
+                # Safety! Offense gave up 2 points + free kick
+                # After safety: team that was on offense must do a free kick from their 20
+                # Free kicks typically result in opponent starting at ~35-40 yard line
                 self.is_over_flag = True
-                epa = -2.0 - old_ep
+                
+                # Model free kick: opponent receives ball approximately at their 35
+                opp_start_yardline = 35  # Conservative estimate - their 35-yard line
+                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_start_yardline)
+                
+                # Safety EPA = new_value - old_ep
+                # new_value = -(2 + opp_ep) since we lose 2 pts AND give opponent their EP
+                epa = -(2.0 + opp_ep) - old_ep
             
             self.payoffs = [epa, -epa]
             
