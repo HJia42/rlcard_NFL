@@ -140,7 +140,7 @@ def run_games(agents, agent_types, env, num_games=100):
 
 def main():
     parser = argparse.ArgumentParser(description='Agent Round Robin Tournament')
-    parser.add_argument('--ppo-model', type=str, default='models_cloud/ppo_nfl-bucketed_final.pt',
+    parser.add_argument('--ppo-model', type=str, default='models/ppo_cloud/ppo_nfl-bucketed_final.pt',
                         help='Path to PPO model')
     parser.add_argument('--nfsp-model', type=str, default='models/nfsp_cloud/nfsp_nfl-bucketed_p0_final.pt',
                         help='Path to NFSP model (player 0)')
