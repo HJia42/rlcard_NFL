@@ -376,11 +376,15 @@ class DMCTrainer:
             log.info('Training interrupted, saving checkpoint...')
             checkpoint(frames)
             return
-        else:
-            for thread in threads:
-                thread.join()
-            log.info('Learning finished after %d frames.', frames)
-
-        # Always save final checkpoint
+        
+        # Save checkpoint BEFORE joining threads (threads may hang)
+        log.info('Training complete, saving checkpoint...')
         checkpoint(frames)
+        
+        # Try to join threads with timeout
+        log.info('Waiting for threads to finish...')
+        for thread in threads:
+            thread.join(timeout=5.0)
+        
+        log.info('Learning finished after %d frames.', frames)
         self.plogger.close()
