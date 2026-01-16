@@ -40,7 +40,7 @@ def games_to_iterations(agent: str, total_games: int) -> int:
     return int(total_games / factor)
 
 
-def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_args: list = None):
+def run_agent(agent: str, total_games: int, save_dir: str, device: str, game: str, extra_args: list = None):
     """Run a single agent's training."""
     
     iterations = games_to_iterations(agent, total_games)
@@ -50,7 +50,7 @@ def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_ar
     if agent == 'ppo':
         cmd += [
             'examples/run_ppo_nfl.py',
-            '--game', 'nfl-bucketed',
+            '--game', game,
             '--cached-model',
             '--episodes', str(iterations),
             '--device', device,
@@ -61,7 +61,7 @@ def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_ar
         cuda_arg = '0' if device == 'cuda' else ''
         cmd += [
             'examples/run_dmc_nfl.py',
-            '--game', 'nfl-bucketed',
+            '--game', game,
             '--cached-model',
             '--iterations', str(iterations),
             '--num-actors', '4',
@@ -72,6 +72,7 @@ def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_ar
     elif agent == 'nfsp':
         cmd += [
             'examples/nfl_nfsp_train.py',
+            '--game', game,
             '--cached-model',
             '--episodes', str(iterations),
             '--device', device,
@@ -81,6 +82,7 @@ def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_ar
     elif agent == 'deep_cfr':
         cmd += [
             'examples/run_deep_cfr_nfl.py',
+            '--game', game,
             '--iterations', str(iterations),
             '--model_path', f'{save_dir}/deep_cfr',
             '--device', device,
@@ -96,6 +98,7 @@ def run_agent(agent: str, total_games: int, save_dir: str, device: str, extra_ar
     print(f"\n{'='*60}")
     print(f"Training {agent.upper()}")
     print(f"{'='*60}")
+    print(f"Game: {game}")
     print(f"Total games equivalent: {total_games:,}")
     print(f"Agent iterations: {iterations:,}")
     print(f"Command: {' '.join(cmd)}")
@@ -117,6 +120,9 @@ def main():
     parser.add_argument('--agents', nargs='+', default=['ppo', 'dmc', 'nfsp', 'deep_cfr'],
                         choices=['ppo', 'dmc', 'nfsp', 'deep_cfr', 'all'],
                         help='Agents to train')
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--save-dir', type=str, default='models/paper',
                         help='Base directory for saving models')
     parser.add_argument('--device', type=str, default='cuda',
@@ -135,6 +141,7 @@ def main():
     print("="*60)
     print("STANDARDIZED NFL RL TRAINING")
     print("="*60)
+    print(f"Game: {args.game}")
     print(f"Total games per agent: {args.total_games:,}")
     print(f"Agents: {', '.join(agents)}")
     print(f"Device: {args.device}")
@@ -154,7 +161,7 @@ def main():
     total_start = time.time()
     
     for agent in agents:
-        success = run_agent(agent, args.total_games, args.save_dir, args.device)
+        success = run_agent(agent, args.total_games, args.save_dir, args.device, args.game)
         results[agent] = 'SUCCESS' if success else 'FAILED'
     
     total_elapsed = time.time() - total_start
