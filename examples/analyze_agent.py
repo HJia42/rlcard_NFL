@@ -44,7 +44,7 @@ Examples:
     parser.add_argument('model_path', type=str,
                        help='Path to model file or directory')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                       choices=['nfl', 'nfl-bucketed'],
+                       choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                        help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--verbose', action='store_true',
                        help='Show all action probabilities')

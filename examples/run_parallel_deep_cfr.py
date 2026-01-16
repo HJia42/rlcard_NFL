@@ -40,7 +40,7 @@ def evaluate_against_random(env, agent, num_games=500):
 def main():
     parser = argparse.ArgumentParser(description='Parallel Deep CFR on NFL')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--iterations', type=int, default=500,
                         help='Training iterations')

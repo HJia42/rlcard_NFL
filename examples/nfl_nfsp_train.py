@@ -101,7 +101,7 @@ def train(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='NFSP Training for NFL')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--episodes', type=int, default=10000,
                         help='Number of training episodes')

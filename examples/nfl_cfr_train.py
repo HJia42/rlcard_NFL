@@ -72,7 +72,7 @@ def train(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("CFR training for NFL")
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--num_episodes', type=int, default=10000)

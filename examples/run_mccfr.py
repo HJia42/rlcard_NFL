@@ -34,7 +34,7 @@ def evaluate_vs_random(env, agent, num_games=500):
 def main():
     parser = argparse.ArgumentParser(description='MCCFR on NFL')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--iterations', type=int, default=1000)
     parser.add_argument('--eval_every', type=int, default=200)

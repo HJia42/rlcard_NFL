@@ -94,6 +94,39 @@ class NFLGameIIG(NFLGame):
             # Phase 2: No decision (auto-execute)
             return []
     
+    def _save_state(self):
+        """Save current state for step_back, including committed_play_type."""
+        self.history.append({
+            'down': self.down,
+            'ydstogo': self.ydstogo,
+            'yardline': self.yardline,
+            'current_player': self.current_player,
+            'phase': self.phase,
+            'pending_formation': self.pending_formation,
+            'pending_defense_action': self.pending_defense_action,
+            'is_over_flag': self.is_over_flag,
+            'payoffs': self.payoffs.copy(),
+            'committed_play_type': self.committed_play_type,  # IIG-specific
+        })
+    
+    def step_back(self):
+        """Restore previous state, including committed_play_type."""
+        if not self.history:
+            return False
+        
+        state = self.history.pop()
+        self.down = state['down']
+        self.ydstogo = state['ydstogo']
+        self.yardline = state['yardline']
+        self.current_player = state['current_player']
+        self.phase = state['phase']
+        self.pending_formation = state['pending_formation']
+        self.pending_defense_action = state['pending_defense_action']
+        self.is_over_flag = state['is_over_flag']
+        self.payoffs = state['payoffs']
+        self.committed_play_type = state.get('committed_play_type')  # IIG-specific
+        return True
+    
     def step(self, action):
         """Process an action.
         
@@ -102,6 +135,10 @@ class NFLGameIIG(NFLGame):
         Phase 2: Play executes (no player action needed)
         """
         if self.phase == 0:
+            # Save state before phase 0 action for step_back
+            if self.allow_step_back:
+                self._save_state()
+            
             # Offense phase - commit to formation AND play type
             formation, play_type = IIG_OFFENSE_ACTIONS[action]
             

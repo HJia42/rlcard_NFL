@@ -48,6 +48,9 @@ def main():
     parser.add_argument('--device', type=str, default='auto',
                         choices=['auto', 'cpu', 'cuda'],
                         help='Device for training (auto: use GPU if available)')
+    parser.add_argument('--game', type=str, default='nfl-bucketed',
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
+                        help='Game environment (default: nfl-bucketed)')
     args = parser.parse_args()
 
     print("=" * 60)
@@ -56,7 +59,7 @@ def main():
     
     # Create environment with step_back enabled
     env = rlcard.make(
-        'nfl',
+        args.game,
         config={
             'seed': args.seed,
             'allow_step_back': True,
@@ -65,7 +68,7 @@ def main():
     )
     
     print(f"\nEnvironment Info:")
-    print(f"  Game: nfl")
+    print(f"  Game: {args.game}")
     print(f"  Num Actions: {env.num_actions}")
     print(f"  Num Players: {env.num_players}")
     print(f"  State Shape: {env.state_shape}")

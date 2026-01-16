@@ -101,7 +101,7 @@ def train_dmc(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='DMC Training for NFL')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
     parser.add_argument('--iterations', type=int, default=100000,
                         help='Total training iterations/frames')

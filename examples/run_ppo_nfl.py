@@ -251,7 +251,7 @@ def evaluate(agent, game='nfl-bucketed', num_episodes=1000):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PPO Self-Play for NFL')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'],
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment')
     parser.add_argument('--episodes', type=int, default=100000,
                         help='Number of training episodes')
