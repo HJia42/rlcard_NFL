@@ -136,10 +136,12 @@ def _load_nfsp(model_path: str, env, verbose: bool) -> Any:
     
     # model_path can be a directory or a .pt file
     if os.path.isdir(model_path):
-        # Search for checkpoint file
+        # Search for checkpoint file - try multiple patterns
+        game_name = getattr(env, 'name', getattr(env, 'game_name', 'nfl-bucketed'))
         patterns = [
-            f'nfsp_{env.game_name}_p0_final.pt',
+            f'nfsp_{game_name}_p0_final.pt',
             'nfsp_nfl-bucketed_p0_final.pt',
+            'nfsp_nfl_p0_final.pt',
             'nfsp_player_0_final.pt',
         ]
         checkpoint_path = None
