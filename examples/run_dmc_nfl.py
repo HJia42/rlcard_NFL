@@ -95,8 +95,6 @@ def train_dmc(args):
     
     # Clean exit - kill any remaining actor processes
     print("\nCleaning up processes...")
-    import sys
-    import os
     os._exit(0)  # Force exit to clean up multiprocessing actors
 
 
