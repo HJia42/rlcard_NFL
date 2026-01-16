@@ -1,0 +1,3 @@
+Saving logs data to models/dmc_cloud2/dmc_nfl-bucketed/logs.csv
+Saving logs' fields to models/dmc_cloud2/dmc_nfl-bucketed/fields.csv
+Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_0', 'mean_episode_return_1', 'loss_1']
