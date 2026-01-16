@@ -339,8 +339,14 @@ cdef class NFLGameFast:
         return NUM_INITIAL_ACTIONS
 
 
-def make_fast_game(single_play=True, use_cached_model=True, seed=None):
+def make_fast_game(single_play=True, use_cached_model=True, use_bucketed=True, seed=None):
     """Factory to create fast game with optional cached outcome model.
+    
+    Args:
+        single_play: End game after one play
+        use_cached_model: Use O(1) cached outcome model
+        use_bucketed: Use bucketed or full state space for caching
+        seed: Random seed
     
     Falls back to Python version if Cython not compiled.
     """
@@ -355,7 +361,7 @@ def make_fast_game(single_play=True, use_cached_model=True, seed=None):
         if data_path.exists():
             play_data = pd.read_csv(data_path)
             np_random = np.random.RandomState(seed) if seed else np.random.RandomState()
-            outcome_model = get_cached_outcome_model(play_data, np_random, use_bucketed=True)
+            outcome_model = get_cached_outcome_model(play_data, np_random, use_bucketed=use_bucketed)
         else:
             outcome_model = None
             np_random = None

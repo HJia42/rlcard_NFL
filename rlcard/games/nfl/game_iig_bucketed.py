@@ -43,6 +43,8 @@ class NFLGameIIGBucketed(NFLGameIIG):
     def __init__(self, allow_step_back=False, single_play=True, 
                  use_cached_model=True, seed=None):
         """Initialize bucketed IIG NFL game."""
+        # Mark as bucketed BEFORE calling parent init
+        self.is_bucketed = True
         super().__init__(
             allow_step_back=allow_step_back,
             single_play=single_play,

@@ -166,14 +166,35 @@ class NFLGameIIG(NFLGame):
         self.committed_play_type = None
     
     def _get_outcome(self, down, ydstogo, yardline, formation, defense_action, play_type):
-        """Get outcome - override to accept play_type directly."""
-        if self.outcome_model:
-            box_count = defense_action[0] if isinstance(defense_action, tuple) else defense_action
+        """Get outcome - override to accept play_type directly.
+        
+        Checks: cached_model > outcome_model > parent fallback
+        """
+        # Extract box count from defense action
+        if isinstance(defense_action, tuple):
+            box_count = defense_action[0]  # (box_count, personnel)
+        elif isinstance(defense_action, int):
+            box_count = defense_action
+        else:
+            box_count = 6  # Default
+        
+        # Try cached model first (O(1) lookup)
+        if self.cached_model is not None:
+            return self.cached_model.sample(
+                formation, play_type, box_count,
+                yardline, down, ydstogo
+            )
+        
+        # Try distribution model (Biro & Walker)
+        if self.outcome_model is not None:
             return self.outcome_model.sample(
                 formation, play_type, box_count,
                 yardline, down, ydstogo
             )
-        return super()._get_outcome(down, ydstogo, yardline, formation, defense_action)
+        
+        # Fallback: use parent's _get_outcome with combined (formation, play_type)
+        offense_action = (formation, play_type)
+        return super()._get_outcome(down, ydstogo, yardline, offense_action, defense_action)
     
     def _apply_outcome(self, yards, turnover, old_ep):
         """Apply outcome and calculate EPA."""

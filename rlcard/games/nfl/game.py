@@ -116,9 +116,9 @@ class NFLGame:
                 # Use cached model (O(1) lookup)
                 from rlcard.games.nfl.cached_outcome_model import get_cached_outcome_model
                 # For bucketed game, use bucketed cache; otherwise full
-                use_bucketed = hasattr(self, 'is_bucketed') and self.is_bucketed
-                self.cached_model = get_cached_outcome_model(self.play_data, self.np_random, use_bucketed=True)
-                print("Using cached distribution model (O(1) lookup)")
+                use_bucketed = getattr(self, 'is_bucketed', False)
+                self.cached_model = get_cached_outcome_model(self.play_data, self.np_random, use_bucketed=use_bucketed)
+                print(f"Using cached distribution model (O(1) lookup, {'bucketed' if use_bucketed else 'full'})")
             elif self.use_distribution_model and self.play_data is not None:
                 # Use Biro & Walker distribution model
                 from rlcard.games.nfl.outcome_model import OutcomeModel

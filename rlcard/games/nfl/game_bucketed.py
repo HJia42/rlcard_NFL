@@ -68,9 +68,12 @@ class NFLGameBucketed(NFLGame):
     State representation uses discrete buckets:
     - Down: 1-4 (4 values)
     - Distance bucket: short/medium/long/very_long (4 values)
-    - Field position bucket: own_deep/own_side/midfield/opp_side/red_zone (5 values)
+    - Field position bucket: 5-yard increments (20 values)
     
-    Total info sets: 4 × 4 × 5 = 80 (per phase)
+    Total info sets per phase:
+    - Phase 0: 4 × 4 × 20 = 320
+    - Phase 1: 320 × 5 formations = 1600  
+    - Phase 2: 320 × 5 × 5 defenses = 8000
     """
     
     def __init__(self, allow_step_back=False, single_play=True):
@@ -80,6 +83,8 @@ class NFLGameBucketed(NFLGame):
             allow_step_back: Support step_back for CFR
             single_play: End game after one play (recommended for CFR)
         """
+        # Mark as bucketed BEFORE calling parent init
+        self.is_bucketed = True
         # Call parent init - will load B-spline models for special teams
         super().__init__(
             allow_step_back=allow_step_back, 
@@ -169,16 +174,17 @@ class NFLGameBucketed(NFLGame):
     def count_info_sets():
         """Return theoretical number of information sets.
         
-        Phase 0 (formation):  4 downs × 4 distance × 5 field = 80
-        Phase 1 (defense):    80 × 7 formations = 560
-        Phase 2 (play_type):  80 × 7 formations × 5 defenses = 2800
+        Phase 0 (formation):  4 downs × 4 distance × 20 field = 320
+        Phase 1 (defense):    320 × 5 formations = 1600
+        Phase 2 (play_type):  320 × 5 formations × 5 defenses = 8000
         
-        Total: 3440 information sets
+        Total: 9920 information sets
         """
-        base = 4 * 4 * 5  # 80
+        num_field_buckets = 20  # 5-yard increments from 1-99
+        base = 4 * 4 * num_field_buckets  # 320
         phase_0 = base
-        phase_1 = base * len(FORMATION_ACTIONS)  # 560
-        phase_2 = base * len(FORMATION_ACTIONS) * len(DEFENSE_ACTIONS)  # 2800
+        phase_1 = base * len(FORMATION_ACTIONS)  # 1600
+        phase_2 = base * len(FORMATION_ACTIONS) * len(DEFENSE_ACTIONS)  # 8000
         return {
             'phase_0': phase_0,
             'phase_1': phase_1,

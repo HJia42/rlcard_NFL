@@ -17,7 +17,7 @@ from collections import defaultdict
 BUCKETED_CONFIG = {
     'formations': ['SHOTGUN', 'SINGLEBACK', 'UNDER CENTER', 'I_FORM', 'EMPTY'],
     'play_types': ['rush', 'pass'],
-    'box_counts': [5, 6, 7, 8, 9],
+    'box_counts': [4, 5, 6, 7, 8],  # Matches game action space (defense actions 0-4 map to 4-8 box)
     'yardline_bins': list(range(5, 100, 5)),  # 5, 10, 15, ..., 95
     'down_values': [1, 2, 3, 4],
     'distance_bins': [1, 3, 6, 10, 20],  # Represents: 1, 2-3, 4-6, 7-10, 11+
@@ -27,7 +27,7 @@ BUCKETED_CONFIG = {
 FULL_GAME_CONFIG = {
     'formations': ['SHOTGUN', 'SINGLEBACK', 'UNDER CENTER', 'I_FORM', 'EMPTY'],
     'play_types': ['rush', 'pass'],
-    'box_counts': [5, 6, 7, 8, 9],
+    'box_counts': [4, 5, 6, 7, 8],  # Matches game action space (defense actions 0-4 map to 4-8 box)
     'yardline_bins': list(range(1, 100, 1)),  # Every yard
     'down_values': [1, 2, 3, 4],
     'distance_bins': [1, 2, 3, 5, 7, 10, 15, 20],  # Finer distance bins
