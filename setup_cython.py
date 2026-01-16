@@ -29,7 +29,7 @@ def get_extensions():
     
     extensions = []
     
-    # game_fast.pyx
+    # game_fast.pyx - Standard NFL game
     game_fast = Extension(
         "rlcard.games.nfl.cython.game_fast",
         sources=[str(cython_dir / "game_fast.pyx")],
@@ -38,6 +38,18 @@ def get_extensions():
         extra_compile_args=["-O3"] if sys.platform != "win32" else ["/O2"],
     )
     extensions.append(game_fast)
+    
+    # game_iig_fast.pyx - IIG (Imperfect Information Game) variant
+    game_iig_fast_path = cython_dir / "game_iig_fast.pyx"
+    if game_iig_fast_path.exists():
+        game_iig_fast = Extension(
+            "rlcard.games.nfl.cython.game_iig_fast",
+            sources=[str(game_iig_fast_path)],
+            include_dirs=[np.get_include()],
+            define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")],
+            extra_compile_args=["-O3"] if sys.platform != "win32" else ["/O2"],
+        )
+        extensions.append(game_iig_fast)
     
     return extensions
 
