@@ -80,20 +80,21 @@ def test_agent(agent, env, scenarios):
         env.game.phase = 0
         state = env.get_state(0)
         
-        action, probs = agent.eval_step(state)
+        action, info = agent.eval_step(state)
+        probs = info.get('probs', {})
         
-        top_action = max(probs, key=probs.get)
-        top_name = INITIAL_ACTIONS[top_action]
-        top_prob = probs[top_action] * 100
+        # probs now uses action names (str) as keys
+        top_action_name = max(probs, key=probs.get) if probs else "Unknown"
+        top_prob = probs.get(top_action_name, 0) * 100
         
         # Check if correct
         if expected == "GO":
-            is_correct = top_name not in ["PUNT", "FG"]
+            is_correct = top_action_name not in ["PUNT", "FG"]
         else:
-            is_correct = top_name == expected
+            is_correct = top_action_name == expected
         
         results[label] = {
-            'action': top_name,
+            'action': top_action_name,
             'prob': top_prob,
             'expected': expected,
             'correct': is_correct

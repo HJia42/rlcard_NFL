@@ -78,9 +78,12 @@ class DMCAgent:
         exp_values = np.exp(values - values.max())  # Numerical stability
         probs = exp_values / exp_values.sum()
 
+        # Use raw_legal_actions (str) as keys for consistency with CFR/MCCFR/Random
+        raw_actions = state.get('raw_legal_actions', action_keys)
+        
         info = {}
-        info['probs'] = {action_keys[i]: float(probs[i]) for i in range(len(action_keys))}
-        info['values'] = {action_keys[i]: float(values[i]) for i in range(len(action_keys))}
+        info['probs'] = {raw_actions[i]: float(probs[i]) for i in range(len(action_keys))}
+        info['values'] = {raw_actions[i]: float(values[i]) for i in range(len(action_keys))}
 
         return action, info
 

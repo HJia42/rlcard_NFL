@@ -74,16 +74,14 @@ Examples:
     # Part 1: 4th Down Analysis
     fourth_correct, fourth_total = analyze_fourth_down(
         agent, env, 
-        verbose=args.verbose, 
-        agent_type=args.agent_type
+        verbose=args.verbose
     )
     
     # Part 2: Defense Analysis
     if not args.skip_defense:
         defense_results = analyze_defense(
             agent, env,
-            verbose=args.verbose,
-            agent_type=args.agent_type
+            verbose=args.verbose
         )
     
     # Part 3: Self-Play Metrics

@@ -212,7 +212,7 @@ class PPOAgent:
             
         Returns:
             action: Selected action index
-            probs: Action probability dictionary
+            info: Dict with 'probs' key mapping action names to probabilities
         """
         obs = self._process_state(state)
         action_mask = self._get_action_mask(state)
@@ -224,9 +224,18 @@ class PPOAgent:
             )
         
         action = action_probs.argmax(dim=-1).item()
-        probs = {i: p.item() for i, p in enumerate(action_probs.squeeze())}
         
-        return action, probs
+        # Build probs dict using raw_legal_actions (str) as keys for consistency
+        legal_keys = list(state['legal_actions'].keys())
+        raw_actions = state.get('raw_legal_actions', legal_keys)
+        
+        info = {}
+        info['probs'] = {
+            raw_actions[i]: float(action_probs.squeeze()[legal_keys[i]].item())
+            for i in range(len(legal_keys))
+        }
+        
+        return action, info
     
     def batch_eval_step(self, states, deterministic=True):
         """Batched evaluation for multiple states at once.

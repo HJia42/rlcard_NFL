@@ -266,21 +266,25 @@ def compare_exploitability(agents, game):
 # ========== Decision Visualization ==========
 
 def get_action_probs(agent, state, agent_name=None):
-    """Get action probabilities from agent for given state."""
+    """Get action probabilities from agent for given state.
+    
+    All agents now return a standardized format:
+    {'probs': {'action_name': probability, ...}}
+    """
     try:
-        # eval_step returns (action, info) where info contains 'probs'
-        _, info = agent.eval_step(state)
+        action, info = agent.eval_step(state)
         
-        # CFR/MCCFR return probs as dict with action names as keys
+        # Standard format: info['probs'] with str keys
         if isinstance(info, dict) and 'probs' in info:
             return info['probs']
-        # Some agents return probs directly
-        elif isinstance(info, dict):
+        
+        # Fallback: info might be probs dict directly (legacy)
+        if isinstance(info, dict) and all(isinstance(v, (int, float)) for v in info.values()):
             return info
-        else:
-            if agent_name:
-                print(f"{agent_name}: No probs in info (type={type(info)})")
-            return None
+        
+        if agent_name:
+            print(f"{agent_name}: No probs in info (type={type(info)})")
+        return None
     except Exception as e:
         if agent_name:
             print(f"{agent_name}: Error - {e}")

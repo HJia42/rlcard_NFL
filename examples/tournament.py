@@ -57,7 +57,7 @@ def load_dmc_agent(model_dir, env, player_id=0):
 
 
 class RandomAgent:
-    """Random baseline agent."""
+    """Random baseline agent with standardized eval_step output."""
     def __init__(self, num_actions):
         self.num_actions = num_actions
     
@@ -66,41 +66,27 @@ class RandomAgent:
         if isinstance(legal_actions, dict):
             legal_actions = list(legal_actions.keys())
         action = np.random.choice(legal_actions) if legal_actions else 0
-        return action, {}
+        
+        # Return standardized probs format with str keys
+        raw_actions = state.get('raw_legal_actions', legal_actions)
+        probs = {raw_actions[i]: 1.0/len(legal_actions) for i in range(len(legal_actions))}
+        return action, {'probs': probs}
 
 
 def get_action_from_agent(agent, agent_type, state, env):
-    """Get action from agent based on agent type."""
-    if agent_type == 'ppo':
-        action, _ = agent.eval_step(state)
-    elif agent_type == 'nfsp':
-        action, _ = agent.eval_step(state)
-    elif agent_type == 'dmc':
-        # DMC uses Q-values to select action
-        obs = torch.FloatTensor(state['obs']).unsqueeze(0)
-        legal_actions = state.get('legal_actions', {})
-        if isinstance(legal_actions, dict):
-            legal_actions = list(legal_actions.keys())
-        
-        best_action = None
-        best_value = -float('inf')
-        
-        with torch.no_grad():
-            for action_idx in legal_actions:
-                action_one_hot = np.zeros(env.num_actions, dtype=np.float32)
-                action_one_hot[action_idx] = 1.0
-                action_tensor = torch.FloatTensor(action_one_hot).unsqueeze(0)
-                q_value = agent.net(obs, action_tensor).item()
-                if q_value > best_value:
-                    best_value = q_value
-                    best_action = action_idx
-        
-        action = best_action if best_action is not None else 0
-    elif agent_type == 'random':
-        action, _ = agent.eval_step(state)
-    else:
-        action = 0
+    """Get action from agent - all agents now use uniform eval_step() interface.
     
+    Args:
+        agent: Agent instance
+        agent_type: (deprecated) Agent type string - no longer needed
+        state: State dictionary from environment
+        env: Environment (for compatibility, not used)
+    
+    Returns:
+        action: Selected action index
+    """
+    # All agents now use the same eval_step() interface
+    action, _ = agent.eval_step(state)
     return action
 
 

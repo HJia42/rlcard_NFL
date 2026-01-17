@@ -167,13 +167,22 @@ class DQNAgent(object):
 
         Returns:
             action (int): an action id
-            info (dict): A dictionary containing information
+            info (dict): A dictionary containing 'probs' and 'values'
         '''
         q_values = self.predict(state)
         best_action = np.argmax(q_values)
+        
+        legal_keys = list(state['legal_actions'].keys())
+        raw_actions = state.get('raw_legal_actions', legal_keys)
+        
+        # Convert Q-values to probabilities via softmax for consistency
+        legal_q = np.array([q_values[k] for k in legal_keys])
+        exp_q = np.exp(legal_q - legal_q.max())  # Numerical stability
+        probs = exp_q / exp_q.sum()
 
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: float(q_values[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
+        info['probs'] = {raw_actions[i]: float(probs[i]) for i in range(len(legal_keys))}
+        info['values'] = {raw_actions[i]: float(q_values[legal_keys[i]]) for i in range(len(legal_keys))}
 
         return best_action, info
 

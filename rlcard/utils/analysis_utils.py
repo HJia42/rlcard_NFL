@@ -73,50 +73,30 @@ def get_action_probs(agent, state: dict, agent_type: str = None) -> Optional[Dic
     """
     Extract action probabilities from any agent type.
     
-    Handles differences:
-    - PPO: returns {int: float} (action index -> prob)
-    - CFR/NFSP/Deep CFR: returns {'action_name': float}
-    - DMC: returns action directly, needs special handling
+    All agents now return a standardized format:
+    {'probs': {'action_name': probability, ...}}
+    
+    Args:
+        agent: Agent instance with eval_step method
+        state: State dictionary from environment
+        agent_type: (deprecated) Agent type hint - no longer needed
     
     Returns:
-        Dict mapping action identifiers to probabilities, or None on error
+        Dict mapping action names (str) to probabilities (float), or None on error
     """
     try:
-        result = agent.eval_step(state)
+        action, info = agent.eval_step(state)
         
-        # Handle different return formats
-        if isinstance(result, tuple) and len(result) == 2:
-            action, info = result
-        else:
-            return None
+        # Standard format: info['probs'] with str keys
+        if isinstance(info, dict) and 'probs' in info:
+            return info['probs']
         
-        # Extract probabilities
-        if isinstance(info, dict):
-            if 'probs' in info:
-                probs = info['probs']
-                # Check if probs values are dicts (DMC nested format)
-                if probs and isinstance(next(iter(probs.values())), dict):
-                    # DMC returns nested dicts - extract scalar logits/probs
-                    flat_probs = {}
-                    for k, v in probs.items():
-                        if isinstance(v, dict):
-                            # Use 'probs' or first numeric value
-                            flat_probs[k] = v.get('probs', v.get('logits', 0.0))
-                        else:
-                            flat_probs[k] = v
-                    return flat_probs
-                return probs
-            # Some agents return probs directly in info
+        # Fallback: info might be probs dict directly (legacy)
+        if isinstance(info, dict) and all(isinstance(v, (int, float)) for v in info.values()):
             return info
-        
-        # DMC returns just action - create uniform-ish probs with action having highest
-        if isinstance(action, (int, np.integer)):
-            # Can't recover full probs, return single action indicator
-            return {action: 1.0}
         
         return None
     except Exception as e:
-        # Print error for debugging state/model mismatches
         import sys
         print(f"Warning: get_action_probs error - {e}", file=sys.stderr)
         return None
@@ -124,10 +104,13 @@ def get_action_probs(agent, state: dict, agent_type: str = None) -> Optional[Dic
 
 def normalize_probs_to_action_names(probs: Dict, action_list: List[str]) -> Dict[str, float]:
     """
-    Convert probability dict with int keys to action names.
+    Ensure probability dict uses action names as keys.
+    
+    With standardized agent output, this is now mostly a pass-through.
+    Still handles legacy int-keyed dicts for backwards compatibility.
     
     Args:
-        probs: Dict with int or str keys
+        probs: Dict with str or int keys
         action_list: List of action names (e.g., OFFENSE_ACTIONS)
     
     Returns:
@@ -136,12 +119,12 @@ def normalize_probs_to_action_names(probs: Dict, action_list: List[str]) -> Dict
     if not probs:
         return {}
     
-    # Check if already using string keys
+    # Check if already using string keys (standard format)
     first_key = next(iter(probs.keys()))
     if isinstance(first_key, str):
         return probs
     
-    # Convert int keys to action names
+    # Legacy fallback: convert int keys to action names
     result = {}
     for idx, prob in probs.items():
         if isinstance(idx, int) and idx < len(action_list):
