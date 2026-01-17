@@ -1,0 +1,3 @@
+Saving logs data to models/test_dmc_std_200\dmc_nfl/logs.csv
+Saving logs' fields to models/test_dmc_std_200\dmc_nfl/fields.csv
+Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_0', 'mean_episode_return_1', 'loss_1']

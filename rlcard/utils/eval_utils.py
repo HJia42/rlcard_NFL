@@ -162,9 +162,9 @@ def plot_eval_history(csv_path: str, save_path: Optional[str] = None, title: Opt
 
     history = load_eval_history(csv_path)
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(history['episode'], history['offense_epa'], label='Offense EPA')
-    ax.plot(history['episode'], history['defense_epa'], label='Defense EPA')
-    ax.plot(history['episode'], history['self_play_epa'], label='Self-play EPA')
+    ax.plot(history['episode'], history['offense_epa'], label='Offense EPA', marker='o', linewidth=2)
+    ax.plot(history['episode'], history['defense_epa'], label='Defense EPA', marker='o', linewidth=2)
+    ax.plot(history['episode'], history['self_play_epa'], label='Self-play EPA', marker='o', linewidth=2)
     ax.set_xlabel('Episode')
     ax.set_ylabel('EPA')
     ax.grid(True, alpha=0.3)
