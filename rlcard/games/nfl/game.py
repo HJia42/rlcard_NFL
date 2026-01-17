@@ -181,8 +181,21 @@ class NFLGame:
         
         # Initial state: 1st & 10 at own 25 (or custom down)
         self.down = self.start_down
-        self.ydstogo = 10
-        self.yardline = 25
+        
+        if self.single_play:
+            # Randomize field position for generalizable training
+            self.yardline = np.random.randint(1, 100)
+            
+            # Randomize ydstogo (capped by distance to goal and realistic max)
+            dist_to_goal = 100 - self.yardline
+            max_yds = min(20, dist_to_goal)
+            self.ydstogo = np.random.randint(1, max_yds + 1)
+            
+            # Print for verification (temporary, can remove later if spammy)
+            # print(f"DEBUG: Initialized at {self.yardline} yd line, {self.ydstogo} to go")
+        else:
+            self.ydstogo = 10
+            self.yardline = 25
         
         # Start with offense picking formation (phase 0)
         self.current_player = 0
