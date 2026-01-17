@@ -290,24 +290,77 @@ cdef class NFLGameFast:
         return yards, turnover
     
     cdef dict _get_state_dict(self):
-        """Get state as Python dict for RLCard compatibility."""
-        cdef list legal_actions
+        """Get state as Python dict for RLCard compatibility.
         
+        Matches standardized format from Python games:
+        - obs: 12-dim float32 array
+        - legal_actions: dict {action_idx: None}
+        - raw_legal_actions: list of action names
+        - phase: int (0/1/2)
+        - phase_name: str
+        """
+        cdef list legal_list
+        cdef list raw_legal_actions
+        cdef str phase_name
+        cdef np.ndarray[DTYPE_t, ndim=1] obs = np.zeros(12, dtype=DTYPE)
+        
+        # Formation names for raw_legal_actions
+        formations = ['SHOTGUN', 'SINGLEBACK', 'UNDER CENTER', 'I_FORM', 'EMPTY', 'PUNT', 'FG']
+        defense_names = ['4_box', '5_box', '6_box', '7_box', '8_box']
+        play_types = ['pass', 'rush']
+        
+        # Build obs array
+        obs[0] = self.down / 4.0
+        obs[1] = min(self.ydstogo, 30) / 30.0
+        obs[2] = self.yardline / 100.0
+        
+        # Formation encoding (indices 3-7) - visible after phase 0
+        if self.phase >= 1 and 0 <= self.pending_formation_idx < NUM_FORMATIONS:
+            obs[3 + self.pending_formation_idx] = 1.0
+        
+        # Box count encoding (index 8) - visible in phase 2
+        if self.phase == 2 and self.pending_box_count > 0:
+            obs[8] = (self.pending_box_count - 4) / 4.0
+        
+        # Phase encoding
+        obs[11] = self.phase / 2.0
+        
+        # Build legal actions and raw names based on phase
         if self.phase == 0:
-            legal_actions = list(range(NUM_INITIAL_ACTIONS))
+            legal_list = list(range(NUM_INITIAL_ACTIONS))
+            raw_legal_actions = formations
+            phase_name = 'formation'
         elif self.phase == 1:
-            legal_actions = list(range(NUM_DEFENSE_ACTIONS))
+            legal_list = list(range(NUM_DEFENSE_ACTIONS))
+            raw_legal_actions = defense_names
+            phase_name = 'defense'
         else:
-            legal_actions = list(range(NUM_PLAY_TYPES))
+            legal_list = list(range(NUM_PLAY_TYPES))
+            raw_legal_actions = play_types
+            phase_name = 'play_type'
         
-        return {
+        # Convert to dict for RLCard compatibility
+        legal_actions_dict = {i: None for i in legal_list}
+        
+        state = {
+            'obs': obs,
+            'legal_actions': legal_actions_dict,
+            'raw_legal_actions': raw_legal_actions,
+            'player_id': self.current_player,
             'down': self.down,
             'ydstogo': self.ydstogo,
             'yardline': self.yardline,
             'phase': self.phase,
-            'legal_actions': legal_actions,
-            'player_id': self.current_player,
+            'phase_name': phase_name,
         }
+        
+        # Add phase-specific info
+        if self.phase >= 1 and 0 <= self.pending_formation_idx < NUM_FORMATIONS:
+            state['formation'] = formations[self.pending_formation_idx]
+        if self.phase == 2 and self.pending_box_count > 0:
+            state['box_count'] = self.pending_box_count
+        
+        return state
     
     cpdef bint is_over(self):
         """Check if game is over."""
