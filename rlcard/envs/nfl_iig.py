@@ -3,11 +3,17 @@ NFL IIG (Imperfect Information Game) Environment
 
 Environment wrapper for the IIG NFL game variant where
 offense commits to formation AND play type before seeing defense.
+
+3-Phase Structure:
+  Phase 0: Offense picks formation (or PUNT/FG)
+  Phase 1: Offense picks play type (pass/rush)
+  Phase 2: Defense picks box count
 """
 
 import numpy as np
 from rlcard.envs.env import Env
-from rlcard.games.nfl.game_iig import NFLGameIIG, IIG_OFFENSE_ACTIONS, IIG_ACTION_NAMES
+from rlcard.games.nfl.game_iig import NFLGameIIG
+from rlcard.games.nfl.game import INITIAL_ACTIONS, PLAY_TYPE_ACTIONS, DEFENSE_ACTIONS
 
 
 class NFLIIGEnv(Env):
@@ -26,17 +32,20 @@ class NFLIIGEnv(Env):
         )
         super().__init__(config)
         
-        # State shape: 12 dimensions (matching standard NFL env)
+        # State shape: 12 dimensions
         self.state_shape = [[12], [12]]
         self.action_shape = [None, None]
-        
-        self.action_names = IIG_ACTION_NAMES
     
     def _extract_state(self, state):
         """Extract state dict for agents."""
+        # legal_actions is now already a dict from the game
+        legal_actions = state['legal_actions']
+        if not isinstance(legal_actions, dict):
+            legal_actions = {i: None for i in legal_actions}
+        
         return {
             'obs': state['obs'],
-            'legal_actions': {i: None for i in state['legal_actions']},
+            'legal_actions': legal_actions,
             'raw_obs': state,
             'raw_legal_actions': state.get('raw_legal_actions', []),
         }
@@ -63,3 +72,4 @@ class NFLIIGEnv(Env):
             'is_over': self.game.is_over(),
             'committed_play_type': self.game.committed_play_type,
         }
+

@@ -515,43 +515,70 @@ class NFLGame:
         return True
     
     def get_state(self, player_id):
-        """Get state from perspective of player."""
-        if player_id == 0:
-            # Offense
-            if self.phase == 0:
-                # Picking formation or special teams - just see game state
-                return {
-                    'down': self.down,
-                    'ydstogo': self.ydstogo,
-                    'yardline': self.yardline,
-                    'phase': 'formation',
-                    'legal_actions': list(range(self.num_initial_actions)),  # 5 formations + 2 special teams
-                    'player_id': 0
-                }
-            else:
-                # Phase 2: Picking play type - see box count!
-                box_count = self.pending_defense_action[0] if self.pending_defense_action else 0
-                return {
-                    'down': self.down,
-                    'ydstogo': self.ydstogo,
-                    'yardline': self.yardline,
-                    'formation': self.pending_formation,
-                    'box_count': box_count,
-                    'phase': 'play_type',
-                    'legal_actions': list(range(self.num_play_type_actions)),
-                    'player_id': 0
-                }
+        """Get state from perspective of player.
+        
+        Returns standardized state dict with:
+        - obs: 12-dim float32 array for neural networks
+        - legal_actions: dict {action_idx: None}
+        - raw_legal_actions: list of action name strings
+        - phase: integer (0=formation, 1=defense, 2=play_type)
+        - phase_name: string for readability
+        """
+        # Build 12-dim observation array for neural networks
+        obs = np.zeros(12, dtype=np.float32)
+        obs[0] = self.down / 4.0  # Normalized down
+        obs[1] = min(self.ydstogo, 30) / 30.0  # Normalized yards to go
+        obs[2] = self.yardline / 100.0  # Normalized yardline
+        
+        # Formation encoding (indices 3-7) - visible after phase 0
+        if self.phase >= 1 and self.pending_formation in FORMATION_ACTIONS:
+            formation_idx = FORMATION_ACTIONS.index(self.pending_formation)
+            obs[3 + formation_idx] = 1.0
+        
+        # Box count encoding (index 8-9) - visible in phase 2
+        if self.phase == 2 and self.pending_defense_action:
+            box_count = self.pending_defense_action[0]
+            obs[8] = (box_count - 4) / 4.0  # Normalize box count 4-8 to 0-1
+        
+        # Phase encoding (index 11)
+        obs[11] = self.phase / 2.0
+        
+        # Build legal actions dict and raw names
+        if self.phase == 0:
+            legal_list = list(range(self.num_initial_actions))
+            raw_legal_actions = [INITIAL_ACTIONS[i] for i in legal_list]
+            phase_name = 'formation'
+        elif self.phase == 1:
+            legal_list = list(range(self.num_defense_actions))
+            raw_legal_actions = [f"{d[0]}_box" for d in DEFENSE_ACTIONS]
+            phase_name = 'defense'
         else:
-            # Defense - sees formation
-            return {
-                'down': self.down,
-                'ydstogo': self.ydstogo,
-                'yardline': self.yardline,
-                'formation': self.pending_formation,
-                'phase': 'defense',
-                'legal_actions': list(range(self.num_defense_actions)),
-                'player_id': 1
-            }
+            legal_list = list(range(self.num_play_type_actions))
+            raw_legal_actions = list(PLAY_TYPE_ACTIONS)
+            phase_name = 'play_type'
+        
+        # Convert to dict format for RLCard compatibility
+        legal_actions = {i: None for i in legal_list}
+        
+        state = {
+            'obs': obs,
+            'legal_actions': legal_actions,
+            'raw_legal_actions': raw_legal_actions,
+            'player_id': player_id,
+            'down': self.down,
+            'ydstogo': self.ydstogo,
+            'yardline': self.yardline,
+            'phase': self.phase,
+            'phase_name': phase_name,
+        }
+        
+        # Add phase-specific info
+        if self.phase >= 1:
+            state['formation'] = self.pending_formation
+        if self.phase == 2 and self.pending_defense_action:
+            state['box_count'] = self.pending_defense_action[0]
+        
+        return state
     
     def get_legal_actions(self):
         """Get legal actions for current player."""

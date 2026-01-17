@@ -96,26 +96,18 @@ class NFLGameBucketed(NFLGame):
         """Get state with bucketed representation.
         
         Returns state dict with bucketed observations suitable for tabular methods.
+        Extends parent with obs_tuple for tabular CFR.
         """
-        # Get base state from parent
+        # Get base state from parent (now includes obs, raw_legal_actions, etc.)
         base_state = super().get_state(player_id)
         
         # Create bucketed observation
         down_bucket = self.down - 1  # 0-3
         distance_bucket = get_distance_bucket(self.ydstogo)  # 0-3
-        field_bucket = get_field_position_bucket(self.yardline)  # 0-4
+        field_bucket = get_field_position_bucket(self.yardline)  # 0-19
         
-        # Get legal actions from base state
+        # Get legal actions from base state (now a dict)
         legal_actions = base_state['legal_actions']
-        
-        # Construct raw_legal_actions based on phase
-        if self.phase == 0:
-            # Phase 0 now includes formations + PUNT + FG (7 total)
-            raw_legal_actions = [INITIAL_ACTIONS[i] for i in legal_actions]
-        elif self.phase == 1:
-            raw_legal_actions = [DEFENSE_ACTIONS[i] for i in legal_actions]
-        else:
-            raw_legal_actions = [PLAY_TYPE_ACTIONS[i] for i in legal_actions]
         
         # Encode state as tuple for hashability in tabular methods
         if self.phase == 0:
@@ -132,34 +124,23 @@ class NFLGameBucketed(NFLGame):
             defense_idx = DEFENSE_ACTIONS.index(self.pending_defense_action) if self.pending_defense_action else 0
             obs_tuple = (self.phase, down_bucket, distance_bucket, field_bucket, formation_idx, defense_idx)
         
-        # Also create array representation for neural networks
-        obs_array = np.array([
-            down_bucket / 3.0,          # Normalize to 0-1
-            distance_bucket / 3.0,
-            field_bucket / 19.0,        # Now 20 buckets (0-19)
-        ], dtype=np.float32)
+        # Override obs with bucketed version for neural networks
+        obs_array = np.zeros(12, dtype=np.float32)
+        obs_array[0] = down_bucket / 3.0
+        obs_array[1] = distance_bucket / 3.0
+        obs_array[2] = field_bucket / 19.0
+        obs_array[11] = self.phase / 2.0
         
-        # Pad to consistent size (12 dims with phase)
-        full_obs = np.zeros(12, dtype=np.float32)
-        full_obs[:len(obs_array)] = obs_array
-        # Add phase encoding at position 11 (0=formation, 0.5=defense, 1=play_type)
-        full_obs[11] = self.phase / 2.0
+        # Start with base state and add bucketed extras
+        state = base_state.copy()
+        state['obs'] = obs_array
+        state['obs_tuple'] = obs_tuple
+        state['phase'] = self.phase  # Ensure int phase
+        state['down_bucket'] = down_bucket
+        state['distance_bucket'] = distance_bucket
+        state['field_bucket'] = field_bucket
         
-        return {
-            'obs': full_obs,           # Array for neural networks
-            'obs_tuple': obs_tuple,     # Tuple for tabular methods
-            'legal_actions': legal_actions,
-            'raw_legal_actions': raw_legal_actions,
-            'player_id': player_id,
-            'down': self.down,
-            'ydstogo': self.ydstogo,
-            'yardline': self.yardline,
-            'phase': base_state['phase'],
-            # Bucket info for debugging
-            'down_bucket': down_bucket,
-            'distance_bucket': distance_bucket,
-            'field_bucket': field_bucket,
-        }
+        return state
     
     def get_info_set_id(self, player_id):
         """Get unique info set ID for current state.
