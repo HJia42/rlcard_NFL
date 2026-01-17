@@ -51,6 +51,12 @@ def main():
     parser.add_argument('--game', type=str, default='nfl-bucketed',
                         choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'],
                         help='Game environment (default: nfl-bucketed)')
+    parser.add_argument('--start-down', type=int, default=None, choices=[1, 2, 3, 4],
+                        help='Starting down (1-4)')
+    parser.add_argument('--start-ydstogo', type=int, default=None,
+                        help='Starting yards to go')
+    parser.add_argument('--start-yardline', type=int, default=None,
+                        help='Starting yardline (1-99, from own goal)')
     args = parser.parse_args()
 
     print("=" * 60)
@@ -58,13 +64,18 @@ def main():
     print("=" * 60)
     
     # Create environment with step_back enabled
+    config = {
+        'seed': args.seed,
+        'allow_step_back': True,
+        'single_play': True,  # Critical for CFR performance
+        'start_down': args.start_down,
+        'start_ydstogo': args.start_ydstogo,
+        'start_yardline': args.start_yardline,
+    }
+    
     env = rlcard.make(
         args.game,
-        config={
-            'seed': args.seed,
-            'allow_step_back': True,
-            'single_play': True,  # Critical for CFR performance
-        }
+        config=config
     )
     
     print(f"\nEnvironment Info:")

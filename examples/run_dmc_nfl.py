@@ -75,6 +75,8 @@ def train_dmc(args):
         total_frames=args.iterations,  # Total training steps
         eval_every=args.eval_every,
         eval_callback=eval_callback,
+        batch_size=args.batch_size,
+        learning_rate=args.lr,
     )
     
     print("Starting DMC training...")
@@ -143,6 +145,10 @@ if __name__ == '__main__':
                         help='End game after one play')
     parser.add_argument('--start-down', type=int, default=1,
                         help='Starting down (1-4)')
+    parser.add_argument('--batch-size', type=int, default=32,
+                        help='Batch size (default: 32)')
+    parser.add_argument('--lr', type=float, default=0.0001,
+                        help='Learning rate (default: 1e-4)')
     
     args = parser.parse_args()
     train_dmc(args)
