@@ -207,9 +207,13 @@ class NFLGameIIG(NFLGame):
     
     def _apply_outcome(self, yards, turnover, old_ep):
         """Apply outcome and calculate EPA."""
+        # Ensure yards is int
+        yards = int(np.round(yards))
+        
         if turnover:
             self.is_over_flag = True
             opp_yardline = 100 - (self.yardline + yards)
+            opp_yardline = int(np.round(opp_yardline))
             opp_yardline = max(1, min(99, opp_yardline))
             opp_ep = self._calculate_ep(1, 10, opp_yardline)
             epa = -opp_ep - old_ep

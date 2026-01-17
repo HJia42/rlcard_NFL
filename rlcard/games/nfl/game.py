@@ -184,12 +184,12 @@ class NFLGame:
         
         if self.single_play:
             # Randomize field position for generalizable training
-            self.yardline = np.random.randint(1, 100)
+            self.yardline = int(np.random.randint(1, 100))
             
             # Randomize ydstogo (capped by distance to goal and realistic max)
             dist_to_goal = 100 - self.yardline
             max_yds = min(20, dist_to_goal)
-            self.ydstogo = np.random.randint(1, max_yds + 1)
+            self.ydstogo = int(np.random.randint(1, max_yds + 1))
             
             # Print for verification (temporary, can remove later if spammy)
             # print(f"DEBUG: Initialized at {self.yardline} yd line, {self.ydstogo} to go")
@@ -353,6 +353,7 @@ class NFLGame:
             # Punt: opponent gets ball at predicted position
             # predict_punt_outcome returns opponent's yardline from THEIR own goal
             opp_yardline = self.special_teams.predict_punt_outcome(self.yardline)
+            opp_yardline = int(np.round(opp_yardline))
             opp_yardline = max(1, min(99, opp_yardline))  # Clamp to valid range
             
             # Use full EP model for opponent's position (1st & 10)
@@ -406,6 +407,7 @@ class NFLGame:
                 base_yards += (box_count - 6) * 0.3
             
             yards = self.np_random.normal(base_yards, variance)
+            yards = int(np.round(yards))
             yards = max(-10, min(yards, 50))
             turnover = self.np_random.random() < int_prob
             
@@ -444,7 +446,7 @@ class NFLGame:
         yards = sampled.get('yards_gained', 0)
         turnover = sampled.get('interception', 0) == 1 or sampled.get('fumble', 0) == 1
         
-        return {'yards_gained': float(yards), 'turnover': bool(turnover)}
+        return {'yards_gained': int(round(float(yards))), 'turnover': bool(turnover)}
     
     def _calculate_ep(self, down, ydstogo, yardline, goal_to_go=False):
         """Calculate expected points using fitted OLS regression model.

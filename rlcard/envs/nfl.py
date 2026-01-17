@@ -110,7 +110,7 @@ class NFLEnv(Env):
             'obs': obs,
             'legal_actions': legal_actions,
             'raw_obs': state,
-            'raw_legal_actions': state['legal_actions']
+            'raw_legal_actions': state.get('raw_legal_actions', list(state['legal_actions'].keys()))
         }
     
     def _encode_formation(self, formation):

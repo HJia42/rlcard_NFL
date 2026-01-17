@@ -183,9 +183,14 @@ class NFLGameIIGScrimmage(NFLGame):
     
     def _apply_outcome(self, yards, turnover, old_ep):
         """Apply outcome and calculate EPA."""
+        # Ensure yards is int
+        yards = int(np.round(yards))
+        
         if turnover:
             self.is_over_flag = True
-            opp_yardline = max(1, min(99, 100 - (self.yardline + yards)))
+            opp_yardline = 100 - (self.yardline + yards)
+            opp_yardline = int(np.round(opp_yardline))
+            opp_yardline = max(1, min(99, opp_yardline))
             opp_ep = self._calculate_ep(1, 10, opp_yardline)
             epa = -opp_ep - old_ep
         elif self.yardline + yards >= 100:
@@ -204,13 +209,15 @@ class NFLGameIIGScrimmage(NFLGame):
             if self.down > 4:
                 self.is_over_flag = True
                 opp_yardline = max(1, min(99, 100 - self.yardline))
+                opp_ep = self._calculate_ep(1, 10, opp_yardline)
                 epa = -self._calculate_ep(1, 10, opp_yardline) - old_ep
             else:
                 epa = self._calculate_ep(self.down, self.ydstogo, self.yardline) - old_ep
         
         if self.yardline <= 0:
             self.is_over_flag = True
-            epa = -(2.0 + self._calculate_ep(1, 10, 35)) - old_ep
+            opp_ep = self._calculate_ep(1, 10, 35)
+            epa = -(2.0 + opp_ep) - old_ep
         
         if self.single_play:
             self.is_over_flag = True
