@@ -93,11 +93,8 @@ def train_ppo(
         'use_cached_model': use_cached_model,
     })
     
-    # Determine max actions across all phases
-    # Phase 0: 7 (formations + special teams)
-    # Phase 1: 5 (defense)
-    # Phase 2: 2 (play type)
-    max_actions = 7  # Maximum action space
+    # Get action count from environment (supports IIG with 12 actions)
+    max_actions = env.num_actions
     
     # Create PPO agent
     state_shape = env.state_shape[0]

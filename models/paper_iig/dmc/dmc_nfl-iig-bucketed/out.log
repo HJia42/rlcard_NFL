@@ -1,0 +1,3 @@
+Saving logs data to models/paper_iig/dmc/dmc_nfl-iig-bucketed/logs.csv
+Saving logs' fields to models/paper_iig/dmc/dmc_nfl-iig-bucketed/fields.csv
+Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_0', 'mean_episode_return_1', 'loss_1']

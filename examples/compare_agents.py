@@ -383,7 +383,7 @@ def analyze_key_situations(agents, game):
 def main():
     parser = argparse.ArgumentParser(description='Compare NFL Agents')
     parser.add_argument('--game', type=str, default='nfl-bucketed',
-                        choices=['nfl', 'nfl-bucketed'])
+                        choices=['nfl', 'nfl-bucketed', 'nfl-iig', 'nfl-iig-bucketed'])
     parser.add_argument('--num-games', type=int, default=200,
                         help='Games per matchup')
     parser.add_argument('--situation', action='store_true',

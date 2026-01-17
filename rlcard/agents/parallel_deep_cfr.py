@@ -49,7 +49,7 @@ def actor_process(
         hidden_layers: Hidden layer sizes for networks
     """
     # Create local environment
-    env = rlcard.make('nfl', config=env_config)
+    env = rlcard.make(env_config.get('game', 'nfl'), config=env_config)
     
     # Create local networks for inference (CPU)
     advantage_nets = []
@@ -207,7 +207,8 @@ class ParallelDeepCFRTrainer:
         self.hidden_layers = hidden_layers
         
         # Create env to get dimensions
-        env = rlcard.make('nfl', config=env_config)
+        game_name = env_config.get('game', 'nfl')
+        env = rlcard.make(game_name, config=env_config)
         self.num_actions = env.num_actions
         self.num_players = env.num_players
         self.state_shape = max(env.state_shape, key=lambda x: np.prod(x))
@@ -406,7 +407,8 @@ class ParallelDeepCFRTrainer:
     def get_agent(self):
         """Get agent for evaluation."""
         # Create a DeepCFRAgent with our trained networks
-        env = rlcard.make('nfl', config=self.env_config)
+        game_name = self.env_config.get('game', 'nfl')
+        env = rlcard.make(game_name, config=self.env_config)
         agent = DeepCFRAgent(env, hidden_layers=self.hidden_layers, device=self.device)
         
         # Copy network weights

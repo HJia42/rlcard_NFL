@@ -75,7 +75,21 @@ def _load_ppo(model_path: str, env, verbose: bool) -> Any:
     """Load PPO agent."""
     from rlcard.agents.ppo_agent import PPOAgent
     
-    # First peek at the checkpoint to get the actual state shape
+    # If model_path is a directory, find the final .pt file
+    if os.path.isdir(model_path):
+        pt_files = [f for f in os.listdir(model_path) if f.endswith('.pt')]
+        # Prefer 'final' checkpoint
+        final_files = [f for f in pt_files if 'final' in f]
+        if final_files:
+            model_path = os.path.join(model_path, final_files[0])
+        elif pt_files:
+            # Use the highest numbered checkpoint
+            pt_files.sort(key=lambda x: int(''.join(filter(str.isdigit, x)) or '0'), reverse=True)
+            model_path = os.path.join(model_path, pt_files[0])
+        else:
+            raise FileNotFoundError(f"No .pt files found in {model_path}")
+    
+    # First peek at the checkpoint to get the actual state shape and action count
     checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
     
     # Infer state shape from first layer weights: shared.0.weight has shape [hidden, state_dim]
@@ -86,15 +100,22 @@ def _load_ppo(model_path: str, env, verbose: bool) -> Any:
         # Fallback to environment
         state_dim = env.state_shape[0][0] if isinstance(env.state_shape[0], list) else env.state_shape[0]
     
+    # Infer num_actions from actor head: actor_head.2.weight has shape [num_actions, hidden]
+    if 'actor_head.2.weight' in state_dict:
+        num_actions = state_dict['actor_head.2.weight'].shape[0]
+    else:
+        # Fallback to environment
+        num_actions = env.num_actions
+    
     agent = PPOAgent(
         state_shape=[state_dim],
-        num_actions=7,
+        num_actions=num_actions,
         hidden_dims=[128, 128],
     )
     agent.load(model_path)
     
     if verbose:
-        print(f"Loaded PPO agent from {model_path} (state_dim={state_dim})")
+        print(f"Loaded PPO agent from {model_path} (state_dim={state_dim}, num_actions={num_actions})")
     
     return agent
 
@@ -198,9 +219,12 @@ def _load_deep_cfr(model_path: str, env, verbose: bool) -> Any:
     """Load Deep CFR agent via ParallelDeepCFRTrainer."""
     from rlcard.agents.parallel_deep_cfr import ParallelDeepCFRTrainer
     
+    # Get game name - IIG envs use 'name', standard envs use 'game_name'
+    game_name = getattr(env, 'name', getattr(env, 'game_name', 'nfl-bucketed'))
+    
     # Deep CFR requires loading through the trainer
     trainer = ParallelDeepCFRTrainer(
-        env_config={'game': env.game_name, 'single_play': True},
+        env_config={'game': game_name, 'single_play': True},
         model_path=model_path,
     )
     
