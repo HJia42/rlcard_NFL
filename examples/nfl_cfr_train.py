@@ -15,17 +15,32 @@ import argparse
 
 import rlcard
 from rlcard.agents import CFRAgent, RandomAgent
-from rlcard.utils import set_seed, tournament, Logger, plot_curve
+from rlcard.utils import set_seed, plot_curve
+from rlcard.utils.eval_utils import EvalLogger, evaluate_agent, format_eval_line
 
 
 def train(args):
+    # Handle aliases
+    if args.save_dir:
+        args.log_dir = args.save_dir
+    if args.iterations:
+        args.num_episodes = args.iterations
+
     # Create environments with step_back enabled for CFR
-    env = rlcard.make(args.game, config={
+    env_config = {
         'seed': args.seed,
         'allow_step_back': True,
-    })
+        'single_play': args.single_play,
+        'start_down': args.start_down,
+    }
     
-    eval_env = rlcard.make(args.game, config={'seed': args.seed})
+    env = rlcard.make(args.game, config=env_config)
+    
+    eval_env = rlcard.make(args.game, config={
+        'seed': args.seed,
+        'single_play': args.single_play,
+        'start_down': args.start_down,
+    })
     
     set_seed(args.seed)
     
@@ -50,22 +65,33 @@ def train(args):
     
     print(f"\nTraining CFR on NFL for {args.num_episodes} iterations...")
     
-    # Training loop
-    with Logger(args.log_dir) as logger:
-        for episode in range(args.num_episodes):
-            agent.train()
-            print(f'\rIteration {episode}', end='')
-            
-            if episode % args.evaluate_every == 0:
-                agent.save()
-                result = tournament(eval_env, args.num_eval_games)[0]
-                logger.log_performance(episode, result)
-                print(f'\nEpisode {episode}: Offense vs Random = {result:.2f}')
-        
-        csv_path, fig_path = logger.csv_path, logger.fig_path
+    # Initialize EvalLogger
+    os.makedirs(args.log_dir, exist_ok=True)
+    log_path = os.path.join(args.log_dir, 'eval_log.csv')
+    eval_logger = EvalLogger(log_path)
     
-    # Plot learning curve
-    plot_curve(csv_path, fig_path, 'cfr')
+    # Training loop
+    for episode in range(1, args.num_episodes + 1):
+        agent.train()
+        print(f'\rIteration {episode}', end='')
+        
+        if episode % args.evaluate_every == 0:
+            agent.save()
+            # Evaluate using standardized metrics
+            results = evaluate_agent(agent, args.game, num_games=args.num_eval_games, verbose=False)
+            results['episode'] = episode  # Add episode to results
+            
+            # Log and print
+            eval_logger.log(episode, results)
+            print(f"\n{format_eval_line(episode, results)}")
+    
+    csv_path = log_path
+    fig_path = os.path.join(args.log_dir, 'fig.png')
+    
+    # Plot standard evaluation history
+    from rlcard.utils.eval_utils import plot_eval_history
+    plot_eval_history(csv_path, fig_path, title='CFR Training EPA')
+    
     print(f"\nTraining complete! Results saved to {args.log_dir}")
 
 
@@ -79,6 +105,12 @@ if __name__ == '__main__':
     parser.add_argument('--num_eval_games', type=int, default=200)
     parser.add_argument('--evaluate_every', type=int, default=200)
     parser.add_argument('--log_dir', type=str, default='models/cfr/')
+    parser.add_argument('--save-dir', type=str, default=None, help='Alias for log_dir')
+    parser.add_argument('--iterations', type=int, default=None, help='Alias for num_episodes')
+    
+    # Custom game config
+    parser.add_argument('--single-play', action='store_true', help='End game after one play')
+    parser.add_argument('--start-down', type=int, default=1, help='Starting down (1-4)')
     
     args = parser.parse_args()
     train(args)

@@ -53,7 +53,7 @@ class NFLGame:
     """
     
     def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
-                 single_play=False, use_distribution_model=False, use_cached_model=False):
+                 single_play=False, start_down=1, use_distribution_model=False, use_cached_model=False):
         """Initialize NFL Game.
         
         Args:
@@ -63,6 +63,7 @@ class NFLGame:
                              If None, auto-detect based on allow_step_back.
             single_play: If True, game ends after one complete play (3 phases).
                         This dramatically reduces tree depth for CFR algorithms.
+            start_down: Starting down (1-4). Default: 1.
             use_distribution_model: If True, use Biro & Walker statistical distributions
                         instead of random sampling for play outcomes.
             use_cached_model: If True, use pre-computed cached distributions for O(1) lookup.
@@ -70,6 +71,7 @@ class NFLGame:
         """
         self.allow_step_back = allow_step_back
         self.single_play = single_play
+        self.start_down = start_down
         self.use_distribution_model = use_distribution_model
         self.use_cached_model = use_cached_model
         self.np_random = np.random.RandomState()
@@ -177,8 +179,8 @@ class NFLGame:
         """Initialize a new game (drive)."""
         self.players = [OffensePlayer(0), DefensePlayer(1)]
         
-        # Initial state: 1st & 10 at own 25
-        self.down = 1
+        # Initial state: 1st & 10 at own 25 (or custom down)
+        self.down = self.start_down
         self.ydstogo = 10
         self.yardline = 25
         

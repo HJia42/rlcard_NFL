@@ -37,13 +37,30 @@ def train_dmc(args):
         os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     
     # Create environment
+    # Create environment
     env_config = {
-        'single_play': True,
+        'single_play': args.single_play,
+        'start_down': args.start_down,
         'use_distribution_model': args.distribution_model,
         'use_cached_model': args.cached_model,
     }
     env = rlcard.make(args.game, config=env_config)
     
+    # Create eval logger
+    log_path = os.path.join(args.save_dir, f'dmc_{args.game}', 'eval_log.csv')
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    eval_logger = EvalLogger(log_path)
+    
+    # Define evaluation callback
+    def eval_callback(agent, frames):
+        try:
+            results = evaluate_agent(agent, args.game, num_games=200, verbose=False) # Keep games low for speed
+            results['episode'] = frames # Use frames as episode counter
+            eval_logger.log(frames, results)
+            print(f"\n[Eval @ {frames} frames] {format_eval_line(frames, results)}")
+        except Exception as e:
+            print(f"Evaluation failed: {e}")
+
     # Create DMC trainer
     trainer = DMCTrainer(
         env,
@@ -56,12 +73,9 @@ def train_dmc(args):
         num_actors=args.num_actors,
         training_device=args.training_device,
         total_frames=args.iterations,  # Total training steps
+        eval_every=args.eval_every,
+        eval_callback=eval_callback,
     )
-    
-    # Create eval logger
-    log_path = os.path.join(args.save_dir, f'dmc_{args.game}', 'eval_log.csv')
-    os.makedirs(os.path.dirname(log_path), exist_ok=True)
-    eval_logger = EvalLogger(log_path)
     
     print("Starting DMC training...")
     print("(Training will automatically terminate after specified iterations)\n")
@@ -113,6 +127,8 @@ if __name__ == '__main__':
                         help='Save directory')
     parser.add_argument('--save-interval', type=int, default=30,
                         help='Save interval in minutes')
+    parser.add_argument('--eval-every', type=int, default=10000,
+                        help='Evaluate every N frames/steps')
     parser.add_argument('--num-actor-devices', type=int, default=1,
                         help='Number of actor devices')
     parser.add_argument('--num-actors', type=int, default=5,
@@ -123,6 +139,10 @@ if __name__ == '__main__':
                         help='Use Biro & Walker distribution model for outcomes')
     parser.add_argument('--cached-model', action='store_true',
                         help='Use cached distribution model (O(1) lookup, faster)')
+    parser.add_argument('--single-play', action='store_true',
+                        help='End game after one play')
+    parser.add_argument('--start-down', type=int, default=1,
+                        help='Starting down (1-4)')
     
     args = parser.parse_args()
     train_dmc(args)

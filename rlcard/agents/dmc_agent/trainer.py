@@ -127,9 +127,13 @@ class DMCTrainer:
         learning_rate=0.0001,
         alpha=0.99,
         momentum=0,
-        epsilon=0.00001
+        epsilon=0.00001,
+        eval_every=None,
+        eval_callback=None,
     ):
         self.env = env
+        self.eval_every = eval_every
+        self.eval_callback = eval_callback
 
         self.plogger = FileWriter(
             xpid=xpid,
@@ -354,6 +358,7 @@ class DMCTrainer:
         try:
             # Don't save immediately at start - wait for save_interval
             last_checkpoint_time = timer()
+            last_eval_frames = frames
             while frames < self.total_frames:
                 start_frames = frames
                 start_time = timer()
@@ -371,6 +376,16 @@ class DMCTrainer:
                     fps,
                     pprint.pformat(stats),
                 )
+                
+                # Evaluation
+                if self.eval_every and self.eval_callback:
+                    if frames - last_eval_frames >= self.eval_every:
+                        log.info(f"Evaluating at {frames} frames...")
+                        # Get current agent state (Player 0)
+                        _agent = learner_model.get_agent(0) # Get centralized agent for player 0
+                        self.eval_callback(_agent, frames)
+                        last_eval_frames = frames
+                        
         except KeyboardInterrupt:
             # Save checkpoint on interrupt
             log.info('Training interrupted, saving checkpoint...')

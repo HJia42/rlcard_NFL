@@ -42,12 +42,13 @@ class NFLGameIIG(NFLGame):
     """
     
     def __init__(self, allow_step_back=False, data_path=None, 
-                 single_play=False, use_cached_model=False, seed=None):
+                 single_play=False, start_down=1, use_cached_model=False, seed=None):
         """Initialize IIG NFL game."""
         super().__init__(
             allow_step_back=allow_step_back,
             data_path=data_path,
             single_play=single_play,
+            start_down=start_down,
             use_cached_model=use_cached_model,
         )
         # Store committed play type (hidden from defense)

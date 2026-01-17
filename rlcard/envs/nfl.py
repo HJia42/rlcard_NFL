@@ -24,6 +24,7 @@ class NFLEnv(Env):
         self.game = NFLGame(
             allow_step_back=config.get('allow_step_back', False),
             single_play=config.get('single_play', False),
+            start_down=config.get('start_down', 1),
             use_distribution_model=config.get('use_distribution_model', False),
             use_cached_model=config.get('use_cached_model', False),
         )

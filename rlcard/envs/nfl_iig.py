@@ -28,6 +28,7 @@ class NFLIIGEnv(Env):
         self.game = NFLGameIIG(
             allow_step_back=config.get('allow_step_back', False),
             single_play=config.get('single_play', True),
+            start_down=config.get('start_down', 1),
             use_cached_model=config.get('use_cached_model', False),
         )
         super().__init__(config)
