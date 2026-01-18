@@ -82,11 +82,22 @@ def load_agent(env_name, agent_type, device='cpu'):
         print(f"  [Error] Failed to load {agent_type} from {checkpoint_dir}: {e}")
         return None
 
-def get_scalar(payoff):
-    """Robustly extract scalar from potential array/list."""
-    if isinstance(payoff, (list, np.ndarray, torch.Tensor)):
-        return float(payoff[0])
-    return float(payoff)
+def extract_payoff(payoffs, player_id):
+    """
+    Robustly extract payoff for a specific player.
+    Handles standard [p0, p1] and nested [array([p0, p1]), 0.0] cases.
+    """
+    # Check if first element is an array/list that looks like it holds all payoffs
+    p0_val = payoffs[0]
+    
+    # Case: IIG-like structure where payoffs[0] is array([p0_avg, p1_avg])
+    if isinstance(p0_val, (list, np.ndarray, torch.Tensor)):
+        if len(p0_val) >= 2:
+            val = float(p0_val[player_id])
+            return val
+            
+    # Standard Case: payoffs[i] is the scalar for player i
+    return float(payoffs[player_id])
 
 def evaluate_margin(agent, env_name, num_games=1000):
     """
@@ -99,15 +110,17 @@ def evaluate_margin(agent, env_name, num_games=1000):
     # 1. Agent vs Random (Agent is Offense/Player 0)
     env.set_agents([agent, random_agent])
     # tournament returns rewards for all players: [p0_reward, p1_reward]
-    # We want P0 reward (Offense EPA)
     payoffs_off = tournament(env, num_games) 
-    off_margin = get_scalar(payoffs_off[0])
+    print(f"DEBUG: {env_name} Off Payoffs: {payoffs_off}")
+    # We want Player 0 payoff
+    off_margin = extract_payoff(payoffs_off, 0)
     
     # 2. Random vs Agent (Agent is Defense/Player 1)
     env.set_agents([random_agent, agent])
-    # We want P1 reward (Defense EPA)
     payoffs_def = tournament(env, num_games)
-    def_margin = get_scalar(payoffs_def[1])
+    print(f"DEBUG: {env_name} Def Payoffs: {payoffs_def}")
+    # We want Player 1 payoff
+    def_margin = extract_payoff(payoffs_def, 1)
     
     return off_margin, def_margin
 
