@@ -92,7 +92,10 @@ def reorganize_trajectories(trajectories, payoffs):
             continue
             
         # Intermediate steps (reward = 0)
-        for i in range(0, len(traj)-2, 2):
+        # Fix: range should exclude the last transition (handled by Final step block)
+        # If len=3 (1 step), range(0, 0, 2) -> empty. Correct.
+        # If len=5 (2 steps), range(0, 2, 2) -> [0]. Correct.
+        for i in range(0, len(traj)-3, 2):
             s = traj[i]
             a = traj[i+1]
             ns = traj[i+2]
@@ -151,24 +154,13 @@ def train(args):
                 q_mlp_layers=[128, 128],
                 device=device,
             )
-        elif args.agent == 'deep_cfr':
-            # DeepCFR creates one agent that handles the whole game or typically explicitly initialized
-            # But RLCard DeepCFRAgent usually takes index. 
-            # Reviewing RLCard DeepCFR implementation:
-            # It seems DeepCFRAgent is a single object handling policy for a player 
-            # BUT standard examples often init one agent object per player.
-            
-            # Actually, DeepCFR in RLCard typically uses a single large Buffer but separate networks per player?
-            # Let's instantiate per player as is standard for NFSP/PPO.
+        elif args.agent == 'deep_cfr': # Corrected placement for DeepCFR
+            # DeepCFR in RLCard assumes standard network sizes often, or takes hidden_layers
             agent = DeepCFRAgent(
                 env,
-                policy_network_layers=(128, 128),
-                advantage_network_layers=(128, 128),
-                num_rollouts=100, # Lower for speed in demo, increase for quality
-                num_traversals=100,
-                learning_rate=1e-3,
-                batch_size_advantage=128,
-                batch_size_strategy=128,
+                hidden_layers=[128, 128], 
+                batch_size=128,
+                train_steps=100, # Steps per iteration
                 device=device,
             )
         else:

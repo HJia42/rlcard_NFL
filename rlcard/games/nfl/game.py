@@ -388,13 +388,13 @@ class NFLGame:
             self.phase,
         ])
 
-        legal_actions = list(self.get_legal_actions())
+        legal_actions = {i: None for i in self.get_legal_actions()}
         if self.phase == 0:
-            raw_legal_actions = list(self.initial_actions)
+            raw_legal_actions = [self.initial_actions[i] for i in legal_actions]
         elif self.phase == 1:
-            raw_legal_actions = list(self.defense_actions)
+            raw_legal_actions = [self.defense_actions[i] for i in legal_actions]
         else:
-            raw_legal_actions = list(self.play_type_actions)
+            raw_legal_actions = [self.play_type_actions[i] for i in legal_actions]
 
         state = {
             'down': self.down,
