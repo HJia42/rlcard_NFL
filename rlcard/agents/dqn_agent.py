@@ -336,6 +336,8 @@ class DQNAgent(object):
             path (str): the path to save the model
             filename(str): the file name of checkpoint
         '''
+        if not os.path.exists(path):
+            os.makedirs(path)
         torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
 
     def save(self, path):
