@@ -6,6 +6,11 @@
 echo "Starting Extended Training (Target: 20,000 Episodes)..."
 
 # 1. PPO (Standard)
+# Force 1 thread per job to avoid locking up the VM
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export TORCH_NUM_THREADS=1
+
 nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent ppo --num_episodes 20000 --resume > logs/ppo_standard_20k.log 2>&1 &
 echo "Started PPO (Standard) [PID $!]"
 
