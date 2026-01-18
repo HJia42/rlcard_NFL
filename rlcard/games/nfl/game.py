@@ -448,6 +448,16 @@ class NFLGame:
             
         # Restore state from history
         # Note: This is a simplified restoration for CFR
+        prev_state = self.history.pop()
+        self.down = int(prev_state['down'])
+        self.ydstogo = int(prev_state['ydstogo'])
+        self.yardline = int(prev_state['yardline'])
+        
+        # Restore phase from raw obs (index 3 is phase)
+        # This is robust across Standard and IIG variants
+        self.phase = int(prev_state['obs'][3])
+        
+        return True
         # In a real traversing agent, we might need more deep copy
         # But for simple games, just popping history is often enough if we only need to traverse back up
         

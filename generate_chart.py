@@ -100,95 +100,67 @@ def get_4th_down_decision(agent, env, yardline, distance, device='cpu'):
             if k in all_actions:
                  relevant_probs[k] = v
             
-    # For Scrimmage Only mode, "GO" is the only option (choosing a formation).
-    # We can plot the probability of the most aggressive formation (EMPTY?) vs conservative?
-    # Or just return 1.0 for GO to keep the chart green (indicating Go preference).
-    
-    return {
-        'GO': 1.0,
-        'PUNT': 0.0,
-        'FG': 0.0
-    }
+    return relevant_probs
 
 def generate_heatmap(agent, env, agent_name, output_dir):
     # Grid: Yardline (1-99) x Distance (1-10)
     yardlines = range(1, 100) # 1 to 99
     distances = range(1, 11)  # 1 to 10
     
-    # Matrices for each decision
-    go_matrix = np.zeros((len(distances), len(yardlines)))
-    punt_matrix = np.zeros((len(distances), len(yardlines)))
-    fg_matrix = np.zeros((len(distances), len(yardlines)))
-    decision_matrix = np.full((len(distances), len(yardlines)), np.nan) # Initialize with NaN
+    # Store "Best Formation Index"
+    decision_matrix = np.full((len(distances), len(yardlines)), np.nan) 
     
     print(f"Sampling {len(yardlines)*len(distances)} states for {agent_name}...")
+    
+    formations = FORMATION_ACTIONS
+    formation_to_idx = {f: i for i, f in enumerate(formations)}
     
     for i, dist in enumerate(distances):
         for j, yl in enumerate(yardlines):
             # Skip invalid states (e.g. 4th & 10 at 95 yardline -> only 5 yards to goal)
             dist_to_goal = 100 - yl
             if dist > dist_to_goal:
-                # Impossible state, leave as NaN
                 continue
                 
             probs = get_4th_down_decision(agent, env, yl, dist)
             
-            go = probs.get('GO', 0)
-            punt = probs.get('PUNT', 0)
-            fg = probs.get('FG', 0)
+            if not probs:
+                continue
+                
+            # Find best formation
+            best_formation = max(probs, key=probs.get)
+            best_idx = formation_to_idx.get(best_formation, 0)
             
-            go_matrix[i, j] = go
-            punt_matrix[i, j] = punt
-            fg_matrix[i, j] = fg
-            
-            # Dominant strategy
-            if go >= punt and go >= fg:
-                decision_matrix[i, j] = 2 # GO
-            elif fg >= go and fg >= punt:
-                decision_matrix[i, j] = 1 # FG
-            else:
-                decision_matrix[i, j] = 0 # PUNT
+            decision_matrix[i, j] = best_idx
 
     # Plotting
     os.makedirs(output_dir, exist_ok=True)
     
-    # 1. Dominant Decision Map
     plt.figure(figsize=(15, 6))
-    # Custom cmap: Blue=Punt, Green=FG, Red=Go
-    cmap = sns.color_palette(["#3498db", "#2ecc71", "#e74c3c"]) 
     
-    # Mask NaNs (Invalid states)
+    # Create colormap for formations (Category10 or similar)
+    cmap = sns.color_palette("tab10", len(formations))
+    
+    # Mask NaNs
     mask = np.isnan(decision_matrix)
     
-    ax = sns.heatmap(decision_matrix, cmap=cmap, cbar=False, mask=mask,
+    ax = sns.heatmap(decision_matrix, cmap=cmap, mask=mask,
                      xticklabels=10, yticklabels=distances)
-    
-    # Invert Y axis so 1 is at top, 10 at bottom? Or standard matrix?
-    # Standard matrix: Row 0 is Dist 1. Let's invert y axis to match chart intuition (Short distance at bottom usually?)
-    # Actually, standard "NYT 4th Down Bot" charts usually have Distance on Y (1 at top) and Field Pos on X.
-    # Let's stick to matrix defaults: Row 0 = Dist 1.
-    
-    # Fix X axis labels (Yardlines 1, 11, 21...)
-    # Current indices are 0..98 corresponding to 1..99
-    # xticklabels=10 means every 10th label
-    
-    plt.title(f"{agent_name}: 4th Down Decision Map (Red=GO, Green=FG, Blue=PUNT)")
-    plt.xlabel("Yardline (Own 1 -> Opp 99)")
-    plt.ylabel("Yards to Go")
     
     # Custom Legend
     from matplotlib.patches import Patch
-    legend_elements = [
-        Patch(facecolor='#3498db', label='Punt'),
-        Patch(facecolor='#2ecc71', label='Field Goal'),
-        Patch(facecolor='#e74c3c', label='Go for it')
-    ]
-    plt.legend(handles=legend_elements, loc='upper left')
+    legend_elements = [Patch(facecolor=cmap[i], label=f) for i, f in enumerate(formations)]
     
-    plt.savefig(os.path.join(output_dir, f"{agent_name}_decision_map.png"))
+    plt.title(f"{agent_name}: 4th Down Formation Strategy")
+    plt.xlabel("Yardline (Own 1 -> Opp 99)")
+    plt.ylabel("Yards to Go")
+    plt.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(1, 1))
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, f"{agent_name}_formation_map.png"))
     plt.close()
     
-    print(f"Saved chart to {output_dir}/{agent_name}_decision_map.png")
+    print(f"Saved chart to {output_dir}/{agent_name}_formation_map.png")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

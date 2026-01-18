@@ -5,7 +5,7 @@ Environment wrapper for the IIG NFL game variant where
 offense commits to formation AND play type before seeing defense.
 
 3-Phase Structure:
-  Phase 0: Offense picks formation (or PUNT/FG)
+  Phase 0: Offense picks formation
   Phase 1: Offense picks play type (pass/rush)
   Phase 2: Defense picks box count
 """
