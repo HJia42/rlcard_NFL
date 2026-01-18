@@ -41,12 +41,20 @@ def load_agent(env_name, agent_type, device='cpu'):
             agent.load(path)
             
         elif agent_type == 'nfsp':
+            # Initialize agent before loading
+            agent = NFSPAgent(
+                num_actions=env.num_actions,
+                state_shape=env.state_shape[0],
+                hidden_layers_sizes=[128, 128],
+                q_mlp_layers=[128, 128],
+                device=device
+            )
             # NFSP load expects the directory path
             path = os.path.join(checkpoint_dir, 'agent_0.pt')
             try:
                 agent.load(path)
             except Exception as e:
-                print(f"  [Error] NFSP load failed: {e}")
+                # print(f"  [Error] NFSP load failed: {e}")
                 return None
             
         elif agent_type == 'deep_cfr':
