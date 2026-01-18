@@ -27,6 +27,60 @@ from rlcard.utils import (
     Logger,
     plot_curve,
 )
+import json
+import glob
+
+def save_checkpoint(log_dir, episode, agents, agent_type):
+    """Save checkpoint with metadata."""
+    checkpoint_dir = os.path.join(log_dir, 'checkpoints')
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    
+    # Save metadata
+    meta = {'episode': episode}
+    with open(os.path.join(checkpoint_dir, 'meta.json'), 'w') as f:
+        json.dump(meta, f)
+        
+    # Save agents
+    if agent_type == 'deep_cfr':
+        # DeepCFR usually saves to internal path, but we can force it
+        agents[0].save_path = checkpoint_dir
+        agents[0].save_model(episode) 
+    else:
+        for idx, agent in enumerate(agents):
+            path = os.path.join(checkpoint_dir, f'agent_{idx}.pt')
+            agent.save(path)
+    
+    print(f"\\nSaved checkpoint at episode {episode}")
+
+def load_checkpoint(log_dir, agents, agent_type):
+    """Load latest checkpoint if exists."""
+    checkpoint_dir = os.path.join(log_dir, 'checkpoints')
+    meta_path = os.path.join(checkpoint_dir, 'meta.json')
+    
+    if not os.path.exists(meta_path):
+        print("No checkpoint found. Starting from scratch.")
+        return 0
+        
+    with open(meta_path, 'r') as f:
+        meta = json.load(f)
+    
+    start_episode = meta['episode']
+    
+    # Load agents
+    if agent_type == 'deep_cfr':
+        # Check for .pt files
+        pt_files = glob.glob(os.path.join(checkpoint_dir, '*.pt'))
+        if pt_files:
+            agents[0].load(pt_files[0]) 
+    else:
+        for idx, agent in enumerate(agents):
+            path = os.path.join(checkpoint_dir, f'agent_{idx}.pt')
+            if os.path.exists(path):
+                agent.load(path)
+    
+    print(f"Resumed from episode {start_episode}")
+    return start_episode
+
 
 def train(args):
     # Make models directory
@@ -98,103 +152,65 @@ def train(args):
     # Logger
     logger = Logger(log_dir)
     
-    print(f"Start training {args.agent} on {args.env}...")
+    start_episode = 0
+    if args.resume:
+        start_episode = load_checkpoint(log_dir, agents, args.agent)
     
-    for episode in range(args.num_episodes):
-        if args.agent == 'ppo':
-            # PPO Custom Loop (simplified, mostly self-play in RLCard wraps this differently)
-            # RLCard's "tournament" handles evaluation. 
-            # For PPO, we usually need to call agent.feed manually inside a loop if we are not using high-level trainer.
-            # But wait, env.run() creates trajectories. 
-            # Let's use a standard step loop for better control or just the simple loop.
-            
-            trajectories, payoffs = env.run(is_training=True)
-            # PPOAgent in RLCard expects separate feed calls? 
-            # The standard PPO agent in RLCard has a `feed(transition)` method.
-            # We must iterate trajectories.
-            if episode == 0:
-                 pass # check structure
-                 
-            # Reorganize data for PPO
-            # trajectories is list of [transition, transition...]
-            # transition is (state, action, reward, next_state, done)
-            
-            # Since PPO is on-policy, we update after collecting batch.
-            pass # Standard loop below works for NFSP, DeepCFR. PPO needs explicit updates.
-            
-            # Let's just use the tournament loop style but with training steps
-            
-        elif args.agent == 'deep_cfr':
-             # DeepCFR has its own train loop usually?
-             # agent.train() runs one iteration of CFR.
-             pass
-        else:
-             # NFSP
-             pass
-
-    # RLCard provides `tournament` for evaluation but training loop differs by agent.
-    # Let's build specific loops.
+    print(f"Start training {args.agent} on {args.env} from episode {start_episode}...")
     
     if args.agent == 'deep_cfr':
         # Deep CFR Loop
-        for i in range(args.num_episodes): # Here 'episodes' means iterations for DeepCFR
-            agents[0].train() # DeepCFR agent usually shares memory or trains both? 
-            # In standard RLCard DeepCFR example: it has `agent.train()`
+        for i in range(start_episode, args.num_episodes): 
+            agents[0].train() 
             
             if i % args.evaluate_every == 0:
                 logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+            
+            if i % args.checkpoint_every == 0 and i > 0:
+                save_checkpoint(log_dir, i, agents, args.agent)
                 
-        # Save
+        # Save Final
         agents[0].save_path = log_dir
-        agents[0].save_model(i) # Save final
+        agents[0].save_model(args.num_episodes)
+
 
     elif args.agent == 'nfsp' or args.agent == 'dqn':
         # NFSP Loop
-        for i in range(args.num_episodes):
+        for i in range(start_episode, args.num_episodes):
             env.run(is_training=True)
             if i % args.evaluate_every == 0:
                 logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
-                
-        # Save
-        for idx, agent in enumerate(agents):
-            save_path = os.path.join(log_dir, f'model_player_{idx}.pth')
-            agent.save(save_path)
+
+            if i % args.checkpoint_every == 0 and i > 0:
+                save_checkpoint(log_dir, i, agents, args.agent)
+
+        # Save Final
+        save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
 
     elif args.agent == 'ppo':
         # PPO Loop
-        # Needs to collect rollouts then update
         step_counter = 0
-        for i in range(args.num_episodes):
+        for i in range(start_episode, args.num_episodes):
             trajectories, payoffs = env.run(is_training=True)
             
-            # Flatten trajectories
-            for traj in trajectories:
-                for transition in traj:
-                    # state, action, reward, next_state, done
-                    # PPO agent.feed takes entries
-                    # PPO implemented in RLCard assumes player_id matches
-                    pass # Handled by env.run() returning per-player trajectories
-            
-            # Feed data to respective agents
             for p_id, traj in enumerate(trajectories):
                 for ts in traj:
-                    # ts = (state, action, reward, next_state, done)
                     agents[p_id].feed(ts)
                     step_counter += 1
             
-            # Update agents periodically? Or every episode?
-            # Usually update after batch
             if step_counter > 256: 
                 for agent in agents:
-                    agent.update() # PPO update
+                    agent.update()
                 step_counter = 0
 
             if i % args.evaluate_every == 0:
                 logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+
+            if i % args.checkpoint_every == 0 and i > 0:
+                save_checkpoint(log_dir, i, agents, args.agent)
         
-        # Save
-        for idx, agent in enumerate(agents):
-             agent.save(os.path.join(log_dir, f'ppo_agent_{idx}.pt'))
+        # Save Final
+        save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
 
     # Plot
     csv_path = logger.csv_path
@@ -209,6 +225,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_episodes', type=int, default=5000)
     parser.add_argument('--num_eval_games', type=int, default=100)
     parser.add_argument('--evaluate_every', type=int, default=100)
+    parser.add_argument('--checkpoint_every', type=int, default=500, help="Save checkpoint every N episodes")
+    parser.add_argument('--resume', action='store_true', help="Resume from last checkpoint if available")
     
     args = parser.parse_args()
     train(args)
