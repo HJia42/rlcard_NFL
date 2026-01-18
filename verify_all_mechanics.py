@@ -1,7 +1,6 @@
 import numpy as np
 from rlcard.games.nfl.game import NFLGame
 from rlcard.games.nfl.game_iig import NFLGameIIG
-from rlcard.games.nfl.game_iig_scrimmage import NFLGameIIGScrimmage
 
 def check_integer(val, name, context):
     """Check if value is integer or integer-like float."""
@@ -23,68 +22,55 @@ def test_mechanics(game_cls, name, num_iters=200):
         game.init_game()
         
         # Randomize play type
-        play_type = np.random.choice(['pass', 'rush'])
+        play_type_idx = np.random.choice([0, 1]) # 0=pass, 1=rush
         
         # Execute play based on game type
         if "IIG" in name:
             # Phase 0: Formation
             game.step(0) # SHOTGUN
-            # Phase 1: Play Type
-            if "Scrimmage" in name:
-                # Scrimmage game: phase 1 is just play type
-                game.step(0 if play_type == 'pass' else 1)
-            else:
-                # Full IIG: phase 1 is play type
-                game.step(0 if play_type == 'pass' else 1)
+            # Phase 1: Play Type (Hidden)
+            game.step(play_type_idx)
             # Phase 2: Defense
             game.step(0) # Standard box
         else:
             # Standard: Phase 0 (Formation) -> Phase 1 (Defense) -> Phase 2 (Play Type)
             game.step(0) # SHOTGUN
             game.step(0) # Standard box
-            game.step(0 if play_type == 'pass' else 1)
+            game.step(play_type_idx)
             
-        if not check_integer(game.yardline, "Yardline", f"{name} {play_type}"):
+        if not check_integer(game.yardline, "Yardline", f"{name} Play"):
             failures += 1
-        if not check_integer(game.ydstogo, "YdsToGo", f"{name} {play_type}"):
+        if not check_integer(game.ydstogo, "YdsToGo", f"{name} Play"):
             failures += 1
 
-    # Test Special Teams (if applicable)
-    if "Scrimmage" not in name:
-        # Test Punt
-        for _ in range(num_iters):
-            game.init_game()
-            # Force Punt
-            if "IIG" in name:
-                # Phase 0: Special Team Action
-                game.step('PUNT') 
-            else:
-                # Phase 0: Special Team Action
-                game.step('PUNT')
-                
-            # For PUNT, the game ends immediately. 
-            # We can't easily check 'opp_yardline' directly from game state after game over 
-            # unless we inspect internal variables or logic, but let's check if the logic throws errors
-            # or if we can infer state. 
-            # Actually, the game logic updates self.yardline? No, PUNT ends game.
-            # But the payload calculation relies on integers.
-            pass # Punts end game efficiently, difficult to check internal state without deep inspection.
-                 # However, we verified the code uses int().
-                 
-        # Test FG
-        for _ in range(num_iters):
-             game.init_game()
-             if "IIG" in name:
-                 game.step('FG')
-             else:
-                 game.step('FG')
-                 
+    # Test 4th Down Turnover Logic (No Special Teams anymore)
+    print(f"Testing 4th Down Turnover logic for {name}...")
+    for _ in range(50):
+        # Force 4th down state
+        game.init_game()
+        game.down = 4
+        game.ydstogo = 15 # Hard to convert
+        
+        if "IIG" in name:
+            game.step(0)
+            game.step(1) # Rush (likely fail)
+            game.step(1) # Heavy box
+        else:
+            game.step(0)
+            game.step(1) # Heavy box
+            game.step(1) # Rush
+            
+        yards_gained = game.history[-1]['payoffs'][0] if hasattr(game, 'history') and game.history else 0
+        
+        # If failure, should be Turnover (is_over=True for single_play, but specifically formatted)
+        # In single_play=True, any play is over. 
+        # But we want to ensure no crash.
+        
     if failures == 0:
         print(f"[PASS] {name}: Logic checks out.")
     else:
         print(f"[FAIL] {name}: {failures} integer violations found.")
 
 if __name__ == "__main__":
-    test_mechanics(NFLGame, "NFLGame (Standard)")
-    test_mechanics(NFLGameIIG, "NFLGameIIG")
-    test_mechanics(NFLGameIIGScrimmage, "NFLGameIIGScrimmage")
+    test_mechanics(NFLGame, "NFLGame (Scrimmage Only)")
+    test_mechanics(NFLGameIIG, "NFLGameIIG (Scrimmage Only)")

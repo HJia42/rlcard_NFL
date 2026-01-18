@@ -68,12 +68,3 @@ register(
     entry_point='rlcard.envs.nfl_iig_bucketed:NFLIIGBucketedEnv',
 )
 
-register(
-    env_id='nfl-iig-scrimmage',
-    entry_point='rlcard.envs.nfl_iig_scrimmage:NFLIIGScrimmageEnv',
-)
-
-register(
-    env_id='nfl-scrimmage',
-    entry_point='rlcard.envs.nfl_scrimmage:NFLScrimmageEnv',
-)
