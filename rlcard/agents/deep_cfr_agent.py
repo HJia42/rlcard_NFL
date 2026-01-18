@@ -473,6 +473,9 @@ class DeepCFRAgent:
 
     def save(self):
         """Save model to disk."""
+        if self.model_path is None:
+            self.model_path = './deep_cfr_model'
+            
         if not os.path.exists(self.model_path):
             os.makedirs(self.model_path)
         
@@ -486,6 +489,12 @@ class DeepCFRAgent:
         }
         
         torch.save(checkpoint, os.path.join(self.model_path, 'model.pt'))
+
+    def save_model(self, episode):
+        """Wrapper for save to match training script API."""
+        # We can ignore episode or append it if we want versioning
+        # For now, just call save() which overwrites 'model.pt'
+        self.save()
 
     def load(self):
         """Load model from disk."""
