@@ -41,16 +41,12 @@ def load_agent(env_name, agent_type, device='cpu'):
             agent.load(path)
             
         elif agent_type == 'nfsp':
-            # NFSP checkpoint is a directory containing 'checkpoint_nfsp.pt'
+            # NFSP load expects the directory path
             path = os.path.join(checkpoint_dir, 'agent_0.pt')
-            ckpt_path = os.path.join(path, 'checkpoint_nfsp.pt')
-            
             try:
-                checkpoint = torch.load(ckpt_path, map_location=device)
-                checkpoint['device'] = device # Override device to match current env
-                agent = NFSPAgent.from_checkpoint(checkpoint)
+                agent.load(path)
             except Exception as e:
-                print(f"  [Error] NFSP load failed: {e}") 
+                print(f"  [Error] NFSP load failed: {e}")
                 return None
             
         elif agent_type == 'deep_cfr':
@@ -78,6 +74,12 @@ def load_agent(env_name, agent_type, device='cpu'):
         print(f"  [Error] Failed to load {agent_type} from {checkpoint_dir}: {e}")
         return None
 
+def get_scalar(payoff):
+    """Robustly extract scalar from potential array/list."""
+    if isinstance(payoff, (list, np.ndarray, torch.Tensor)):
+        return float(payoff[0])
+    return float(payoff)
+
 def evaluate_margin(agent, env_name, num_games=1000):
     """
     Calculate EPA Margin against Random Baseline.
@@ -91,15 +93,13 @@ def evaluate_margin(agent, env_name, num_games=1000):
     # tournament returns rewards for all players: [p0_reward, p1_reward]
     # We want P0 reward (Offense EPA)
     payoffs_off = tournament(env, num_games) 
-    print(f"DEBUG: {env_name} Off Payoffs: {payoffs_off}")
-    off_margin = float(np.mean(payoffs_off[0]))
+    off_margin = get_scalar(payoffs_off[0])
     
     # 2. Random vs Agent (Agent is Defense/Player 1)
     env.set_agents([random_agent, agent])
     # We want P1 reward (Defense EPA)
     payoffs_def = tournament(env, num_games)
-    print(f"DEBUG: {env_name} Def Payoffs: {payoffs_def}")
-    def_margin = float(np.mean(payoffs_def[1]))
+    def_margin = get_scalar(payoffs_def[1])
     
     return off_margin, def_margin
 
