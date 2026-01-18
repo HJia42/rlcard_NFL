@@ -44,7 +44,7 @@ class NFLEnv(Env):
         self.action_shape = [None, None]
         
         # Encoding mappings
-        self.formations = FORMATIONS + ("PISTOL", "JUMBO")
+        self.formations = FORMATIONS
         self.formation_to_idx = {f: i for i, f in enumerate(self.formations)}
     
     def reset(self):
