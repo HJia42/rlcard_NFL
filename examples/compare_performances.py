@@ -41,16 +41,17 @@ def load_agent(env_name, agent_type, device='cpu'):
             agent.load(path)
             
         elif agent_type == 'nfsp':
-            agent = NFSPAgent(
-                num_actions=env.num_actions,
-                state_shape=env.state_shape[0],
-                hidden_layers_sizes=[128, 128],
-                q_mlp_layers=[128, 128],
-                device=device
-            )
+            # NFSP checkpoint is a directory containing 'checkpoint_nfsp.pt'
             path = os.path.join(checkpoint_dir, 'agent_0.pt')
-            # NFSP saves a directory, let the agent handle loading
-            agent.load(path)
+            ckpt_path = os.path.join(path, 'checkpoint_nfsp.pt')
+            
+            try:
+                checkpoint = torch.load(ckpt_path, map_location=device)
+                checkpoint['device'] = device # Override device to match current env
+                agent = NFSPAgent.from_checkpoint(checkpoint)
+            except Exception as e:
+                # print(f"  [Error] NFSP load failed: {e}") 
+                return None
             
         elif agent_type == 'deep_cfr':
             agent = DeepCFRAgent(
@@ -61,9 +62,12 @@ def load_agent(env_name, agent_type, device='cpu'):
             if not os.path.exists(path):
                 # Check for alternative path if needed
                 pass
-                
-            checkpoint = torch.load(path, map_location=device)
-            agent.load(checkpoint)
+            
+            if os.path.exists(path):
+                checkpoint = torch.load(path, map_location=device)
+                agent.load(checkpoint)
+            else:
+                return None
             
         else:
             return None
@@ -87,13 +91,13 @@ def evaluate_margin(agent, env_name, num_games=1000):
     # tournament returns rewards for all players: [p0_reward, p1_reward]
     # We want P0 reward (Offense EPA)
     payoffs_off = tournament(env, num_games) 
-    off_margin = float(payoffs_off[0])
+    off_margin = float(np.mean(payoffs_off[0]))
     
     # 2. Random vs Agent (Agent is Defense/Player 1)
     env.set_agents([random_agent, agent])
     # We want P1 reward (Defense EPA)
     payoffs_def = tournament(env, num_games)
-    def_margin = float(payoffs_def[1])
+    def_margin = float(np.mean(payoffs_def[1]))
     
     return off_margin, def_margin
 
