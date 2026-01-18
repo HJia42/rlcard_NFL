@@ -49,25 +49,17 @@ def load_agent(env_name, agent_type, device='cpu'):
                 device=device
             )
             path = os.path.join(checkpoint_dir, 'agent_0.pt')
-            # NFSP load expects entire checkpoint dict usually
-            checkpoint = torch.load(path, map_location=device)
-            agent.load(checkpoint) 
+            # NFSP saves a directory, let the agent handle loading
+            agent.load(path)
             
         elif agent_type == 'deep_cfr':
             agent = DeepCFRAgent(
                 env,
                 device=device
             )
-            # DeepCFR saves centralized model? Or separate? 
-            # Training script calls `agents[0].save_model(episode)` -> saves to `model.pt` usually?
-            # Or our script force-saved to `agent_0.pt`?
-            # Training script: agents[0].save_path = checkpoint_dir; agents[0].save_model(episode)
-            # DeepCFRAgent.save() uses os.path.join(self.save_path, 'model.pt')
-            
             path = os.path.join(checkpoint_dir, 'model.pt')
             if not os.path.exists(path):
-                # Fallback to agent_0.pt if we changed it in training script (we did for PPO/NFSP, checking DeepCFR...)
-                # In training script: `agents[0].save_model(episode)` -> deep cfr uses internal save path logic.
+                # Check for alternative path if needed
                 pass
                 
             checkpoint = torch.load(path, map_location=device)
@@ -79,7 +71,7 @@ def load_agent(env_name, agent_type, device='cpu'):
         return agent
         
     except Exception as e:
-        print(f"  [Error] Failed to load {agent_type} from {checkpoint_dir}: {e}")
+        # print(f"  [Error] Failed to load {agent_type} from {checkpoint_dir}: {e}")
         return None
 
 def evaluate_margin(agent, env_name, num_games=1000):
@@ -95,14 +87,13 @@ def evaluate_margin(agent, env_name, num_games=1000):
     # tournament returns rewards for all players: [p0_reward, p1_reward]
     # We want P0 reward (Offense EPA)
     payoffs_off = tournament(env, num_games) 
-    off_margin = payoffs_off[0]
+    off_margin = float(payoffs_off[0])
     
     # 2. Random vs Agent (Agent is Defense/Player 1)
     env.set_agents([random_agent, agent])
-    # We want P1 reward (Defense EPA) - usually negative of offense if zero-sum, 
-    # but let's take P1's raw return.
+    # We want P1 reward (Defense EPA)
     payoffs_def = tournament(env, num_games)
-    def_margin = payoffs_def[1] 
+    def_margin = float(payoffs_def[1])
     
     return off_margin, def_margin
 
