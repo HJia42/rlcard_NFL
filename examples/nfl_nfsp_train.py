@@ -54,7 +54,6 @@ def train(args):
             q_epsilon_end=args.epsilon_end,
             q_epsilon_decay_steps=args.epsilon_decay_steps,
             reservoir_buffer_capacity=args.reservoir_capacity,
-            reservoir_buffer_capacity=args.reservoir_capacity,
             batch_size=args.batch_size,
             q_batch_size=args.batch_size,
             min_buffer_size_to_learn=max(1000, args.batch_size),
