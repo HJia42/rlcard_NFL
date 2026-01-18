@@ -1,12 +1,26 @@
 """Curriculum training for PPO on various 4th down scenarios."""
-import sys
-sys.path.insert(0, '.')
 import os
 import time
 import rlcard
 import numpy as np
 from rlcard.agents.ppo_agent import PPOAgent
-from rlcard.games.nfl.game_bucketed import INITIAL_ACTIONS
+from rlcard.utils.analysis_utils import (
+    OFFENSE_ACTIONS,
+    get_action_probs,
+    normalize_probs_to_action_names,
+    get_top_action,
+)
+
+
+def set_fourth_down_state(env, yardline, ydstogo, player_id=0, reset: bool = True):
+    """Set a custom 4th down state and return the resulting state."""
+    if reset:
+        env.reset()
+    env.game.down = 4
+    env.game.ydstogo = ydstogo
+    env.game.yardline = yardline
+    env.game.phase = 0
+    return env.get_state(player_id)
 
 
 def main():
@@ -63,15 +77,9 @@ def main():
         # Randomly pick a scenario
         yardline, ydstogo = scenarios[np.random.randint(len(scenarios))]
         
-        # Reset environment
+        # Reset environment and set custom 4th down state
         state, player_id = env.reset()
-        
-        # Set custom 4th down state
-        env.game.down = 4
-        env.game.ydstogo = ydstogo
-        env.game.yardline = yardline
-        env.game.phase = 0
-        state = env.get_state(player_id)
+        state = set_fourth_down_state(env, yardline, ydstogo, player_id, reset=False)
         
         episode_reward = 0
         
@@ -99,7 +107,7 @@ def main():
         
         # Update PPO every rollout_size steps
         if step_count >= rollout_size:
-            stats = agent.update()
+            agent.update()
             step_count = 0
         
         # Logging
@@ -131,18 +139,15 @@ def test_policy(agent, env):
     ]
     
     for yardline, ydstogo, label, expected in tests:
-        env.reset()
-        env.game.down = 4
-        env.game.ydstogo = ydstogo
-        env.game.yardline = yardline
-        env.game.phase = 0
-        state = env.get_state(0)
+        state = set_fourth_down_state(env, yardline, ydstogo)
+        probs = get_action_probs(agent, state)
+        if probs is None:
+            print(f"  {label}: could not read action probabilities")
+            continue
 
-        action, probs = agent.eval_step(state)
-
-        top_action = max(probs, key=probs.get)
-        top_name = INITIAL_ACTIONS[top_action]
-        top_prob = probs[top_action] * 100
+        probs = normalize_probs_to_action_names(probs, OFFENSE_ACTIONS)
+        top_name, top_prob = get_top_action(probs, OFFENSE_ACTIONS)
+        top_prob *= 100
         
         # Consider GO as any formation (not PUNT/FG)
         if expected == "GO":
