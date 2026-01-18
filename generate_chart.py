@@ -139,6 +139,11 @@ def generate_heatmap(agent, env, agent_name, output_dir):
             go = probs.get('GO', 0)
             punt = probs.get('PUNT', 0)
             fg = probs.get('FG', 0)
+
+            # Debug specific known 'GO' state: 4th & 1 at Opp 2 (Yardline 98)
+            if yl == 98 and dist == 1:
+                print(f"DEBUG Check (4th & 1 @ Opp 2): GO={go:.4f}, PUNT={punt:.4f}, FG={fg:.4f}")
+                print(f"Raw Probs: {probs}")
             
             go_matrix[i, j] = go
             punt_matrix[i, j] = punt
