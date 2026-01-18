@@ -54,7 +54,7 @@ def load_agent(env_name, agent_type, device='cpu'):
             try:
                 agent.load(path)
             except Exception as e:
-                # print(f"  [Error] NFSP load failed: {e}")
+                print(f"  [Error] NFSP load failed: {e}")
                 return None
             
         elif agent_type == 'deep_cfr':
