@@ -440,5 +440,9 @@ class NFLGame:
     def get_payoffs(self):
         return self.payoffs
         
+    def get_player_id(self):
+        """Get current player id."""
+        return self.current_player
+
     def is_over(self):
         return self.is_over_flag
