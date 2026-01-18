@@ -375,21 +375,47 @@ class NFLGame:
 
     def get_state(self, player_id):
         """Return state for player."""
+        phase_name = {
+            0: 'formation',
+            1: 'defense',
+            2: 'play_type',
+        }.get(self.phase, 'formation')
+
         obs = np.array([
             self.down,
             self.ydstogo,
             self.yardline,
             self.phase,
         ])
-        
+
         legal_actions = list(self.get_legal_actions())
-        
-        return {
+        if self.phase == 0:
+            raw_legal_actions = list(self.initial_actions)
+        elif self.phase == 1:
+            raw_legal_actions = list(self.defense_actions)
+        else:
+            raw_legal_actions = list(self.play_type_actions)
+
+        state = {
+            'down': self.down,
+            'ydstogo': self.ydstogo,
+            'yardline': self.yardline,
+            'phase': phase_name,
+            'player_id': player_id,
+            'legal_actions': legal_actions,
             'obs': obs,
-            'legal_actions': {i: None for i in legal_actions},
             'raw_obs': obs,
-            'raw_legal_actions': [self._decode_action(a) for a in legal_actions]
+            'raw_legal_actions': raw_legal_actions,
         }
+
+        if self.phase >= 1:
+            state['formation'] = self.pending_formation
+        if self.phase == 2 and self.pending_defense_action:
+            box_count, personnel = self.pending_defense_action
+            state['box_count'] = box_count
+            state['personnel'] = personnel
+
+        return state
         
     def get_legal_actions(self):
         """Return legal action indices based on phase."""

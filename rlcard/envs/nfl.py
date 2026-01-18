@@ -4,6 +4,7 @@ import numpy as np
 
 from rlcard.envs.env import Env
 from rlcard.games.nfl import Game as NFLGame
+from rlcard.games.nfl.game import FORMATIONS
 
 
 class NFLEnv(Env):
@@ -43,7 +44,7 @@ class NFLEnv(Env):
         self.action_shape = [None, None]
         
         # Encoding mappings
-        self.formations = ("SHOTGUN", "SINGLEBACK", "I_FORM", "PISTOL", "EMPTY", "JUMBO", "WILDCAT")
+        self.formations = FORMATIONS + ("PISTOL", "JUMBO")
         self.formation_to_idx = {f: i for i, f in enumerate(self.formations)}
     
     def reset(self):
