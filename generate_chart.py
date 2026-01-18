@@ -21,7 +21,7 @@ def load_agent(game_str, model_path, agent_type, device='cpu'):
         agent = DeepCFRAgent(env, model_path=model_path, device=device)
         agent.load()
     elif agent_type == 'nfsp':
-        checkpoint = torch.load(model_path, map_location=device)
+        checkpoint = torch.load(model_path, map_location=device, weights_only=False)
         checkpoint['device'] = device
         agent = NFSPAgent.from_checkpoint(checkpoint)
     elif agent_type == 'ppo':
