@@ -19,11 +19,9 @@ import os
 import argparse
 import torch
 import rlcard
-from rlcard.agents import (
-    PPOAgent,
-    NFSPAgent,
-    DeepCFRAgent,
-)
+from rlcard.agents.ppo_agent import PPOAgent
+from rlcard.agents.nfsp_agent import NFSPAgent
+from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.utils import (
     tournament,
     Logger,
