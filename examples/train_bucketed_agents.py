@@ -82,6 +82,36 @@ def load_checkpoint(log_dir, agents, agent_type):
     return start_episode
 
 
+def reorganize_trajectories(trajectories, payoffs):
+    """Reorganize output of env.run() into (s, a, r, s', done) transitions."""
+    transitions_per_player = []
+    for p_id, traj in enumerate(trajectories):
+        player_transitions = []
+        if len(traj) < 3: 
+            transitions_per_player.append([])
+            continue
+            
+        # Intermediate steps (reward = 0)
+        for i in range(0, len(traj)-2, 2):
+            s = traj[i]
+            a = traj[i+1]
+            ns = traj[i+2]
+            r = 0
+            d = False
+            player_transitions.append((s, a, r, ns, d))
+            
+        # Final step (reward = payoff)
+        s = traj[-3]
+        a = traj[-2]
+        ns = traj[-1]
+        r = payoffs[p_id]
+        d = True
+        player_transitions.append((s, a, r, ns, d))
+        
+        transitions_per_player.append(player_transitions)
+    return transitions_per_player
+
+
 def train(args):
     # Make models directory
     log_dir = f'experiments/{args.env}_{args.agent}'
@@ -177,7 +207,13 @@ def train(args):
     elif args.agent == 'nfsp' or args.agent == 'dqn':
         # NFSP Loop
         for i in range(start_episode, args.num_episodes):
-            env.run(is_training=True)
+            trajectories, payoffs = env.run(is_training=True)
+            transitions = reorganize_trajectories(trajectories, payoffs)
+            
+            for p_id, trans_list in enumerate(transitions):
+                for ts in trans_list:
+                    agents[p_id].feed(ts)
+
             if i % args.evaluate_every == 0:
                 logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
 
@@ -192,9 +228,10 @@ def train(args):
         step_counter = 0
         for i in range(start_episode, args.num_episodes):
             trajectories, payoffs = env.run(is_training=True)
+            transitions = reorganize_trajectories(trajectories, payoffs)
             
-            for p_id, traj in enumerate(trajectories):
-                for ts in traj:
+            for p_id, trans_list in enumerate(transitions):
+                for ts in trans_list:
                     agents[p_id].feed(ts)
                     step_counter += 1
             
