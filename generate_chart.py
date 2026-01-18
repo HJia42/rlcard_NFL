@@ -18,8 +18,31 @@ def load_agent(game_str, model_path, agent_type, device='cpu'):
     env = rlcard.make(game_str, config={'single_play': True})
     
     if agent_type == 'deep_cfr':
-        agent = DeepCFRAgent(env, model_path=model_path, device=device)
-        agent.load()
+        # DeepCFRAgent expects model_path to be a directory containing 'model.pt'
+        # But we passed the full path. Let's fix it.
+        if model_path.endswith('.pt'):
+            model_dir = os.path.dirname(model_path)
+        else:
+            model_dir = model_path
+            
+        agent = DeepCFRAgent(env, model_path=model_dir, device=device)
+        # DeepCFRAgent.load uses torch.load internally. 
+        # We might need to monkeypatch or trust its implementation if it doesn't use weights_only=False by default.
+        # But looking at source, it just calls torch.load. 
+        # If it fails with weights_only, we can't easily fix it without changing agent code.
+        # Let's hope torch 2.6 isn't strictly enforcing yet for simple structures, 
+        # or that DeepCFR structure is simple enough.
+        # UPDATE: We can manually load it here to be safe and set attributes.
+        
+        path = os.path.join(model_dir, 'model.pt')
+        checkpoint = torch.load(path, map_location=device, weights_only=False)
+        
+        agent.iteration = checkpoint['iteration']
+        for i, state_dict in enumerate(checkpoint['advantage_nets']):
+            agent.advantage_nets[i].load_state_dict(state_dict)
+        agent.policy_net.load_state_dict(checkpoint['policy_net'])
+        
+        # agent.load() # Skip default load which might fail on weights_only
     elif agent_type == 'nfsp':
         checkpoint = torch.load(model_path, map_location=device, weights_only=False)
         checkpoint['device'] = device
