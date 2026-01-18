@@ -54,6 +54,8 @@ def train(args):
             q_epsilon_end=args.epsilon_end,
             q_epsilon_decay_steps=args.epsilon_decay_steps,
             reservoir_buffer_capacity=args.reservoir_capacity,
+            batch_size=args.batch_size,
+            q_batch_size=args.batch_size,
         )
         agents.append(agent)
     
@@ -146,6 +148,8 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='auto',
                         choices=['auto', 'cpu', 'cuda'],
                         help='Device for training (auto: use GPU if available)')
+    parser.add_argument('--batch-size', type=int, default=256,
+                        help='Batch size for training')
     
     args = parser.parse_args()
     
