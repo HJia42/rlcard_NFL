@@ -72,6 +72,7 @@ def get_4th_down_decision(agent, env, yardline, distance, device='cpu'):
     env.game.down = 4
     env.game.ydstogo = distance
     env.game.yardline = yardline
+    env.game.phase = 0 # Force offense phase
     
     # Get state for Offense (Player 0)
     state = env.get_state(0)
