@@ -1,4 +1,7 @@
 $env:PYTHONPATH = $PWD
+# Limit PyTorch threads to prevent 100% CPU lockip
+$env:OMP_NUM_THREADS = "1"
+$env:MKL_NUM_THREADS = "1"
 
 # Standard Environment (nfl-bucketed)
 Start-Job -Name "PPO_Standard" -ScriptBlock { python examples/train_bucketed_agents.py --env nfl-bucketed --agent ppo }
