@@ -121,7 +121,7 @@ def generate_heatmap(agent, env, agent_name, output_dir):
     go_matrix = np.zeros((len(distances), len(yardlines)))
     punt_matrix = np.zeros((len(distances), len(yardlines)))
     fg_matrix = np.zeros((len(distances), len(yardlines)))
-    decision_matrix = np.zeros((len(distances), len(yardlines))) # 0=Punt, 1=FG, 2=Go
+    decision_matrix = np.full((len(distances), len(yardlines)), np.nan) # Initialize with NaN
     
     print(f"Sampling {len(yardlines)*len(distances)} states for {agent_name}...")
     
@@ -130,8 +130,7 @@ def generate_heatmap(agent, env, agent_name, output_dir):
             # Skip invalid states (e.g. 4th & 10 at 95 yardline -> only 5 yards to goal)
             dist_to_goal = 100 - yl
             if dist > dist_to_goal:
-                # Impossible state, fill with NaN or 0
-                go_matrix[i, j] = np.nan
+                # Impossible state, leave as NaN
                 continue
                 
             probs = get_4th_down_decision(agent, env, yl, dist)
@@ -164,7 +163,11 @@ def generate_heatmap(agent, env, agent_name, output_dir):
     plt.figure(figsize=(15, 6))
     # Custom cmap: Blue=Punt, Green=FG, Red=Go
     cmap = sns.color_palette(["#3498db", "#2ecc71", "#e74c3c"]) 
-    ax = sns.heatmap(decision_matrix, cmap=cmap, cbar=False, 
+    
+    # Mask NaNs (Invalid states)
+    mask = np.isnan(decision_matrix)
+    
+    ax = sns.heatmap(decision_matrix, cmap=cmap, cbar=False, mask=mask,
                      xticklabels=10, yticklabels=distances)
     
     # Invert Y axis so 1 is at top, 10 at bottom? Or standard matrix?
