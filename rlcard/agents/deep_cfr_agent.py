@@ -290,6 +290,8 @@ class DeepCFRAgent:
                 utility = self._traverse_external(new_probs, player_id)
                 self.env.step_back()
                 
+                # Convert utility to numpy array for element-wise multiplication
+                utility = np.array(utility)
                 state_utility += action_prob * utility
                 action_utilities[action] = utility
             

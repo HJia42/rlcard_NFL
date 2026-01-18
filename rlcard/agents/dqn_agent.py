@@ -342,6 +342,30 @@ class DQNAgent(object):
         """Alias for save_checkpoint to match other agents API."""
         self.save_checkpoint(path)
 
+    def load(self, path):
+        """Load the model from a checkpoint path."""
+        # Find the checkpoint file (we assume single file or take the latest)
+        if os.path.isdir(path):
+            files = [f for f in os.listdir(path) if f.endswith('.pt')]
+            if not files:
+                raise FileNotFoundError(f"No checkpoint found in {path}")
+            filename = files[0] # Simplistic strategy
+            path = os.path.join(path, filename)
+            
+        print(f"INFO - Restoring model from {path}...")
+        checkpoint = torch.load(path, map_location=self.device)
+        
+        self.total_t = checkpoint['total_t']
+        self.train_t = checkpoint['train_t']
+        
+        # Restore estimators
+        self.q_estimator.qnet.load_state_dict(checkpoint['q_estimator']['qnet'])
+        self.q_estimator.optimizer.load_state_dict(checkpoint['q_estimator']['optimizer'])
+        self.target_estimator = deepcopy(self.q_estimator)
+        
+        # Restore memory
+        self.memory.memory = checkpoint['memory']['memory']
+
 
 class Estimator(object):
     '''
