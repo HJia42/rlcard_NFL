@@ -68,7 +68,7 @@ def load_agent(env_name, agent_type, device='cpu'):
                 pass
             
             if os.path.exists(path):
-                checkpoint = torch.load(path, map_location=device)
+                checkpoint = torch.load(path, map_location=device, weights_only=False)
                 agent.load(checkpoint)
             else:
                 return None

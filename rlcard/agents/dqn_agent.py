@@ -355,7 +355,7 @@ class DQNAgent(object):
             path = os.path.join(path, filename)
             
         print(f"INFO - Restoring model from {path}...")
-        checkpoint = torch.load(path, map_location=self.device)
+        checkpoint = torch.load(path, map_location=self.device, weights_only=False)
         
         self.total_t = checkpoint['total_t']
         self.train_t = checkpoint['train_t']

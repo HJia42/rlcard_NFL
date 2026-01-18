@@ -285,7 +285,7 @@ class NFSPAgent(object):
         
         # Load Average Policy Network
         policy_path = os.path.join(checkpoint_path, 'policy_network.pth')
-        self.policy_network.load_state_dict(torch.load(policy_path, map_location=self.device))
+        self.policy_network.load_state_dict(torch.load(policy_path, map_location=self.device, weights_only=False))
 
 
     def train_sl(self):
