@@ -180,80 +180,79 @@ def train(args):
     eval_env.set_agents(agents)
     
     # Logger
-    logger = Logger(log_dir)
-    
-    start_episode = 0
-    if args.resume:
-        start_episode = load_checkpoint(log_dir, agents, args.agent)
-    
-    print(f"Start training {args.agent} on {args.env} from episode {start_episode}...")
-    
-    if args.agent == 'deep_cfr':
-        # Deep CFR Loop
-        for i in range(start_episode, args.num_episodes): 
-            agents[0].train() 
-            
-            if i % args.evaluate_every == 0:
-                logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
-            
-            if i % args.checkpoint_every == 0 and i > 0:
-                save_checkpoint(log_dir, i, agents, args.agent)
-                
-        # Save Final
-        agents[0].save_path = log_dir
-        agents[0].save_model(args.num_episodes)
-
-
-    elif args.agent == 'nfsp' or args.agent == 'dqn':
-        # NFSP Loop
-        for i in range(start_episode, args.num_episodes):
-            trajectories, payoffs = env.run(is_training=True)
-            transitions = reorganize_trajectories(trajectories, payoffs)
-            
-            for p_id, trans_list in enumerate(transitions):
-                for ts in trans_list:
-                    agents[p_id].feed(ts)
-
-            if i % args.evaluate_every == 0:
-                logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
-
-            if i % args.checkpoint_every == 0 and i > 0:
-                save_checkpoint(log_dir, i, agents, args.agent)
-
-        # Save Final
-        save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
-
-    elif args.agent == 'ppo':
-        # PPO Loop
-        step_counter = 0
-        for i in range(start_episode, args.num_episodes):
-            trajectories, payoffs = env.run(is_training=True)
-            transitions = reorganize_trajectories(trajectories, payoffs)
-            
-            for p_id, trans_list in enumerate(transitions):
-                for ts in trans_list:
-                    agents[p_id].feed(ts)
-                    step_counter += 1
-            
-            if step_counter > 256: 
-                for agent in agents:
-                    agent.update()
-                step_counter = 0
-
-            if i % args.evaluate_every == 0:
-                logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
-
-            if i % args.checkpoint_every == 0 and i > 0:
-                save_checkpoint(log_dir, i, agents, args.agent)
+    with Logger(log_dir) as logger:
         
-        # Save Final
-        save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
+        start_episode = 0
+        if args.resume:
+            start_episode = load_checkpoint(log_dir, agents, args.agent)
+        
+        print(f"Start training {args.agent} on {args.env} from episode {start_episode}...")
+        
+        if args.agent == 'deep_cfr':
+            # Deep CFR Loop
+            for i in range(start_episode, args.num_episodes): 
+                agents[0].train() 
+                
+                if i % args.evaluate_every == 0:
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+                
+                if i % args.checkpoint_every == 0 and i > 0:
+                    save_checkpoint(log_dir, i, agents, args.agent)
+                    
+            # Save Final
+            agents[0].save_path = log_dir
+            agents[0].save_model(args.num_episodes)
 
-    # Plot
-    csv_path = logger.csv_path
-    fig_path = os.path.join(log_dir, 'fig.png')
-    plot_curve(csv_path, fig_path, args.agent)
-    print(f"Training complete. Saved to {log_dir}")
+        elif args.agent == 'nfsp' or args.agent == 'dqn':
+            # NFSP Loop
+            for i in range(start_episode, args.num_episodes):
+                trajectories, payoffs = env.run(is_training=True)
+                transitions = reorganize_trajectories(trajectories, payoffs)
+                
+                for p_id, trans_list in enumerate(transitions):
+                    for ts in trans_list:
+                        agents[p_id].feed(ts)
+
+                if i % args.evaluate_every == 0:
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+
+                if i % args.checkpoint_every == 0 and i > 0:
+                    save_checkpoint(log_dir, i, agents, args.agent)
+
+            # Save Final
+            save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
+
+        elif args.agent == 'ppo':
+            # PPO Loop
+            step_counter = 0
+            for i in range(start_episode, args.num_episodes):
+                trajectories, payoffs = env.run(is_training=True)
+                transitions = reorganize_trajectories(trajectories, payoffs)
+                
+                for p_id, trans_list in enumerate(transitions):
+                    for ts in trans_list:
+                        agents[p_id].feed(ts)
+                        step_counter += 1
+                
+                if step_counter > 256: 
+                    for agent in agents:
+                        agent.update()
+                    step_counter = 0
+
+                if i % args.evaluate_every == 0:
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+
+                if i % args.checkpoint_every == 0 and i > 0:
+                    save_checkpoint(log_dir, i, agents, args.agent)
+            
+            # Save Final
+            save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
+
+        # Plot
+        csv_path = logger.csv_path
+        fig_path = os.path.join(log_dir, 'fig.png')
+        plot_curve(csv_path, fig_path, args.agent)
+        print(f"Training complete. Saved to {log_dir}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Train Bucketed NFL Agents")
