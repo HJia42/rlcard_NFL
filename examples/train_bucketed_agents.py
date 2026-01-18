@@ -122,14 +122,16 @@ def train(args):
     
     # Initialize Environment
     # We force 'epa' reward as requested
-    env_config = {
+    config = {
         'single_play': True,
         'reward_type': 'epa',
         'use_distribution_model': True, # Use cached distribution model
+        'seed': 42,
+        'allow_step_back': args.agent == 'deep_cfr', # DeepCFR requires step_back
+        'game_num_players': 2,
     }
-    
-    env = rlcard.make(args.env, config=env_config)
-    eval_env = rlcard.make(args.env, config=env_config)
+    env = rlcard.make(args.env, config=config)
+    eval_env = rlcard.make(args.env, config=config)
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Device: {device}")

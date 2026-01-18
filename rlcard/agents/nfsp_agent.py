@@ -253,6 +253,30 @@ class NFSPAgent(object):
                 action_probs=probs)
         self._reservoir_buffer.add(transition)
 
+    def save(self, checkpoint_path):
+        """Save the agent models."""
+        if not os.path.exists(checkpoint_path):
+            os.makedirs(checkpoint_path)
+            
+        # Save RL Agent (DQN)
+        rl_path = os.path.join(checkpoint_path, 'rl_agent') 
+        self._rl_agent.save(rl_path)
+        
+        # Save Average Policy Network
+        policy_path = os.path.join(checkpoint_path, 'policy_network.pth')
+        torch.save(self.policy_network.state_dict(), policy_path)
+        
+    def load(self, checkpoint_path):
+        """Load the agent models."""
+        # Load RL Agent
+        rl_path = os.path.join(checkpoint_path, 'rl_agent')
+        self._rl_agent.load(rl_path)
+        
+        # Load Average Policy Network
+        policy_path = os.path.join(checkpoint_path, 'policy_network.pth')
+        self.policy_network.load_state_dict(torch.load(policy_path, map_location=self.device))
+
+
     def train_sl(self):
         ''' Compute the loss on sampled transitions and perform a avg-network update.
 
