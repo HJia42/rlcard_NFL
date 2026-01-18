@@ -20,15 +20,11 @@ def load_agent(game_str, model_path, agent_type, device='cpu'):
     if agent_type == 'deep_cfr':
         agent = DeepCFRAgent(env, model_path=model_path, device=device)
         agent.load()
-    elif agent_type == 'nfsp':
-        agent = NFSPAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape[0],
-            hidden_layers_sizes=[128, 128],
-            q_mlp_layers=[128, 128],
             device=device
         )
-        agent.load(checkpoint_path=model_path)
+        checkpoint = torch.load(model_path, map_location=device)
+        checkpoint['device'] = device
+        agent = NFSPAgent.from_checkpoint(checkpoint)
     elif agent_type == 'ppo':
         # Re-instantiate PPO with same dimensions
         # Assuming [128, 128] hidden dims from training default
