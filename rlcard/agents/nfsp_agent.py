@@ -255,15 +255,26 @@ class NFSPAgent(object):
 
     def save(self, checkpoint_path):
         """Save the agent models."""
+        print(f"DEBUG: Saving NFSP agent to {checkpoint_path}")
         if not os.path.exists(checkpoint_path):
-            os.makedirs(checkpoint_path)
+            print(f"DEBUG: Creating directory {checkpoint_path}")
+            os.makedirs(checkpoint_path, exist_ok=True)
             
         # Save RL Agent (DQN)
         rl_path = os.path.join(checkpoint_path, 'rl_agent') 
+        print(f"DEBUG: Saving RL agent to {rl_path}")
         self._rl_agent.save(rl_path)
         
         # Save Average Policy Network
         policy_path = os.path.join(checkpoint_path, 'policy_network.pth')
+        print(f"DEBUG: Saving policy network to {policy_path}")
+        
+        # Double check parent directory exists
+        parent_dir = os.path.dirname(policy_path)
+        if not os.path.exists(parent_dir):
+             print(f"DEBUG: Parent directory {parent_dir} missing! Recreating.")
+             os.makedirs(parent_dir, exist_ok=True)
+             
         torch.save(self.policy_network.state_dict(), policy_path)
         
     def load(self, checkpoint_path):
