@@ -491,7 +491,7 @@ class DeepCFRAgent:
         if not os.path.exists(path):
             return False
         
-        checkpoint = torch.load(path, map_location=self.device)
+        checkpoint = torch.load(path, map_location=self.device, weights_only=False)
         
         self.iteration = checkpoint['iteration']
         
