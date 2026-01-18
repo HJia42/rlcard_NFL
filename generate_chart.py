@@ -28,7 +28,7 @@ def load_agent(game_str, model_path, agent_type, device='cpu'):
             q_mlp_layers=[128, 128],
             device=device
         )
-        agent.load_checkpoint(checkpoint_path=model_path)
+        agent.load(checkpoint_path=model_path)
     elif agent_type == 'ppo':
         # Re-instantiate PPO with same dimensions
         # Assuming [128, 128] hidden dims from training default
