@@ -100,12 +100,28 @@ def get_4th_down_decision(agent, env, yardline, distance, device='cpu'):
             # Already string
             relevant_probs[k] = v
             
-    # Aggregate "GO" probability vs PUNT vs FG
-    # GO = Sum of all Formations
-    go_prob = sum(relevant_probs.get(f, 0) for f in FORMATION_ACTIONS)
-    punt_prob = relevant_probs.get('PUNT', 0)
-    fg_prob = relevant_probs.get('FG', 0)
+    # Logic Update: Use 'Argmax' (Top Action) to match analyze_agent.py
+    # If the agent splits vote across 3 formations (e.g. 0.2, 0.2, 0.2) but Punt is 0.3,
+    # Analysis says PUNT. Old Chart logic said GO (0.6 vs 0.3).
+    # We now align with Analysis: Find top action, then classify it.
     
+    top_action_name = max(relevant_probs, key=relevant_probs.get)
+    # top_prob = relevant_probs[top_action_name] # Use this if we want to plot confidence
+    
+    # Initialize all to 0
+    go_prob = 0.0
+    punt_prob = 0.0
+    fg_prob = 0.0
+    
+    # Assign the weight of the *aggregate* category based on who won the single-action vote
+    if top_action_name == 'PUNT':
+        punt_prob = 1.0 # Winner takes all for classification coloring
+    elif top_action_name == 'FG':
+        fg_prob = 1.0
+    else:
+        # It's a formation
+        go_prob = 1.0
+        
     return {
         'GO': go_prob,
         'PUNT': punt_prob,
