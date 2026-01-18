@@ -370,8 +370,9 @@ class NFLGame:
         return {'yards_gained': yards, 'turnover': turnover}
         
     def _save_state(self):
-        # Unchanged from original idea but needed for consistency
-        pass
+        # Record history for step_back
+        if self.allow_step_back:
+            self.history.append(self.get_state(self.current_player))
 
     def get_state(self, player_id):
         """Return state for player."""
@@ -440,6 +441,42 @@ class NFLGame:
     def get_payoffs(self):
         return self.payoffs
         
+    def step_back(self):
+        """Return to the previous state of the game."""
+        if not self.history:
+            return False
+            
+        # Restore state from history
+        # Note: This is a simplified restoration for CFR
+        # In a real traversing agent, we might need more deep copy
+        # But for simple games, just popping history is often enough if we only need to traverse back up
+        
+        # Actually, standard RLCard step_back pops the state and restores game variables
+        # Since our state is simple (down, yards, phase), we can restore easily.
+        
+        self.history.pop() # Remove current state
+        if not self.history:
+             # Reset to initial
+            self.init_game()
+            return True
+            
+        target_state = self.history[-1]
+        
+        # Restore variables from state dict
+        self.down = target_state['down']
+        self.ydstogo = target_state['ydstogo']
+        self.yardline = target_state['yardline']
+        self.phase = {
+            'formation': 0,
+            'defense': 1,
+            'play_type': 2
+        }.get(target_state['phase'], 0)
+        
+        # Restore player ID
+        self.current_player = target_state['player_id']
+        
+        return True
+
     def get_player_id(self):
         """Get current player id."""
         return self.current_player

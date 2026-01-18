@@ -338,6 +338,10 @@ class DQNAgent(object):
         '''
         torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
 
+    def save(self, path):
+        """Alias for save_checkpoint to match other agents API."""
+        self.save_checkpoint(path)
+
 
 class Estimator(object):
     '''

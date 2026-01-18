@@ -98,6 +98,49 @@ class NFLGameIIG(NFLGame):
             
         return self.get_state(self.current_player), self.current_player
     
+    def get_state(self, player_id):
+        """Get state for current player, handling IIG phases."""
+        # This overrides the base class get_state to handle IIG-specific legal actions
+        
+        # Mapping phase to name
+        phase_name = {
+            0: 'formation',
+            1: 'play_type',
+            2: 'defense',
+        }.get(self.phase, 'formation')
+
+        obs = np.array([
+            self.down,
+            self.ydstogo,
+            self.yardline,
+            self.phase,
+        ])
+
+        legal_actions = list(self.get_legal_actions())
+        # IIG specific action mapping
+        if self.phase == 0:
+            raw_legal_actions = [self.initial_actions[i] for i in legal_actions]
+        elif self.phase == 1:
+            raw_legal_actions = [self.play_type_actions[i] for i in legal_actions]
+        else:
+            raw_legal_actions = [self.defense_actions[i] for i in legal_actions]
+
+        # Convert list to keys dict
+        legal_actions_dict = {i: None for i in legal_actions}
+
+        state = {
+            'down': self.down,
+            'ydstogo': self.ydstogo,
+            'yardline': self.yardline,
+            'phase': phase_name,
+            'player_id': player_id,
+            'legal_actions': legal_actions_dict,
+            'obs': obs,
+            'raw_obs': obs,
+            'raw_legal_actions': raw_legal_actions,
+        }
+        return state
+    
     def _execute_committed_play(self):
         """Execute the committed play against the defensive alignment."""
         
