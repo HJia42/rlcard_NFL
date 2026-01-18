@@ -13,7 +13,7 @@ import numpy as np
 # Action Mappings
 # =============================================================================
 
-OFFENSE_ACTIONS = ['SHOTGUN', 'SINGLEBACK', 'UNDER CENTER', 'I_FORM', 'EMPTY', 'PUNT', 'FG']
+OFFENSE_ACTIONS = ['SHOTGUN', 'SINGLEBACK', 'UNDER CENTER', 'I_FORM', 'EMPTY']
 DEFENSE_ACTIONS = ['4_box', '5_box', '6_box', '7_box', '8_box']
 PLAY_TYPE_ACTIONS = ['Pass', 'Run']
 
@@ -24,25 +24,19 @@ PLAY_TYPE_ACTIONS = ['Pass', 'Run']
 
 # 4th Down scenarios: (yardline, ydstogo, down, label, expected)
 FOURTH_DOWN_SCENARIOS = [
-    # Clear PUNT situations
-    (10, 10, 4, "4th & 10 at own 10", "PUNT"),
-    (25, 10, 4, "4th & 10 at own 25", "PUNT"),
-    (30, 8, 4, "4th & 8 at own 30", "PUNT"),
-    
-    # Clear FG situations
-    (70, 8, 4, "4th & 8 at opp 30", "FG"),
-    (75, 10, 4, "4th & 10 at opp 25", "FG"),
-    (85, 8, 4, "4th & 8 at opp 15", "FG"),
-    
-    # Clear GO situations
+    # Clear GO situations (Goal Line)
     (95, 3, 4, "4th & Goal at 5", "GO"),
     (97, 1, 4, "4th & 1 at opp 3", "GO"),
     (99, 1, 4, "4th & Goal at 1", "GO"),
     
-    # Borderline situations
+    # Short Yardage (previously borderline, now GO is only option really, but good to test behavior)
     (35, 1, 4, "4th & 1 at own 35", "GO"),
-    (50, 1, 4, "4th & 1 at midfield", "GO"),
+    (50, 1, 4, "4th & 1 at midfield", "GO"), 
     (60, 1, 4, "4th & 1 at opp 40", "GO"),
+    
+    # Long Yardage (previously Punt/FG, now desperate Go)
+    (25, 10, 4, "4th & 10 at own 25", "GO"),
+    (75, 10, 4, "4th & 10 at opp 25", "GO"),
 ]
 
 # Defense scenarios: (yardline, ydstogo, down, formation, label, expected_tendency)

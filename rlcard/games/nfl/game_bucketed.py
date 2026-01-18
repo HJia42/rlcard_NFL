@@ -10,7 +10,7 @@ This makes tabular CFR algorithms (MCCFR) much more efficient.
 """
 
 import numpy as np
-from rlcard.games.nfl.game import NFLGame, FORMATION_ACTIONS, DEFENSE_ACTIONS, PLAY_TYPE_ACTIONS, INITIAL_ACTIONS, SPECIAL_TEAMS
+from rlcard.games.nfl.game import NFLGame, FORMATION_ACTIONS, DEFENSE_ACTIONS, PLAY_TYPE_ACTIONS, INITIAL_ACTIONS
 
 
 # Distance buckets

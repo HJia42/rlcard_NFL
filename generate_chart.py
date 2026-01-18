@@ -11,7 +11,7 @@ from rlcard.agents import NFSPAgent
 from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.agents.ppo_agent import PPOAgent
 from rlcard.utils.analysis_utils import get_action_probs
-from rlcard.games.nfl.game import FORMATION_ACTIONS, SPECIAL_TEAMS_ACTIONS
+from rlcard.games.nfl.game import FORMATION_ACTIONS
 
 def load_agent(game_str, model_path, agent_type, device='cpu'):
     # Create valid dummy env for shape
@@ -82,14 +82,13 @@ def get_4th_down_decision(agent, env, yardline, distance, device='cpu'):
     if probs is None:
         return {}
         
-    # Filter for Phase 0 actions (Formations + Special Teams)
+    # Filter for Phase 0 actions (Formations)
     # The agent might return probs for ALL actions, but we only care about the initial choice
-    # indices 0-6 correspond to FORMATION_ACTIONS + SPECIAL_TEAMS_ACTIONS
     
     relevant_probs = {}
     
     # Convert keys to readable names if they are indices
-    all_actions = FORMATION_ACTIONS + SPECIAL_TEAMS_ACTIONS
+    all_actions = FORMATION_ACTIONS
     
     for k, v in probs.items():
         if isinstance(k, int):
@@ -98,34 +97,17 @@ def get_4th_down_decision(agent, env, yardline, distance, device='cpu'):
                 relevant_probs[name] = v
         else:
             # Already string
-            relevant_probs[k] = v
+            if k in all_actions:
+                 relevant_probs[k] = v
             
-    # Logic Update: Use 'Argmax' (Top Action) to match analyze_agent.py
-    # If the agent splits vote across 3 formations (e.g. 0.2, 0.2, 0.2) but Punt is 0.3,
-    # Analysis says PUNT. Old Chart logic said GO (0.6 vs 0.3).
-    # We now align with Analysis: Find top action, then classify it.
+    # For Scrimmage Only mode, "GO" is the only option (choosing a formation).
+    # We can plot the probability of the most aggressive formation (EMPTY?) vs conservative?
+    # Or just return 1.0 for GO to keep the chart green (indicating Go preference).
     
-    top_action_name = max(relevant_probs, key=relevant_probs.get)
-    # top_prob = relevant_probs[top_action_name] # Use this if we want to plot confidence
-    
-    # Initialize all to 0
-    go_prob = 0.0
-    punt_prob = 0.0
-    fg_prob = 0.0
-    
-    # Assign the weight of the *aggregate* category based on who won the single-action vote
-    if top_action_name == 'PUNT':
-        punt_prob = 1.0 # Winner takes all for classification coloring
-    elif top_action_name == 'FG':
-        fg_prob = 1.0
-    else:
-        # It's a formation
-        go_prob = 1.0
-        
     return {
-        'GO': go_prob,
-        'PUNT': punt_prob,
-        'FG': fg_prob
+        'GO': 1.0,
+        'PUNT': 0.0,
+        'FG': 0.0
     }
 
 def generate_heatmap(agent, env, agent_name, output_dir):

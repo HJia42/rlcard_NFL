@@ -20,7 +20,6 @@ import pickle
 from pathlib import Path
 
 from rlcard.games.nfl.player import OffensePlayer, DefensePlayer
-# Special teams engine removed
 
 # Game constants - these should match your cleaned_nfl_rl_data.csv
 FORMATIONS = ("SHOTGUN", "SINGLEBACK", "UNDER CENTER", "I_FORM", "EMPTY")
@@ -80,9 +79,8 @@ class NFLGame:
         self.defense_actions = DEFENSE_ACTIONS
         self.play_type_actions = PLAY_TYPE_ACTIONS
         
-        # Load play data logic...
+        # Load play data logic
         if use_cached_model:
-            # Load cached model logic (unchanged)
             try:
                 base_dir = Path(__file__).parent
                 cache_files = [
@@ -104,7 +102,6 @@ class NFLGame:
                 self.use_simple_model = True
                 self.use_cached_model = False
         elif use_distribution_model:
-            # Distribution model logic (unchanged)
             try:
                 from rlcard.games.nfl.outcome_model import NFLOutcomeModel
                 self.outcome_model = NFLOutcomeModel(data_path)
@@ -114,7 +111,6 @@ class NFLGame:
                 self.use_simple_model = True
                 self.use_distribution_model = False
         else:
-            # Simple or Data-based logic
             if use_simple_model is None:
                 self.use_simple_model = False # Default to attempting data load
             else:
@@ -127,7 +123,6 @@ class NFLGame:
 
     def _load_data(self, data_path):
         """Load historical play data."""
-        # Unchanged
         if data_path is None:
             possible_paths = [
                 Path(__file__).parent.parent.parent.parent.parent / "Code" / "data" / "cleaned_nfl_rl_data.csv",
@@ -231,20 +226,18 @@ class NFLGame:
             # Check for Touchdown
             if self.yardline + yards_gained >= 100:
                 # Touchdown!
-                # If reward_type is TD, give bonus here
                 if self.reward_type == 'touchdown':
                     reward_offense = 1.0
                 elif self.reward_type == 'yards':
                     reward_offense = float(yards_gained)
-                # For EPA, handled in _calculate_reward usually (or below)
                 
                 self.payoffs = [float(reward_offense), -float(reward_offense)]
                 self.is_over_flag = True
                 self.current_player = 0 # Offense gets reward
             
             elif turnover:
-                # Turnover on play execution (Fumble/Int)
-                if self.reward_type == 'touchdown': # Failed drive
+                # Turnover
+                if self.reward_type == 'touchdown': 
                     reward_offense = 0.0
                 
                 self.payoffs = [float(reward_offense), -float(reward_offense)]
@@ -260,7 +253,7 @@ class NFLGame:
                     # First Down
                     self.down = 1
                     dist_to_goal = 100 - self.yardline
-                    self.ydstogo = min(10, dist_to_goal) # Goal-to-go check
+                    self.ydstogo = min(10, dist_to_goal)
                     
                     if self.single_play:
                         self.payoffs = [float(reward_offense), -float(reward_offense)]
@@ -270,12 +263,9 @@ class NFLGame:
                     self.down += 1
                     if self.down > 4:
                         # Turnover on Downs (Failed 4th Down)
-                        # The reward calculation already captured the negative EPA of turning it over?
-                        # Or we need to update it?
-                        
-                        # If we used EPA, check based on NEW state (opponent ball at yardline)
                         if self.reward_type == 'epa':
-                            ep_after = -self._calculate_ep(1, 10, 100 - self.yardline) # Opponent EP (flipped)
+                            # Opponent gets ball 100 - yardline
+                            ep_after = -self._calculate_ep(1, 10, 100 - self.yardline)
                             reward_offense = ep_after - self.ep_before
                             
                         self.payoffs = [float(reward_offense), -float(reward_offense)]
@@ -286,16 +276,6 @@ class NFLGame:
                     self.phase = 0
                     self.current_player = 0
                     self.ep_before = self._calculate_ep(self.down, self.ydstogo, self.yardline)
-                    # Accumulate reward for multi-step? 
-                    # Usually RLCard returns payoff only at end, or step-reward.
-                    # PPO expects immediate rewards? No, PPO uses trajectory.
-                    # For now, if not over, payoff is 0?
-                    # If we want dense rewards (shaping), we can return step reward.
-                    # Standard RLCard game style: return payoff at end.
-                    # But for PPO dense reward is better.
-                    # Let's assume we want dense rewards:
-                    # Wait, RLCard step() returns (state, player_id). Payoff is accessed via game.get_payoffs().
-                    pass 
 
         state = self.get_state(self.current_player)
         return state, self.current_player
@@ -306,20 +286,15 @@ class NFLGame:
             return float(yards_gained)
         
         elif self.reward_type == 'touchdown':
-            # Binary reward only at end
             return 0.0 # Handled in step()
             
         else: # 'epa' (Default)
-            # Calculate EP After
             if turnover:
-                # Opponent takes over at new yardline
-                # Their EP is positive, so ours is negative of theirs
                 current_yl = self.yardline + yards_gained
                 ep_after = -self._calculate_ep(1, 10, 100 - current_yl)
             elif is_touchdown:
-                ep_after = 7.0 # Approx EP of TD
+                ep_after = 7.0
             else:
-                # Normal play, updated down/dist
                 new_yl = self.yardline + yards_gained
                 new_ydstogo = self.ydstogo - yards_gained
                 new_down = self.down
@@ -331,9 +306,6 @@ class NFLGame:
                     new_down += 1
                     
                 if new_down > 4:
-                     # Turnover on downs logic will handle this in step calculation?
-                     # Let's start with EP of the resulting state.
-                     # If resulting state is 5th down, that implies turnover.
                      ep_after = -self._calculate_ep(1, 10, 100 - new_yl)
                 else:
                     ep_after = self._calculate_ep(new_down, new_ydstogo, new_yl)
@@ -342,21 +314,13 @@ class NFLGame:
 
     def _calculate_ep(self, down, ydstogo, yardline):
         """Simple Expected Points model (Interpolated)."""
-        # Linear interpolation for simple model
-        # Own 0 = -2, Own 25 = 0.5, Own 50 = 2, Opp 25 = 4, Opp 0 = 7
-        # Simplified curve
-        
-        field_pos = yardline / 100.0 # 0.0 to 1.0
-        
-        # Base EP based on field position (roughly)
+        field_pos = yardline / 100.0
         # -2.0 at 0, 7.0 at 100
         ep = -2.0 + 9.0 * field_pos
         
         # Down/Distance Penalty
-        # 1st down: 0 penalty
-        # 4th down: big penalty
         down_penalty = (down - 1) * 0.5
-        dist_penalty = (ydstogo - 5) * 0.1 # centered at 5 yards
+        dist_penalty = (ydstogo - 5) * 0.1
         
         return ep - down_penalty - dist_penalty
 
@@ -366,101 +330,58 @@ class NFLGame:
         box_count, personnel = def_action
         
         if self.use_cached_model and hasattr(self, 'cached_model'):
-            # Look up in hash table
             # Key: (formation, play_type, box_count)
-            # We map box_count to nearest bucket if needed, or exact if cached
-            # The cached model usually keys by (formation, pass_rush, box)
-            
-            # Map inputs to keys
-            # Formation: "SHOTGUN" -> "SHOTGUN"
-            # Play Type: "pass" -> "pass"
-            # Box: 4 -> 4
-            
             key = (formation, play_type, box_count)
             
             if key in self.cached_model:
-                # Distribution: list of (yards, prob) or similar
-                # The cached model structure is: dict[key] -> {'yards': [probs], 'turnover': prob}
                 outcome_dist = self.cached_model[key]
-                
-                # Sample turnover
                 turnover_prob = outcome_dist.get('turnover_prob', 0.0)
                 is_turnover = (self.np_random.rand() < turnover_prob)
                 
                 if is_turnover:
                     return {'yards_gained': 0, 'turnover': True}
                 else:
-                    # Sample yards
-                    # yards_dist is likely a list of possible yardages if bucketed,
-                    # or parameters for a distribution.
-                    # Let's assume it's a discrete distribution for now based on 'cached_outcomes_full'
-                    
-                    # If the cached model is just "mean yards", we use that?
-                    # No, for RL we need variance.
-                    # Let's fallback to the simple logic if we don't know the exact structure of the pkl here,
-                    # BUT we do know it from previous interactions or we can assume it's capable.
-                    
-                    # For safety in this refactor, let's use the Robust Simple Model 
-                    # which approximates the data well enough for testing
+                    # Pass through to backup logic for exact yardage distribution if needed
+                    # Or use a simple sampler if not fully implemented in this refactor
                     pass
             
-        # Robust Fallback Model (Physics-based approximation of NFL data)
+        # Robust Fallback Model (Physics-based approximation)
         is_pass = (play_type == 'pass')
         yards = 0
         turnover = False
         
-        # Base Yards
         if is_pass:
-            # Pass distribution: often 0 (incomplete), or huge gain
-            # Completion rate approx 60%
             if self.np_random.rand() < 0.6:
-                # Complete
-                # Mean ~11 yards, Std ~6
                 yards = self.np_random.normal(11.0, 6.0)
-                # Yards after catch bonus for light box
                 if box_count < 6:
                     yards += (6 - box_count) * 1.5
             else:
-                # Incomplete
                 yards = 0
             
-            # Interception chance
             if self.np_random.rand() < 0.025:
                 turnover = True
                 
         else:
-            # Rush distribution: consistent, lower variance
-            # Mean ~4 yards, Std ~3
             yards = self.np_random.normal(4.0, 3.0)
-            
-            # Box count impact (Heavy impact on run)
-            # 7 man box is neutral. 8 is -1.5, 6 is +1.0
             yards -= (box_count - 7) * 1.0
-            
-            # Fumble chance
             if self.np_random.rand() < 0.01:
                 turnover = True
 
         return {'yards_gained': yards, 'turnover': turnover}
         
     def _save_state(self):
-        pass # Unchanged
+        # Unchanged from original idea but needed for consistency
+        pass
 
     def get_state(self, player_id):
         """Return state for player."""
-        # Clean state representation (No special teams info needed)
-        # [down, ydstogo, yardline, phase, ... formation/box history]
         obs = np.array([
             self.down,
             self.ydstogo,
             self.yardline,
             self.phase,
-            # Normalize inputs
         ])
         
-        # Add history if needed (formation, defense)
-        
-        # Encode for Agent
         legal_actions = list(self.get_legal_actions())
         
         return {
@@ -481,9 +402,7 @@ class NFLGame:
         return []
         
     def _decode_action(self, action_id):
-         # helper to return string names
          if self.phase == 0: return self.initial_actions[action_id]
-         # ...
          return str(action_id)
 
     def get_num_players(self):
@@ -497,623 +416,3 @@ class NFLGame:
         
     def is_over(self):
         return self.is_over_flag
-
-A two-player imperfect information game with 3 turns per play:
-- Turn 1 (Player 0): Offense selects formation
-- Turn 2 (Player 1): Defense sees formation, selects box count
-- Turn 3 (Player 0): Offense sees box count, selects play type (pass/rush)
-- Then outcome is resolved from historical data
-
-This models the NFL audible system where QB reads the defense.
-"""
-
-import numpy as np
-from copy import copy
-import os
-import pickle
-from pathlib import Path
-
-from rlcard.games.nfl.player import OffensePlayer, DefensePlayer
-from rlcard.games.nfl.special_teams import get_special_teams_engine
-
-
-# Game constants - these should match your cleaned_nfl_rl_data.csv
-FORMATIONS = ("SHOTGUN", "SINGLEBACK", "UNDER CENTER", "I_FORM", "EMPTY")
-PLAY_TYPES = ("pass", "rush")
-BOX_COUNTS = (4, 5, 6, 7, 8)
-PERSONNEL_TYPES = ("Standard",)
-SPECIAL_TEAMS = ("PUNT", "FG")  # These bypass defense
-
-# Build action maps
-# Phase 0: Offense picks formation OR special teams (7 actions total)
-FORMATION_ACTIONS = list(FORMATIONS)
-SPECIAL_TEAMS_ACTIONS = list(SPECIAL_TEAMS)
-INITIAL_ACTIONS = FORMATION_ACTIONS + SPECIAL_TEAMS_ACTIONS  # All Phase 0 options
-
-# Phase 1: Defense picks box count (5 actions)
-DEFENSE_ACTIONS = []
-for box in BOX_COUNTS:
-    for personnel in PERSONNEL_TYPES:
-        DEFENSE_ACTIONS.append((box, personnel))
-
-# Phase 2: Offense picks play type (2 actions)
-PLAY_TYPE_ACTIONS = list(PLAY_TYPES)
-
-
-class NFLGame:
-    """NFL Play-by-Play Game compatible with RLCard.
-    
-    Three-phase game per play:
-    Phase 1: Offense picks formation
-    Phase 2: Defense sees formation, picks box count
-    Phase 3: Offense sees box count, picks pass/rush
-    """
-    
-    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
-                 single_play=False, start_down=1, use_distribution_model=False, use_cached_model=False):
-        """Initialize NFL Game.
-        
-        Args:
-            allow_step_back: Whether to support step_back for CFR
-            data_path: Path to cleaned NFL data (optional)
-            use_simple_model: If True, skip pandas and use fast simplified model.
-                             If None, auto-detect based on allow_step_back.
-            single_play: If True, game ends after one complete play (3 phases).
-                        This dramatically reduces tree depth for CFR algorithms.
-            start_down: Starting down (1-4). Default: 1.
-            use_distribution_model: If True, use Biro & Walker statistical distributions
-                        instead of random sampling for play outcomes.
-            use_cached_model: If True, use pre-computed cached distributions for O(1) lookup.
-                        Overrides use_distribution_model if True.
-        """
-        self.allow_step_back = allow_step_back
-        self.single_play = single_play
-        self.start_down = start_down
-        self.use_distribution_model = use_distribution_model
-        self.use_cached_model = use_cached_model
-        self.np_random = np.random.RandomState()
-        
-        # Action spaces per phase
-        self.initial_actions = INITIAL_ACTIONS          # Phase 0: formations + special teams
-        self.formation_actions = FORMATION_ACTIONS      # Subset of phase 0
-        self.special_teams_actions = SPECIAL_TEAMS_ACTIONS  # Subset of phase 0
-        self.defense_actions = DEFENSE_ACTIONS          # Phase 1
-        self.play_type_actions = PLAY_TYPE_ACTIONS      # Phase 2
-        
-        self.num_initial_actions = len(INITIAL_ACTIONS)
-        self.num_formation_actions = len(FORMATION_ACTIONS)
-        self.num_defense_actions = len(DEFENSE_ACTIONS)
-        self.num_play_type_actions = len(PLAY_TYPE_ACTIONS)
-        
-        # Max actions for RLCard compatibility
-        self.num_actions = max(
-            self.num_initial_actions,  # 7 (5 formations + 2 special teams)
-            self.num_defense_actions,  # 5 box counts
-            self.num_play_type_actions # 2 play types
-        )
-        
-        # Special teams engine for FG/Punt outcomes
-        self.special_teams = get_special_teams_engine()
-        
-        # Determine model to use
-        # Priority: cached > distribution > data-based > simple
-        if use_simple_model is None:
-            # Simple model only if step_back AND no advanced models requested
-            self.use_simple_model = allow_step_back and not use_distribution_model and not use_cached_model
-        else:
-            self.use_simple_model = use_simple_model
-        
-        # Load data and outcome models
-        self.play_data = None
-        self.outcome_model = None
-        self.cached_model = None
-        
-        if not self.use_simple_model or self.use_distribution_model or self.use_cached_model:
-            self._load_data(data_path)
-            
-            if self.use_cached_model and self.play_data is not None:
-                # Use cached model (O(1) lookup)
-                from rlcard.games.nfl.cached_outcome_model import get_cached_outcome_model
-                # For bucketed game, use bucketed cache; otherwise full
-                use_bucketed = getattr(self, 'is_bucketed', False)
-                self.cached_model = get_cached_outcome_model(self.play_data, self.np_random, use_bucketed=use_bucketed)
-                print(f"Using cached distribution model (O(1) lookup, {'bucketed' if use_bucketed else 'full'})")
-            elif self.use_distribution_model and self.play_data is not None:
-                # Use Biro & Walker distribution model
-                from rlcard.games.nfl.outcome_model import OutcomeModel
-                self.outcome_model = OutcomeModel(self.play_data, self.np_random)
-                print("Using Biro & Walker distribution model for outcomes")
-        else:
-            print("Using simplified outcome model (fast mode for CFR)")
-        
-        # Game state
-        self.players = None
-        self.down = None
-        self.ydstogo = None
-        self.yardline = None
-        self.current_player = None
-        
-        # Phase tracking
-        self.phase = 0  # 0=formation, 1=defense, 2=play_type
-        self.pending_formation = None
-        self.pending_defense_action = None
-        
-        self.is_over_flag = False
-        self.payoffs = [0, 0]
-        
-        # History for step_back
-        self.history = []
-    
-    def _load_data(self, data_path):
-        """Load historical play data for outcome sampling."""
-        if data_path is None:
-            possible_paths = [
-                Path(__file__).parent.parent.parent.parent.parent / "Code" / "data" / "cleaned_nfl_rl_data.csv",
-                Path.home() / "Projects" / "NFL_Playcalling" / "Code" / "data" / "cleaned_nfl_rl_data.csv",
-            ]
-            for p in possible_paths:
-                if p.exists():
-                    data_path = str(p)
-                    break
-        
-        if data_path and os.path.exists(data_path):
-            try:
-                import pandas as pd
-                self.play_data = pd.read_csv(data_path)
-                print(f"Loaded {len(self.play_data)} plays from {data_path}")
-            except Exception as e:
-                print(f"Warning: Could not load play data: {e}")
-                self.play_data = None
-        else:
-            print("Warning: No play data found, using simplified outcome model")
-            self.play_data = None
-    
-    def configure(self, game_config):
-        """Configure game parameters."""
-        pass
-    
-    def init_game(self):
-        """Initialize a new game (drive)."""
-        self.players = [OffensePlayer(0), DefensePlayer(1)]
-        
-        # Initial state: 1st & 10 at own 25 (or custom down)
-        self.down = self.start_down
-        
-        if self.single_play:
-            # Randomize field position for generalizable training
-            self.yardline = int(np.random.randint(1, 100))
-            
-            # Randomize ydstogo (capped by distance to goal and realistic max)
-            dist_to_goal = 100 - self.yardline
-            max_yds = min(20, dist_to_goal)
-            self.ydstogo = int(np.random.randint(1, max_yds + 1))
-            
-            # Print for verification (temporary, can remove later if spammy)
-            # print(f"DEBUG: Initialized at {self.yardline} yd line, {self.ydstogo} to go")
-        else:
-            self.ydstogo = 10
-            self.yardline = 25
-        
-        # Start with offense picking formation (phase 0)
-        self.current_player = 0
-        self.phase = 0
-        self.pending_formation = None
-        self.pending_defense_action = None
-        self.is_over_flag = False
-        self.payoffs = [0, 0]
-        self.history = []
-        
-        self.ep_before = self._calculate_ep(self.down, self.ydstogo, self.yardline)
-        
-        state = self.get_state(self.current_player)
-        return state, self.current_player
-    
-    def step(self, action):
-        """Process an action from current player."""
-        if self.allow_step_back:
-            self._save_state()
-        
-        if self.phase == 0:
-            # Phase 0: Offense picks formation OR special teams
-            action_str = action if isinstance(action, str) else self.initial_actions[action]
-            
-            if action_str in SPECIAL_TEAMS:
-                # Special teams - skip defense, resolve immediately
-                self._resolve_special_teams(action_str)
-            else:
-                # Normal play - proceed to defense
-                self.pending_formation = action_str
-                self.phase = 1
-                self.current_player = 1  # Defense's turn
-            
-        elif self.phase == 1:
-            # Phase 1: Defense picks box count
-            self.pending_defense_action = action if isinstance(action, tuple) else self.defense_actions[action]
-            self.phase = 2
-            self.current_player = 0  # Back to offense
-            
-        elif self.phase == 2:
-            # Phase 2: Offense picks play type, then resolve
-            play_type = action if isinstance(action, str) else self.play_type_actions[action]
-            
-            # Build full actions
-            offense_action = (self.pending_formation, play_type)
-            defense_action = self.pending_defense_action
-            
-            # Get outcome
-            outcome = self._get_outcome(
-                self.down, self.ydstogo, self.yardline,
-                offense_action, defense_action
-            )
-            
-            yards = outcome['yards_gained']
-            turnover = outcome.get('turnover', False)
-            
-            # Update state
-            old_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
-            
-            if turnover:
-                self.is_over_flag = True
-                # Estimate opponent EP from turnover spot
-                turnover_spot = self.yardline + yards
-                turnover_spot = max(1, min(99, turnover_spot))
-                opp_yardline = 100 - turnover_spot
-                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
-                epa = -opp_ep - old_ep
-            elif self.yardline + yards >= 100:
-                # Touchdown!
-                self.is_over_flag = True
-                epa = 7.0 - old_ep
-            elif yards >= self.ydstogo:
-                # First down
-                self.yardline += yards
-                self.down = 1
-                self.ydstogo = min(10, 100 - self.yardline)
-                # Check goal-to-go
-                is_goal_to_go = (100 - self.yardline) < self.ydstogo
-                new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline, goal_to_go=is_goal_to_go)
-                epa = new_ep - old_ep
-            else:
-                # No first down
-                self.yardline += yards
-                self.down += 1
-                self.ydstogo -= yards
-                
-                if self.down > 4:
-                    # Turnover on downs: opponent gets ball here
-                    # Calculate opponent's EP from their new field position
-                    opp_yardline = 100 - self.yardline  # Convert to opponent's perspective
-                    opp_yardline = max(1, min(99, opp_yardline))
-                    opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
-                    epa = -opp_ep - old_ep
-                    self.is_over_flag = True
-                else:
-                    # Check goal-to-go for next down
-                    is_goal_to_go = (100 - self.yardline) < self.ydstogo
-                    new_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline, goal_to_go=is_goal_to_go)
-                    epa = new_ep - old_ep
-            
-            if self.yardline <= 0:
-                # Safety! Offense gave up 2 points + free kick
-                # After safety: team that was on offense must do a free kick from their 20
-                # Free kicks typically result in opponent starting at ~35-40 yard line
-                self.is_over_flag = True
-                
-                # Model free kick: opponent receives ball approximately at their 35
-                opp_start_yardline = 35  # Conservative estimate - their 35-yard line
-                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_start_yardline)
-                
-                # Safety EPA = new_value - old_ep
-                # new_value = -(2 + opp_ep) since we lose 2 pts AND give opponent their EP
-                epa = -(2.0 + opp_ep) - old_ep
-            
-            self.payoffs = [epa, -epa]
-            
-            # In single_play mode, always end after one play
-            if self.single_play:
-                self.is_over_flag = True
-            
-            # Reset for next play (if not over)
-            self.phase = 0
-            self.current_player = 0
-            self.pending_formation = None
-            self.pending_defense_action = None
-        
-        state = self.get_state(self.current_player)
-        return state, self.current_player
-    
-    def _resolve_special_teams(self, action_str):
-        """Resolve a special teams play (punt or field goal).
-        
-        Special teams plays skip the defense turn and resolve immediately.
-        """
-        old_ep = self._calculate_ep(self.down, self.ydstogo, self.yardline)
-        
-        if action_str == "FG":
-            # Field Goal attempt
-            success_prob = self.special_teams.predict_fg_prob(self.yardline)
-            success = self.np_random.random() < success_prob
-            
-            if success:
-                # FG made: +3 points
-                epa = 3.0 - old_ep
-            else:
-                # FG missed: opponent gets ball at LOS or 20 (their yardline)
-                opp_yardline = max(100 - self.yardline, 20)
-                # Use full EP model for opponent's position (1st & 10)
-                opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
-                epa = -opp_ep - old_ep
-            
-            self.is_over_flag = True
-            
-        elif action_str == "PUNT":
-            # Punt: opponent gets ball at predicted position
-            # predict_punt_outcome returns opponent's yardline from THEIR own goal
-            opp_yardline = self.special_teams.predict_punt_outcome(self.yardline)
-            opp_yardline = int(np.round(opp_yardline))
-            opp_yardline = max(1, min(99, opp_yardline))  # Clamp to valid range
-            
-            # Use full EP model for opponent's position (1st & 10)
-            opp_ep = self._calculate_ep(down=1, ydstogo=10, yardline=opp_yardline)
-            epa = -opp_ep - old_ep
-            
-            self.is_over_flag = True
-        else:
-            epa = 0
-        
-        self.payoffs = [epa, -epa]
-        
-        # Always end after special teams (no continuation)
-        self.phase = 0
-        self.current_player = 0
-        self.pending_formation = None
-        self.pending_defense_action = None
-    
-    def _get_outcome(self, down, ydstogo, yardline, offense_action, defense_action):
-        """Sample outcome from historical data or statistical distribution."""
-        formation, play_type = offense_action
-        box_count, _ = defense_action
-        
-        # Use cached model if enabled (O(1) lookup)
-        if self.cached_model is not None:
-            return self.cached_model.sample(
-                formation, play_type, box_count, yardline, down, ydstogo
-            )
-        
-        # Use distribution model if enabled and available
-        if self.outcome_model is not None:
-            return self.outcome_model.get_outcome(
-                down, ydstogo, yardline, formation, box_count, play_type
-            )
-        
-        if self.play_data is None:
-            # Simplified model
-            if play_type == "pass":
-                base_yards = 7.0
-                variance = 10.0
-                int_prob = 0.02
-            else:
-                base_yards = 4.0
-                variance = 3.0
-                int_prob = 0.01
-            
-            # Box count effects
-            if play_type == "rush":
-                base_yards -= (box_count - 6) * 0.5
-            else:
-                base_yards += (box_count - 6) * 0.3
-            
-            yards = self.np_random.normal(base_yards, variance)
-            yards = int(np.round(yards))
-            yards = max(-10, min(yards, 50))
-            turnover = self.np_random.random() < int_prob
-            
-            return {'yards_gained': yards, 'turnover': turnover}
-        
-        # Use real data
-        if play_type == "pass":
-            candidates = self.play_data[self.play_data['pass'] == 1]
-        else:
-            candidates = self.play_data[self.play_data['rush'] == 1]
-        
-        if 'offense_formation' in candidates.columns:
-            form_matches = candidates[candidates['offense_formation'] == formation]
-            if len(form_matches) > 10:
-                candidates = form_matches
-        
-        if 'defenders_in_box' in candidates.columns:
-            box_matches = candidates[candidates['defenders_in_box'] == box_count]
-            if len(box_matches) > 10:
-                candidates = box_matches
-        
-        if len(candidates) == 0:
-            return {'yards_gained': 0, 'turnover': False}
-        
-        candidates = candidates.copy()
-        yardline_100 = 100 - yardline
-        
-        candidates['similarity'] = 1.0 / (1.0 + 
-            abs(candidates['down'] - down) +
-            abs(candidates['ydstogo'] - ydstogo).clip(0, 20) +
-            abs(candidates['yardline_100'] - yardline_100).clip(0, 50) * 0.5
-        )
-        
-        sampled = candidates.sample(n=1, weights='similarity').iloc[0]
-        
-        yards = sampled.get('yards_gained', 0)
-        turnover = sampled.get('interception', 0) == 1 or sampled.get('fumble', 0) == 1
-        
-        return {'yards_gained': int(round(float(yards))), 'turnover': bool(turnover)}
-    
-    def _calculate_ep(self, down, ydstogo, yardline, goal_to_go=False):
-        """Calculate expected points using fitted OLS regression model.
-        
-        Model: EP = const + sum(coef_i * feature_i)
-        R² = 0.95 on 210,490 NFL plays
-        
-        Args:
-            down: Current down (1-4)
-            ydstogo: Yards to first down
-            yardline: Yards from own goal (1-99)
-            goal_to_go: Whether it's a goal-to-go situation
-        
-        Returns:
-            Expected points (-7 to 7 range)
-        """
-        # Fitted coefficients from OLS regression
-        # See examples/fit_ep_model.py for derivation
-        CONST = 0.2412
-        COEF_YARDLINE = 0.0571
-        COEF_YARDLINE_SQ = 5.853e-05
-        COEF_YDSTOGO = -0.0634
-        COEF_2ND_DOWN = -0.5528
-        COEF_3RD_DOWN = -1.2497
-        COEF_4TH_DOWN = -2.4989
-        COEF_REDZONE = -0.0255
-        COEF_GOAL_TO_GO = -0.1034
-        # score_diff coefficient is ~0 and not significant, so excluded
-        
-        # Build prediction
-        ep = CONST
-        ep += COEF_YARDLINE * yardline
-        ep += COEF_YARDLINE_SQ * (yardline ** 2)
-        ep += COEF_YDSTOGO * min(ydstogo, 20)  # Cap at 20 as in training
-        
-        # Down dummies (reference = 1st down)
-        if down == 2:
-            ep += COEF_2ND_DOWN
-        elif down == 3:
-            ep += COEF_3RD_DOWN
-        elif down == 4:
-            ep += COEF_4TH_DOWN
-        
-        # Red zone indicator
-        if yardline >= 80:
-            ep += COEF_REDZONE
-        
-        # Goal-to-go
-        if goal_to_go:
-            ep += COEF_GOAL_TO_GO
-        
-        return max(-7, min(7, ep))
-    
-    def _save_state(self):
-        """Save current state for step_back."""
-        self.history.append({
-            'down': self.down,
-            'ydstogo': self.ydstogo,
-            'yardline': self.yardline,
-            'current_player': self.current_player,
-            'phase': self.phase,
-            'pending_formation': self.pending_formation,
-            'pending_defense_action': self.pending_defense_action,
-            'is_over_flag': self.is_over_flag,
-            'payoffs': self.payoffs.copy()
-        })
-    
-    def step_back(self):
-        """Restore previous state."""
-        if not self.history:
-            return False
-        
-        state = self.history.pop()
-        self.down = state['down']
-        self.ydstogo = state['ydstogo']
-        self.yardline = state['yardline']
-        self.current_player = state['current_player']
-        self.phase = state['phase']
-        self.pending_formation = state['pending_formation']
-        self.pending_defense_action = state['pending_defense_action']
-        self.is_over_flag = state['is_over_flag']
-        self.payoffs = state['payoffs']
-        return True
-    
-    def get_state(self, player_id):
-        """Get state from perspective of player.
-        
-        Returns standardized state dict with:
-        - obs: 12-dim float32 array for neural networks
-        - legal_actions: dict {action_idx: None}
-        - raw_legal_actions: list of action name strings
-        - phase: integer (0=formation, 1=defense, 2=play_type)
-        - phase_name: string for readability
-        """
-        # Build 12-dim observation array for neural networks
-        obs = np.zeros(12, dtype=np.float32)
-        obs[0] = self.down / 4.0  # Normalized down
-        obs[1] = min(self.ydstogo, 30) / 30.0  # Normalized yards to go
-        obs[2] = self.yardline / 100.0  # Normalized yardline
-        
-        # Formation encoding (indices 3-7) - visible after phase 0
-        if self.phase >= 1 and self.pending_formation in FORMATION_ACTIONS:
-            formation_idx = FORMATION_ACTIONS.index(self.pending_formation)
-            obs[3 + formation_idx] = 1.0
-        
-        # Box count encoding (index 8-9) - visible in phase 2
-        if self.phase == 2 and self.pending_defense_action:
-            box_count = self.pending_defense_action[0]
-            obs[8] = (box_count - 4) / 4.0  # Normalize box count 4-8 to 0-1
-        
-        # Phase encoding (index 11)
-        obs[11] = self.phase / 2.0
-        
-        # Build legal actions dict and raw names
-        if self.phase == 0:
-            legal_list = list(range(self.num_initial_actions))
-            raw_legal_actions = [INITIAL_ACTIONS[i] for i in legal_list]
-            phase_name = 'formation'
-        elif self.phase == 1:
-            legal_list = list(range(self.num_defense_actions))
-            raw_legal_actions = [f"{d[0]}_box" for d in DEFENSE_ACTIONS]
-            phase_name = 'defense'
-        else:
-            legal_list = list(range(self.num_play_type_actions))
-            raw_legal_actions = list(PLAY_TYPE_ACTIONS)
-            phase_name = 'play_type'
-        
-        # Convert to dict format for RLCard compatibility
-        legal_actions = {i: None for i in legal_list}
-        
-        state = {
-            'obs': obs,
-            'legal_actions': legal_actions,
-            'raw_legal_actions': raw_legal_actions,
-            'player_id': player_id,
-            'down': self.down,
-            'ydstogo': self.ydstogo,
-            'yardline': self.yardline,
-            'phase': self.phase,
-            'phase_name': phase_name,
-        }
-        
-        # Add phase-specific info
-        if self.phase >= 1:
-            state['formation'] = self.pending_formation
-        if self.phase == 2 and self.pending_defense_action:
-            state['box_count'] = self.pending_defense_action[0]
-        
-        return state
-    
-    def get_legal_actions(self):
-        """Get legal actions for current player."""
-        if self.phase == 0:
-            return list(range(self.num_initial_actions))  # Formations + special teams
-        elif self.phase == 1:
-            return list(range(self.num_defense_actions))
-        else:
-            return list(range(self.num_play_type_actions))
-    
-    def is_over(self):
-        return self.is_over_flag
-    
-    def get_payoffs(self):
-        return np.array(self.payoffs)
-    
-    def get_player_id(self):
-        return self.current_player
-    
-    def get_num_players(self):
-        return 2
-    
-    def get_num_actions(self):
-        return self.num_actions

@@ -132,8 +132,8 @@ def main():
 def test_policy(agent, env):
     """Test agent policy on key scenarios."""
     tests = [
-        (25, 10, "4th & 10 own 25", "PUNT"),
-        (75, 10, "4th & 10 opp 25", "FG"),
+        (25, 10, "4th & 10 own 25", "GO"), # Was PUNT
+        (75, 10, "4th & 10 opp 25", "GO"), # Was FG
         (35, 1, "4th & 1 own 35", "GO"),
         (95, 3, "4th & Goal at 5", "GO"),
     ]
