@@ -13,7 +13,7 @@ nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent nfsp 
 echo "Started NFSP (Standard) [PID $!]"
 
 nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent deep_cfr --num_episodes 40000 --resume > logs/deep_cfr_standard_40k.log 2>&1 &
-echo "Started DeepCFR (Standard) [PID $!] (Target: 20,000 iterations)"
+echo "Started DeepCFR (Standard) [PID $!]"
 
 nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent ppo --num_episodes 4000000 --resume > logs/ppo_iig_40k.log 2>&1 &
 echo "Started PPO (IIG) [PID $!]"
@@ -22,7 +22,7 @@ nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent n
 echo "Started NFSP (IIG) [PID $!]"
 
 nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent deep_cfr --num_episodes 40000 --resume > logs/deep_cfr_iig_40k.log 2>&1 &
-echo "Started DeepCFR (IIG) [PID $!] (Target: 20,000 iterations)"
+echo "Started DeepCFR (IIG) [PID $!]"
 
 echo "---------------------------------------------------"
 echo "All jobs started in background."
