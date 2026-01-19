@@ -164,6 +164,7 @@ def train(args):
                 batch_size=128,
                 train_steps=100, # Steps per iteration
                 device=device,
+                model_path=log_dir, # Explicitly valid path
             )
         else:
             raise ValueError(f"Unknown agent: {args.agent}")
