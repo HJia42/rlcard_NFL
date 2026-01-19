@@ -71,6 +71,7 @@ def load_agent(env_name, agent_type, device='cpu'):
                 checkpoint = torch.load(path, map_location=device, weights_only=False)
                 agent.load(checkpoint)
             else:
+                print(f"  [Debug] DeepCFR model not found at:\n    1. {os.path.join(checkpoint_dir, 'model.pt')}\n    2. {path}")
                 return None
             
         else:
