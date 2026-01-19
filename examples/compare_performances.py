@@ -64,8 +64,8 @@ def load_agent(env_name, agent_type, device='cpu'):
             )
             path = os.path.join(checkpoint_dir, 'model.pt')
             if not os.path.exists(path):
-                # Check for alternative path if needed
-                pass
+                # Fallback to root experiment dir (where 'Save Final' puts it)
+                path = os.path.join(base_dir, 'model.pt')
             
             if os.path.exists(path):
                 checkpoint = torch.load(path, map_location=device, weights_only=False)
