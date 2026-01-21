@@ -66,11 +66,26 @@ def get_action_prob(agent, state):
         action, info = agent.eval_step(state)
         if 'probs' in info:
             # Info['probs'] is the strategy
-             # DeepCFR output is keyed by action index, we need valid list
+             # DeepCFR output is keyed by action index OR string representation
              full_probs = np.zeros(agent.num_actions)
+             
+             # Mapping for Offense Play Type Phase (based on game.py PLAY_TYPES)
+             str_map = {'pass': 0, 'rush': 1}
+             
              for a, p in info['probs'].items():
-                 # Keys might be str or np.int, cast to native int
-                 full_probs[int(a)] = p
+                 idx = -1
+                 if isinstance(a, str):
+                     if a in str_map:
+                         idx = str_map[a]
+                     else:
+                         # Try int conversion fallback
+                         try: idx = int(a)
+                         except: pass
+                 else:
+                     idx = int(a)
+                     
+                 if idx >= 0 and idx < len(full_probs):
+                     full_probs[idx] = p
              return full_probs
     
     return np.zeros(2)
