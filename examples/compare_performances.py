@@ -11,72 +11,6 @@ from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.utils import tournament
 
-# Pre-generated scenarios for consistency
-class Scenario:
-    def __init__(self, seed):
-        rng = np.random.RandomState(seed)
-        self.formation = rng.choice(5) # 0-4
-        self.play_type = rng.choice(2) # 0-1 (Pass/Run)
-        self.box_count = rng.choice(5) # 0-4
-        self.seed = seed
-
-class ScenarioRandomAgent(object):
-    '''Agent that replays pre-generated scenarios.'''
-    def __init__(self, scenarios, role):
-        self.scenarios = scenarios # List of Scenario objects
-        self.role = role # 'offense' or 'defense'
-        self.game_idx = 0
-        self.use_raw = False
-
-    def reset_counter(self):
-        self.game_idx = 0
-
-    def step(self, state):
-        # Determine what phase we are in and return prescheduled action
-        scenario = self.scenarios[self.game_idx]
-        
-        # Robust Phase Detection
-        # NFLEnv encodes phase at index 11 of the 'obs' vector.
-        # 0.0 -> Phase 0, 0.5 -> Phase 1, 1.0 -> Phase 2.
-        if 'obs' in state and len(state['obs']) > 11:
-            val = state['obs'][11]
-            if val < 0.25: phase = 0
-            elif val < 0.75: phase = 1
-            else: phase = 2
-        else:
-            # Fallback for raw env usage (if raw_obs is array)
-            # This handles cases where wrappers haven't processed obs
-            phase = 0 # Default safety
-
-        
-        # Mapping based on verified file content:
-        # Phase 0 is ALWAYS Formation (Offense)
-        if phase == 0:
-            return scenario.formation
-            
-        # Phase 1
-        # In Standard: Defense picks Box (0-4)
-        # In IIG: Offense picks Play (0-1)
-        if phase == 1:
-            if 'defense' in str(self.role): # If we are defense in Standard
-                 return scenario.box_count
-            else: # If we are offense in IIG
-                 return scenario.play_type
-                 
-        # Phase 2
-        # In Standard: Offense picks Play (0-1)
-        # In IIG: Defense picks Box (0-4)
-        if phase == 2:
-             if 'offense' in str(self.role): # If we are offense in Standard
-                 return scenario.play_type
-             else: # If we are defense in IIG
-                 return scenario.box_count
-                 
-        return 0 # Should not happen
-
-    def eval_step(self, state):
-        return self.step(state), {}
-
 def load_agent(env_name, agent_type, device='cpu'):
     """Load a trained agent from the default experiment path."""
     env = rlcard.make(env_name, config={'single_play': True})
@@ -177,48 +111,41 @@ def extract_payoff(payoffs, player_id):
     # Standard Case: payoffs[i] is the scalar for player i
     return float(payoffs[player_id])
 
-def evaluate_margin(agent, env_name, scenarios):
+def evaluate_margin(agent, env_name, num_games):
     """
-    Calculate EPA Margin against Standardized Scenario Random Baseline.
+    Calculate EPA Margin against Standard Random Baseline.
     Returns: (Offense Margin, Defense Margin)
     """
     env = rlcard.make(env_name, config={'single_play': True})
     
     # 1. Agent vs Random (Agent is Offense/Player 0)
     # -----------------------------------------------
-    # Random Agent takes role 'defense' to react to scenarios
-    random_def = ScenarioRandomAgent(scenarios, role='defense')
-    env.set_agents([agent, random_def])
+    random_agent = RandomAgent(num_actions=env.num_actions)
+    env.set_agents([agent, random_agent])
     
     payoffs_off_sum = 0.0
-    random_def.reset_counter()
     
-    for i in range(len(scenarios)):
-         random_def.game_idx = i
-         env.seed(scenarios[i].seed) # Standardize Environment Outcome
+    # Simple Loop
+    for _ in range(num_games):
          state, player_id = env.reset()
          while not env.is_over():
              action = env.agents[player_id].eval_step(state)
              if isinstance(action, tuple): action = action[0]
              state, player_id = env.step(action)
-             
+        
          # Extract Player 0 Payoff
          payoffs_off_sum += env.get_payoffs()[0]
          
-    off_margin = payoffs_off_sum / len(scenarios)
+    off_margin = payoffs_off_sum / num_games
     print(f"DEBUG: {env_name} Off Margin: {off_margin}")
 
     # 2. Random vs Agent (Agent is Defense/Player 1)
     # -----------------------------------------------
-    random_off = ScenarioRandomAgent(scenarios, role='offense')
-    env.set_agents([random_off, agent])
+    env.set_agents([random_agent, agent])
     
     payoffs_def_sum = 0.0
-    random_off.reset_counter()
     
-    for i in range(len(scenarios)):
-         random_off.game_idx = i
-         env.seed(scenarios[i].seed)
+    for _ in range(num_games):
          state, player_id = env.reset()
          while not env.is_over():
              action = env.agents[player_id].eval_step(state)
@@ -228,7 +155,7 @@ def evaluate_margin(agent, env_name, scenarios):
          # Extract Player 1 Payoff
          payoffs_def_sum += env.get_payoffs()[1]
          
-    def_margin = payoffs_def_sum / len(scenarios)
+    def_margin = payoffs_def_sum / num_games
     print(f"DEBUG: {env_name} Def Margin: {def_margin}")
     
     return off_margin, def_margin
@@ -237,9 +164,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_games', type=int, default=1000)
     args = parser.parse_args()
-    
-    # Generate Global Scenarios
-    GLOBAL_SCENARIOS = [Scenario(seed=42+i) for i in range(args.num_games)]
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"Using device: {device}")
@@ -264,7 +188,7 @@ def main():
             agent = load_agent(env_name, agent_name, device)
             
             if agent:
-                off, def_ = evaluate_margin(agent, env_name, GLOBAL_SCENARIOS)
+                off, def_ = evaluate_margin(agent, env_name, args.num_games)
                 total = off + def_
                 
                 results[(env_name, agent_name)] = total
