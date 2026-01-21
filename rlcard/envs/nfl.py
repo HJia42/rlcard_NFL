@@ -117,7 +117,7 @@ class NFLEnv(Env):
     
     def _encode_formation(self, formation):
         """One-hot encode formation."""
-        one_hot = [0] * len(self.formations)
+        one_hot = [0] * 7 # Fixed size 7 for compatibility
         if formation in self.formation_to_idx:
             one_hot[self.formation_to_idx[formation]] = 1
         return one_hot
