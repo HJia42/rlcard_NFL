@@ -197,6 +197,7 @@ class NFLGameIIG(NFLGame):
                          
                      self.payoffs = [float(reward_offense), -float(reward_offense)]
                      self.is_over_flag = True
+        self.play_count += 1
         
         # Prepare for next play if not over
         if not self.is_over_flag:
