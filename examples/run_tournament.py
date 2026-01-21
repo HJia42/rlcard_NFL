@@ -86,8 +86,7 @@ def _load_trained_agent(env, agent_type, env_name, device):
         # Load latest checkpoint
         path = os.path.join(checkpoint_dir, "agent_0.pt")
         if os.path.exists(path):
-            checkpoint = torch.load(path, map_location=device, weights_only=False)
-            agent.load(checkpoint)
+            agent.load(path)
         else:
             print(f"  [Warning] PPO model not found at {path}")
             return None
