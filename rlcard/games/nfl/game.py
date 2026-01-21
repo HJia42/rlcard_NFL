@@ -158,12 +158,12 @@ class NFLGame:
         
         if self.single_play:
             # Randomize field position for generalizable training
-            self.yardline = int(np.random.randint(1, 100))
+            self.yardline = int(self.np_random.randint(1, 100))
             
             # Randomize ydstogo (capped by distance to goal and realistic max)
             dist_to_goal = 100 - self.yardline
             max_yds = min(20, dist_to_goal)
-            self.ydstogo = int(np.random.randint(1, max_yds + 1))
+            self.ydstogo = int(self.np_random.randint(1, max_yds + 1))
         else:
             self.ydstogo = 10
             self.yardline = 25
