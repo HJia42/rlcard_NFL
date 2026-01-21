@@ -66,13 +66,73 @@ class ScenarioRandomAgent(object):
     def eval_step(self, state):
         return self.step(state), {}
 
+def _load_trained_agent(env, agent_type, env_name, device):
+    """Internal helper to load trained agents (PPO, NFSP, DeepCFR)."""
+    # Construct paths
+    base_dir = f"experiments/{env_name}_{agent_type}"
+    checkpoint_dir = os.path.join(base_dir, "checkpoints")
+    
+    # Initialize Agent Structure
+    if agent_type == 'ppo':
+        agent = PPOAgent(
+            num_actions=env.num_actions,
+            state_shape=env.state_shape,
+            device=device
+        )
+        # Load latest checkpoint
+        path = os.path.join(checkpoint_dir, "agent_0.pt")
+        if os.path.exists(path):
+            checkpoint = torch.load(path, map_location=device, weights_only=False)
+            agent.load(checkpoint)
+        else:
+            print(f"  [Warning] PPO model not found at {path}")
+            return None
+
+    elif agent_type == 'nfsp':
+        agent = NFSPAgent(
+            num_actions=env.num_actions,
+            state_shape=env.state_shape,
+            hidden_layers_sizes=[64, 64],
+            q_mlp_layers=[64, 64],
+            device=device
+        )
+        path = os.path.join(checkpoint_dir, "agent_0.pt") # Checkpoint folder
+        if os.path.exists(path):
+            agent.load(path)
+        else:
+             print(f"  [Warning] NFSP model not found at {path}")
+             return None
+
+    elif agent_type == 'deep_cfr':
+        agent = DeepCFRAgent(
+            env,
+            device=device
+        )
+        # DeepCFR Path Logic (Fixed)
+        path = os.path.join(checkpoint_dir, 'model.pt')
+        if not os.path.exists(path):
+            path = os.path.join(base_dir, 'model.pt')
+        
+        if os.path.exists(path):
+            agent.model_path = os.path.dirname(path)
+            if not agent.load():
+                 print(f"  [Error] DeepCFR internal load failed for {path}")
+                 return None
+        else:
+            print(f"  [Warning] DeepCFR model not found at {path}")
+            return None
+    
+    else:
+        return None
+        
+    return agent
+
 def load_agent_with_scenarios(env, agent_type, env_name, device, scenarios, role):
     """Load agent, injecting scenarios if random."""
     if agent_type == 'random':
         return ScenarioRandomAgent(scenarios, role)
     
-    # ... (Reuse existing logic for trained agents) ...
-    return load_agent(env, agent_type, env_name, device, seed=42)
+    return _load_trained_agent(env, agent_type, env_name, device)
 
 def run_head_to_head(env, offense_agent, defense_agent, scenarios):
     """Run matchups using shared scenarios."""
