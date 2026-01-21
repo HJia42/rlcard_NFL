@@ -68,8 +68,13 @@ def load_agent(env_name, agent_type, device='cpu'):
                 path = os.path.join(base_dir, 'model.pt')
             
             if os.path.exists(path):
-                checkpoint = torch.load(path, map_location=device, weights_only=False)
-                agent.load(checkpoint)
+                # Correct loading for DeepCFR:
+                # 1. Provide the directory containing 'model.pt'
+                agent.model_path = os.path.dirname(path)
+                # 2. Call load() with NO arguments
+                if not agent.load():
+                     print(f"  [Error] DeepCFR internal load failed for {path}")
+                     return None
             else:
                 print(f"  [Debug] DeepCFR model not found at:\n    1. {os.path.join(checkpoint_dir, 'model.pt')}\n    2. {path}")
                 return None
