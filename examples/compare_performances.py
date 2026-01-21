@@ -11,6 +11,60 @@ from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.utils import tournament
 
+# Pre-generated scenarios for consistency
+class Scenario:
+    def __init__(self, seed):
+        rng = np.random.RandomState(seed)
+        self.formation = rng.choice(5) # 0-4
+        self.play_type = rng.choice(2) # 0-1 (Pass/Run)
+        self.box_count = rng.choice(5) # 0-4
+        self.seed = seed
+
+class ScenarioRandomAgent(object):
+    '''Agent that replays pre-generated scenarios.'''
+    def __init__(self, scenarios, role):
+        self.scenarios = scenarios # List of Scenario objects
+        self.role = role # 'offense' or 'defense'
+        self.game_idx = 0
+        self.use_raw = False
+
+    def reset_counter(self):
+        self.game_idx = 0
+
+    def step(self, state):
+        # Determine what phase we are in and return prescheduled action
+        scenario = self.scenarios[self.game_idx]
+        
+        phase = int(state['raw_obs'][3]) if 'raw_obs' in state else state['obs'][3]
+        
+        # Mapping based on verified file content:
+        # Phase 0 is ALWAYS Formation (Offense)
+        if phase == 0:
+            return scenario.formation
+            
+        # Phase 1
+        # In Standard: Defense picks Box (0-4)
+        # In IIG: Offense picks Play (0-1)
+        if phase == 1:
+            if 'defense' in str(self.role): # If we are defense in Standard
+                 return scenario.box_count
+            else: # If we are offense in IIG
+                 return scenario.play_type
+                 
+        # Phase 2
+        # In Standard: Offense picks Play (0-1)
+        # In IIG: Defense picks Box (0-4)
+        if phase == 2:
+             if 'offense' in str(self.role): # If we are offense in Standard
+                 return scenario.play_type
+             else: # If we are defense in IIG
+                 return scenario.box_count
+                 
+        return 0 # Should not happen
+
+    def eval_step(self, state):
+        return self.step(state), {}
+
 def load_agent(env_name, agent_type, device='cpu'):
     """Load a trained agent from the default experiment path."""
     env = rlcard.make(env_name, config={'single_play': True})
@@ -24,10 +78,16 @@ def load_agent(env_name, agent_type, device='cpu'):
         print(f"  [Warn] No checkpoint dir found at {checkpoint_dir}")
         return None
 
+    # Sanitize State Shape to avoid "144 dimension" bug
+    if isinstance(env.state_shape, list) and isinstance(env.state_shape[0], list):
+        agent_state_shape = env.state_shape[0]
+    else:
+        agent_state_shape = env.state_shape
+
     try:
         if agent_type == 'ppo':
             agent = PPOAgent(
-                state_shape=env.state_shape[0],
+                state_shape=agent_state_shape,
                 num_actions=env.num_actions,
                 hidden_dims=[128, 128],
                 device=device
@@ -38,13 +98,13 @@ def load_agent(env_name, agent_type, device='cpu'):
             # In our training, we have a list of agents [PPO, PPO].
             # Let's load Player 0 (Offense) by default.
             path = os.path.join(checkpoint_dir, 'agent_0.pt')
-            agent.load(path)
+            agent.load(path) # Fix: Pass path string not loaded valid dict
             
         elif agent_type == 'nfsp':
             # Initialize agent before loading
             agent = NFSPAgent(
                 num_actions=env.num_actions,
-                state_shape=env.state_shape[0],
+                state_shape=agent_state_shape,
                 hidden_layers_sizes=[128, 128],
                 q_mlp_layers=[128, 128],
                 device=device
@@ -105,35 +165,69 @@ def extract_payoff(payoffs, player_id):
     # Standard Case: payoffs[i] is the scalar for player i
     return float(payoffs[player_id])
 
-def evaluate_margin(agent, env_name, num_games=1000):
+def evaluate_margin(agent, env_name, scenarios):
     """
-    Calculate EPA Margin against Random Baseline.
+    Calculate EPA Margin against Standardized Scenario Random Baseline.
     Returns: (Offense Margin, Defense Margin)
     """
     env = rlcard.make(env_name, config={'single_play': True})
-    random_agent = RandomAgent(num_actions=env.num_actions)
     
     # 1. Agent vs Random (Agent is Offense/Player 0)
-    env.set_agents([agent, random_agent])
-    # tournament returns rewards for all players: [p0_reward, p1_reward]
-    payoffs_off = tournament(env, num_games) 
-    print(f"DEBUG: {env_name} Off Payoffs: {payoffs_off}")
-    # We want Player 0 payoff
-    off_margin = extract_payoff(payoffs_off, 0)
+    # -----------------------------------------------
+    # Random Agent takes role 'defense' to react to scenarios
+    random_def = ScenarioRandomAgent(scenarios, role='defense')
+    env.set_agents([agent, random_def])
     
+    payoffs_off_sum = 0.0
+    random_def.reset_counter()
+    
+    for i in range(len(scenarios)):
+         random_def.game_idx = i
+         env.seed(scenarios[i].seed) # Standardize Environment Outcome
+         state, player_id = env.reset()
+         while not env.is_over():
+             action = env.agents[player_id].eval_step(state)
+             if isinstance(action, tuple): action = action[0]
+             state, player_id = env.step(action)
+             
+         # Extract Player 0 Payoff
+         payoffs_off_sum += env.get_payoffs()[0]
+         
+    off_margin = payoffs_off_sum / len(scenarios)
+    print(f"DEBUG: {env_name} Off Margin: {off_margin}")
+
     # 2. Random vs Agent (Agent is Defense/Player 1)
-    env.set_agents([random_agent, agent])
-    payoffs_def = tournament(env, num_games)
-    print(f"DEBUG: {env_name} Def Payoffs: {payoffs_def}")
-    # We want Player 1 payoff
-    def_margin = extract_payoff(payoffs_def, 1)
+    # -----------------------------------------------
+    random_off = ScenarioRandomAgent(scenarios, role='offense')
+    env.set_agents([random_off, agent])
+    
+    payoffs_def_sum = 0.0
+    random_off.reset_counter()
+    
+    for i in range(len(scenarios)):
+         random_off.game_idx = i
+         env.seed(scenarios[i].seed)
+         state, player_id = env.reset()
+         while not env.is_over():
+             action = env.agents[player_id].eval_step(state)
+             if isinstance(action, tuple): action = action[0]
+             state, player_id = env.step(action)
+             
+         # Extract Player 1 Payoff
+         payoffs_def_sum += env.get_payoffs()[1]
+         
+    def_margin = payoffs_def_sum / len(scenarios)
+    print(f"DEBUG: {env_name} Def Margin: {def_margin}")
     
     return off_margin, def_margin
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--num_games', type=int, default=500)
+    parser.add_argument('--num_games', type=int, default=1000)
     args = parser.parse_args()
+    
+    # Generate Global Scenarios
+    GLOBAL_SCENARIOS = [Scenario(seed=42+i) for i in range(args.num_games)]
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"Using device: {device}")
@@ -158,7 +252,7 @@ def main():
             agent = load_agent(env_name, agent_name, device)
             
             if agent:
-                off, def_ = evaluate_margin(agent, env_name, args.num_games)
+                off, def_ = evaluate_margin(agent, env_name, GLOBAL_SCENARIOS)
                 total = off + def_
                 
                 results[(env_name, agent_name)] = total
