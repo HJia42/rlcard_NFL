@@ -102,7 +102,7 @@ def _load_trained_agent(env, agent_type, env_name, device):
     elif agent_type == 'nfsp':
         agent = NFSPAgent(
             num_actions=env.num_actions,
-            state_shape=env.state_shape,
+            state_shape=agent_state_shape,
             hidden_layers_sizes=[64, 64],
             q_mlp_layers=[64, 64],
             device=device
