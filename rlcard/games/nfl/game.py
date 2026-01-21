@@ -13,6 +13,7 @@ Refactor Update:
 - Added Configurable Reward Function (EPA, Yards, TD).
 """
 
+import hashlib
 import numpy as np
 from copy import copy
 import os
@@ -45,9 +46,9 @@ PLAY_TYPE_ACTIONS = list(PLAY_TYPES)
 class NFLGame:
     """NFL Play-by-Play Game compatible with RLCard."""
     
-    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
-                 single_play=False, start_down=1, use_distribution_model=False, 
-                 use_cached_model=False, reward_type='epa'):
+    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None,
+                 single_play=False, start_down=1, use_distribution_model=False,
+                 use_cached_model=False, reward_type='epa', seed=None):
         """Initialize NFL Game.
         
         Args:
@@ -72,7 +73,8 @@ class NFLGame:
             print(f"Warning: Unknown reward_type '{reward_type}', defaulting to 'epa'")
             self.reward_type = 'epa'
 
-        self.np_random = np.random.RandomState()
+        self.base_seed = seed
+        self.np_random = np.random.RandomState(seed)
         
         # Initialize action spaces
         self.initial_actions = INITIAL_ACTIONS
@@ -176,6 +178,7 @@ class NFLGame:
         self.is_over_flag = False
         self.payoffs = [0, 0]
         self.history = []
+        self.play_count = 0
         
         # Calculate baseline EP for reward delta
         self.ep_before = self._calculate_ep(self.down, self.ydstogo, self.yardline)
@@ -277,6 +280,8 @@ class NFLGame:
                     self.current_player = 0
                     self.ep_before = self._calculate_ep(self.down, self.ydstogo, self.yardline)
 
+            self.play_count += 1
+
         state = self.get_state(self.current_player)
         return state, self.current_player
         
@@ -328,6 +333,7 @@ class NFLGame:
         """Sample outcome from data or model."""
         formation, play_type = off_action
         box_count, personnel = def_action
+        rng = self._get_outcome_rng(off_action, def_action)
         
         if self.use_cached_model and hasattr(self, 'cached_model'):
             # Key: (formation, play_type, box_count)
@@ -336,7 +342,7 @@ class NFLGame:
             if key in self.cached_model:
                 outcome_dist = self.cached_model[key]
                 turnover_prob = outcome_dist.get('turnover_prob', 0.0)
-                is_turnover = (self.np_random.rand() < turnover_prob)
+                is_turnover = (rng.rand() < turnover_prob)
                 
                 if is_turnover:
                     return {'yards_gained': 0, 'turnover': True}
@@ -351,23 +357,37 @@ class NFLGame:
         turnover = False
         
         if is_pass:
-            if self.np_random.rand() < 0.6:
-                yards = self.np_random.normal(11.0, 6.0)
+            if rng.rand() < 0.6:
+                yards = rng.normal(11.0, 6.0)
                 if box_count < 6:
                     yards += (6 - box_count) * 1.5
             else:
                 yards = 0
             
-            if self.np_random.rand() < 0.025:
+            if rng.rand() < 0.025:
                 turnover = True
                 
         else:
-            yards = self.np_random.normal(4.0, 3.0)
+            yards = rng.normal(4.0, 3.0)
             yards -= (box_count - 7) * 1.0
-            if self.np_random.rand() < 0.01:
+            if rng.rand() < 0.01:
                 turnover = True
 
         return {'yards_gained': yards, 'turnover': turnover}
+
+    def _get_outcome_rng(self, off_action, def_action):
+        """Create deterministic RNG for outcomes when seeded."""
+        if self.base_seed is None:
+            return self.np_random
+        formation, play_type = off_action
+        box_count, personnel = def_action
+        seed_input = (
+            f"{self.base_seed}|{self.play_count}|{self.down}|{self.ydstogo}|"
+            f"{self.yardline}|{formation}|{play_type}|{box_count}|{personnel}"
+        )
+        digest = hashlib.sha256(seed_input.encode("utf-8")).digest()
+        seed_int = int.from_bytes(digest[:8], "big") % (2**32 - 1)
+        return np.random.RandomState(seed_int)
         
     def _save_state(self):
         # Record history for step_back

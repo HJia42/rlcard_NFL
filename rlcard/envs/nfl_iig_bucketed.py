@@ -23,6 +23,7 @@ class NFLIIGBucketedEnv(Env):
             allow_step_back=config.get('allow_step_back', False),
             single_play=config.get('single_play', True),
             use_cached_model=config.get('use_cached_model', True),
+            seed=config.get('seed', None),
         )
         super().__init__(config)
         

@@ -27,10 +27,13 @@ from rlcard.utils import tournament
 
 # ========== Agent Loading ==========
 
-def load_cfr_agent(game, model_path='experiments/nfl_cfr/cfr_model'):
+def load_cfr_agent(game, model_path='experiments/nfl_cfr/cfr_model', seed=None):
     """Load CFR agent."""
     from rlcard.agents import CFRAgent
-    env = rlcard.make(game, config={'allow_step_back': True, 'single_play': True})
+    env = rlcard.make(
+        game,
+        config={'allow_step_back': True, 'single_play': True, 'seed': seed},
+    )
     agent = CFRAgent(env, model_path)
     try:
         agent.load()
@@ -41,10 +44,13 @@ def load_cfr_agent(game, model_path='experiments/nfl_cfr/cfr_model'):
         return None
 
 
-def load_mccfr_agent(game, model_path='models/mccfr'):
+def load_mccfr_agent(game, model_path='models/mccfr', seed=None):
     """Load MCCFR agent."""
     from rlcard.agents.mccfr_agent import MCCFRAgent
-    env = rlcard.make(game, config={'allow_step_back': True, 'single_play': True})
+    env = rlcard.make(
+        game,
+        config={'allow_step_back': True, 'single_play': True, 'seed': seed},
+    )
     agent = MCCFRAgent(env, model_path)
     try:
         agent.load()
@@ -55,10 +61,10 @@ def load_mccfr_agent(game, model_path='models/mccfr'):
         return None
 
 
-def load_nfsp_agent(game, model_path='models/nfsp_nfl'):
+def load_nfsp_agent(game, model_path='models/nfsp_nfl', seed=None):
     """Load NFSP agent (player 0)."""
     from rlcard.agents import NFSPAgent
-    env = rlcard.make(game, config={'single_play': True})
+    env = rlcard.make(game, config={'single_play': True, 'seed': seed})
     agent = NFSPAgent(
         num_actions=env.num_actions,
         state_shape=[11],
@@ -80,10 +86,10 @@ def load_nfsp_agent(game, model_path='models/nfsp_nfl'):
         return None
 
 
-def load_ppo_agent(game, model_path='models/ppo_nfl'):
+def load_ppo_agent(game, model_path='models/ppo_nfl', seed=None):
     """Load PPO agent."""
     from rlcard.agents.ppo_agent import PPOAgent
-    env = rlcard.make(game, config={'single_play': True})
+    env = rlcard.make(game, config={'single_play': True, 'seed': seed})
     agent = PPOAgent(
         state_shape=env.state_shape[0],
         num_actions=7,
@@ -103,34 +109,34 @@ def load_ppo_agent(game, model_path='models/ppo_nfl'):
         return None
 
 
-def load_all_agents(game):
+def load_all_agents(game, seed=None):
     """Load all available trained agents."""
     print("\nLoading trained agents...")
     
     agents = {}
     
     # CFR
-    cfr = load_cfr_agent(game)
+    cfr = load_cfr_agent(game, seed=seed)
     if cfr:
         agents['CFR'] = cfr
     
     # MCCFR
-    mccfr = load_mccfr_agent(game)
+    mccfr = load_mccfr_agent(game, seed=seed)
     if mccfr:
         agents['MCCFR'] = mccfr
     
     # NFSP
-    nfsp = load_nfsp_agent(game)
+    nfsp = load_nfsp_agent(game, seed=seed)
     if nfsp:
         agents['NFSP'] = nfsp
     
     # PPO
-    ppo = load_ppo_agent(game)
+    ppo = load_ppo_agent(game, seed=seed)
     if ppo:
         agents['PPO'] = ppo
     
     # Random baseline
-    env = rlcard.make(game, config={'single_play': True})
+    env = rlcard.make(game, config={'single_play': True, 'seed': seed})
     agents['Random'] = RandomAgent(num_actions=env.num_actions)
     
     print(f"\nLoaded {len(agents)} agents: {list(agents.keys())}")
@@ -139,9 +145,10 @@ def load_all_agents(game):
 
 # ========== Head-to-Head Comparison ==========
 
-def head_to_head(agent1, agent2, game, num_games=500):
+def head_to_head(agent1, agent2, game, num_games=500, seed=None):
     """Play agent1 vs agent2 and return EPA difference."""
-    env = rlcard.make(game, config={'single_play': True})
+    env = rlcard.make(game, config={'single_play': True, 'seed': seed})
+    env_mirror = rlcard.make(game, config={'single_play': True, 'seed': seed})
     
     # Agent1 as offense
     env.set_agents([agent1, agent2])
@@ -149,8 +156,8 @@ def head_to_head(agent1, agent2, game, num_games=500):
     off_epa = result1[0]
     
     # Agent1 as defense
-    env.set_agents([agent2, agent1])
-    result2 = tournament(env, num_games)
+    env_mirror.set_agents([agent2, agent1])
+    result2 = tournament(env_mirror, num_games)
     def_epa = result2[1]
     
     return {
@@ -160,7 +167,7 @@ def head_to_head(agent1, agent2, game, num_games=500):
     }
 
 
-def round_robin_tournament(agents, game, num_games=200):
+def round_robin_tournament(agents, game, num_games=200, seed=None):
     """Run round-robin tournament between all agents."""
     print("\n" + "=" * 60)
     print("ROUND ROBIN TOURNAMENT")
@@ -175,7 +182,7 @@ def round_robin_tournament(agents, game, num_games=200):
         for name2 in names[i+1:]:
             print(f"\n{name1} vs {name2}...")
             
-            result = head_to_head(agents[name1], agents[name2], game, num_games)
+            result = head_to_head(agents[name1], agents[name2], game, num_games, seed=seed)
             
             # Agent1 is winner if total EPA > 0
             if result['total_epa'] > 0:
@@ -213,14 +220,15 @@ def round_robin_tournament(agents, game, num_games=200):
 
 # ========== Exploitability ==========
 
-def calculate_exploitability(agent, game, num_samples=1000):
+def calculate_exploitability(agent, game, num_samples=1000, seed=None):
     """
     Estimate exploitability by sampling states and computing regret.
     
     True exploitability requires computing exact best response,
     which is expensive. This is an approximation.
     """
-    env = rlcard.make(game, config={'single_play': True})
+    env = rlcard.make(game, config={'single_play': True, 'seed': seed})
+    env_mirror = rlcard.make(game, config={'single_play': True, 'seed': seed})
     
     # Compare to random baseline
     random_agent = RandomAgent(num_actions=env.num_actions)
@@ -228,8 +236,8 @@ def calculate_exploitability(agent, game, num_samples=1000):
     env.set_agents([agent, random_agent])
     off_vs_random = tournament(env, num_samples)[0]
     
-    env.set_agents([random_agent, agent])
-    def_vs_random = tournament(env, num_samples)[1]
+    env_mirror.set_agents([random_agent, agent])
+    def_vs_random = tournament(env_mirror, num_samples)[1]
     
     # Exploitability estimate: how much better than random
     # Lower is more exploitable (random exploits it)
@@ -240,7 +248,7 @@ def calculate_exploitability(agent, game, num_samples=1000):
     }
 
 
-def compare_exploitability(agents, game):
+def compare_exploitability(agents, game, seed=None):
     """Compare exploitability across agents."""
     print("\n" + "=" * 60)
     print("EXPLOITABILITY ANALYSIS")
@@ -255,7 +263,7 @@ def compare_exploitability(agents, game):
             continue
         
         print(f"Analyzing {name}...")
-        exp = calculate_exploitability(agent, game)
+        exp = calculate_exploitability(agent, game, seed=seed)
         results[name] = exp
         print(f"  vs Random: {exp['vs_random_total']:.3f} "
               f"(Off: {exp['offense_margin']:.3f}, Def: {exp['defense_margin']:.3f})")
@@ -398,11 +406,13 @@ def main():
                         help='Run round-robin tournament')
     parser.add_argument('--all', action='store_true',
                         help='Run all analyses')
+    parser.add_argument('--seed', type=int, default=0,
+                        help='Random seed for standardized evaluation')
     
     args = parser.parse_args()
     
     # Load all agents
-    agents = load_all_agents(args.game)
+    agents = load_all_agents(args.game, seed=args.seed)
     
     if len(agents) <= 1:
         print("\nNot enough trained agents found. Train some agents first!")
@@ -410,18 +420,18 @@ def main():
     
     # Run requested analyses
     if args.all or args.tournament:
-        round_robin_tournament(agents, args.game, args.num_games)
+        round_robin_tournament(agents, args.game, args.num_games, seed=args.seed)
     
     if args.all or args.exploitability:
-        compare_exploitability(agents, args.game)
+        compare_exploitability(agents, args.game, seed=args.seed)
     
     if args.all or args.situation:
         analyze_key_situations(agents, args.game)
     
     if not any([args.all, args.tournament, args.exploitability, args.situation]):
         # Default: show everything
-        round_robin_tournament(agents, args.game, args.num_games)
-        compare_exploitability(agents, args.game)
+        round_robin_tournament(agents, args.game, args.num_games, seed=args.seed)
+        compare_exploitability(agents, args.game, seed=args.seed)
         analyze_key_situations(agents, args.game)
 
 

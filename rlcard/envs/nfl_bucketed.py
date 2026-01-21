@@ -22,6 +22,7 @@ class NFLBucketedEnv(Env):
         self.game = NFLGameBucketed(
             allow_step_back=config.get('allow_step_back', False),
             single_play=config.get('single_play', True),  # Default to single play for CFR
+            seed=config.get('seed', None),
         )
         super().__init__(config)
         

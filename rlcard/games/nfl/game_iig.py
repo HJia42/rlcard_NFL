@@ -139,6 +139,8 @@ class NFLGameIIG(NFLGame):
             'raw_obs': obs,
             'raw_legal_actions': raw_legal_actions,
         }
+        if self.phase >= 1 and self.pending_formation:
+            state['formation'] = self.pending_formation
         return state
     
     def _execute_committed_play(self):
@@ -195,6 +197,7 @@ class NFLGameIIG(NFLGame):
                          
                      self.payoffs = [float(reward_offense), -float(reward_offense)]
                      self.is_over_flag = True
+        self.play_count += 1
         
         # Prepare for next play if not over
         if not self.is_over_flag:
