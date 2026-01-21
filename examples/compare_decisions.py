@@ -43,12 +43,13 @@ def get_action_prob(agent, state):
         
     # Manual extraction based on agent type
     if isinstance(agent, PPOAgent):
-        # PPO has internal `policy` net
+        # PPO has internal `network` (ActorCritic) not `policy`
         obs = state['obs']
-        # Use underlying actor
         state_tensor = torch.from_numpy(obs).float().to(agent.device).unsqueeze(0)
         with torch.no_grad():
-             logits = agent.policy.actor(state_tensor)
+             # ActorCritic forward pass manual reconstruction
+             features = agent.network.shared(state_tensor)
+             logits = agent.network.actor(features)
              probs = torch.nn.functional.softmax(logits, dim=-1).cpu().numpy()[0]
         return probs
         
