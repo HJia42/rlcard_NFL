@@ -229,14 +229,14 @@ def main():
     print(f"{'-'*60}")
     
     for agent_name in agents:
-        std_score = results.get(('nfl-bucketed', agent_name))
-        iig_score = results.get(('nfl-iig-bucketed', agent_name))
+        std_res = results.get(('nfl-bucketed', agent_name))
+        iig_res = results.get(('nfl-iig-bucketed', agent_name))
         
-        if std_score is not None and iig_score is not None:
-            delta = std_score - iig_score
-            print(f"{agent_name.upper()}: {delta:+.3f} EPA")
+        if std_res is not None and iig_res is not None:
+             delta = std_res['total'] - iig_res['total']
+             print(f"{agent_name.upper()}: {delta:+.3f} EPA")
         else:
-            print(f"{agent_name.upper()}: Insufficient data")
+             print(f"{agent_name.upper()}: Insufficient data")
 
 if __name__ == '__main__':
     main()
