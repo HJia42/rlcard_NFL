@@ -163,7 +163,7 @@ def run_head_to_head(env, offense_agent, defense_agent, scenarios):
         # We should also seed the environment for outcome generation consistency
         env.seed(scenarios[i].seed)
         
-        state, player_id = env.init_game()
+        state, player_id = env.reset()
         while not env.is_over():
             action = env.agents[player_id].eval_step(state)
             if isinstance(action, tuple): action = action[0]
