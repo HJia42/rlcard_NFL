@@ -76,7 +76,7 @@ class NFLGameBucketed(NFLGame):
     - Phase 2: 320 × 5 × 5 defenses = 8000
     """
     
-    def __init__(self, allow_step_back=False, single_play=True):
+    def __init__(self, allow_step_back=False, single_play=True, seed=None):
         """Initialize bucketed NFL game.
         
         Args:
@@ -89,7 +89,8 @@ class NFLGameBucketed(NFLGame):
         super().__init__(
             allow_step_back=allow_step_back, 
             use_simple_model=False,  # Use fitted models for special teams
-            single_play=single_play
+            single_play=single_play,
+            seed=seed,
         )
     
     def get_state(self, player_id):

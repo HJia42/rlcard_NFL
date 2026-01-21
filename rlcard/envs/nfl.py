@@ -29,6 +29,7 @@ class NFLEnv(Env):
             use_distribution_model=config.get('use_distribution_model', False),
             use_cached_model=config.get('use_cached_model', False),
             reward_type=config.get('reward_type', 'epa'),
+            seed=config.get('seed', None),
         )
         super().__init__(config)
         

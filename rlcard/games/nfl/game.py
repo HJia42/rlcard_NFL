@@ -45,9 +45,9 @@ PLAY_TYPE_ACTIONS = list(PLAY_TYPES)
 class NFLGame:
     """NFL Play-by-Play Game compatible with RLCard."""
     
-    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None, 
-                 single_play=False, start_down=1, use_distribution_model=False, 
-                 use_cached_model=False, reward_type='epa'):
+    def __init__(self, allow_step_back=False, data_path=None, use_simple_model=None,
+                 single_play=False, start_down=1, use_distribution_model=False,
+                 use_cached_model=False, reward_type='epa', seed=None):
         """Initialize NFL Game.
         
         Args:
@@ -72,7 +72,7 @@ class NFLGame:
             print(f"Warning: Unknown reward_type '{reward_type}', defaulting to 'epa'")
             self.reward_type = 'epa'
 
-        self.np_random = np.random.RandomState()
+        self.np_random = np.random.RandomState(seed)
         
         # Initialize action spaces
         self.initial_actions = INITIAL_ACTIONS
@@ -158,12 +158,12 @@ class NFLGame:
         
         if self.single_play:
             # Randomize field position for generalizable training
-            self.yardline = int(np.random.randint(1, 100))
+            self.yardline = int(self.np_random.randint(1, 100))
             
             # Randomize ydstogo (capped by distance to goal and realistic max)
             dist_to_goal = 100 - self.yardline
             max_yds = min(20, dist_to_goal)
-            self.ydstogo = int(np.random.randint(1, max_yds + 1))
+            self.ydstogo = int(self.np_random.randint(1, max_yds + 1))
         else:
             self.ydstogo = 10
             self.yardline = 25

@@ -139,6 +139,8 @@ class NFLGameIIG(NFLGame):
             'raw_obs': obs,
             'raw_legal_actions': raw_legal_actions,
         }
+        if self.phase >= 1 and self.pending_formation:
+            state['formation'] = self.pending_formation
         return state
     
     def _execute_committed_play(self):

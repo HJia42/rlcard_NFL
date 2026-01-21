@@ -30,6 +30,7 @@ class NFLIIGEnv(Env):
             single_play=config.get('single_play', True),
             start_down=config.get('start_down', 1),
             use_cached_model=config.get('use_cached_model', False),
+            seed=config.get('seed', None),
         )
         super().__init__(config)
         
@@ -73,4 +74,3 @@ class NFLIIGEnv(Env):
             'is_over': self.game.is_over(),
             'committed_play_type': self.game.committed_play_type,
         }
-
