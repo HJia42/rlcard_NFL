@@ -40,7 +40,19 @@ class ScenarioRandomAgent(object):
         # We need the environment to tell us the phase, which it does in state['phase'] (converted from int)
         # Or state['raw_obs'][3] is the phase int.
         
-        phase = int(state['raw_obs'][3]) if 'raw_obs' in state else state['obs'][3]
+        # Robust Phase Detection
+        # NFLEnv encodes phase at index 11 of the 'obs' vector.
+        # 0.0 -> Phase 0, 0.5 -> Phase 1, 1.0 -> Phase 2.
+        if 'obs' in state and len(state['obs']) > 11:
+            val = state['obs'][11]
+            if val < 0.25: phase = 0
+            elif val < 0.75: phase = 1
+            else: phase = 2
+        else:
+            # Fallback for raw env usage (if raw_obs is array)
+            # This handles cases where wrappers haven't processed obs
+            phase = 0 # Default safety
+
         
         # Mapping based on verified file content:
         # Phase 0 is ALWAYS Formation (Offense)
