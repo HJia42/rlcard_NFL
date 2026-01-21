@@ -76,11 +76,19 @@ def _load_trained_agent(env, agent_type, env_name, device):
     base_dir = f"experiments/{env_name}_{agent_type}"
     checkpoint_dir = os.path.join(base_dir, "checkpoints")
     
+    # Sanitize State Shape
+    # Checkpoint expects 12 inputs. env.state_shape might be [[12], [12]] which np.prod converts to 144.
+    if isinstance(env.state_shape, list) and isinstance(env.state_shape[0], list):
+        # Taking the first element's shape
+        agent_state_shape = env.state_shape[0] 
+    else:
+        agent_state_shape = env.state_shape
+
     # Initialize Agent Structure
     if agent_type == 'ppo':
         agent = PPOAgent(
             num_actions=env.num_actions,
-            state_shape=env.state_shape,
+            state_shape=agent_state_shape,
             device=device
         )
         # Load latest checkpoint
