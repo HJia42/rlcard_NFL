@@ -3,115 +3,111 @@ import os
 import torch
 import numpy as np
 import rlcard
-from rlcard.agents.ppo_agent import PPOAgent
-from rlcard.agents.nfsp_agent import NFSPAgent
-from rlcard.agents.deep_cfr_agent import DeepCFRAgent
-from rlcard.utils import set_seed
 
-class SeededRandomAgent(object):
-    '''Random agent with fixed seed for fair comparison.'''
-    def __init__(self, num_actions, seed=None):
-        self.num_actions = num_actions
+# Pre-generated scenarios for consistency
+class Scenario:
+    def __init__(self, seed):
+        rng = np.random.RandomState(seed)
+        self.formation = rng.choice(5) # 0-4
+        self.play_type = rng.choice(2) # 0-1 (Pass/Run)
+        self.box_count = rng.choice(5) # 0-4
+        self.seed = seed
+
+class ScenarioRandomAgent(object):
+    '''Agent that replays pre-generated scenarios.'''
+    def __init__(self, scenarios, role):
+        self.scenarios = scenarios # List of Scenario objects
+        self.role = role # 'offense' or 'defense'
+        self.game_idx = 0
         self.use_raw = False
-        self.rng = np.random.RandomState(seed) if seed is not None else np.random
+
+    def reset_counter(self):
+        self.game_idx = 0
 
     def step(self, state):
-        return self.rng.choice(list(state['legal_actions'].keys()))
+        # Determine what phase we are in and return prescheduled action
+        scenario = self.scenarios[self.game_idx]
+        
+        # Standard: Phase 0 (Form), Phase 1 (Box), Phase 2 (Play)
+        # IIG: Phase 0 (Form), Phase 1 (Play), Phase 2 (Box)
+        
+        # But wait, step() is called multiple times per game.
+        # How do we know which move we are making without consuming the index prematurely?
+        # We need the environment to tell us the phase, which it does in state['phase'] (converted from int)
+        # Or state['raw_obs'][3] is the phase int.
+        
+        phase = int(state['raw_obs'][3]) if 'raw_obs' in state else state['obs'][3]
+        
+        # Mapping based on verified file content:
+        # Phase 0 is ALWAYS Formation (Offense)
+        if phase == 0:
+            return scenario.formation
+            
+        # Phase 1
+        # In Standard: Defense picks Box (0-4)
+        # In IIG: Offense picks Play (0-1)
+        if phase == 1:
+            if 'defense' in str(self.role): # If we are defense in Standard
+                 return scenario.box_count
+            else: # If we are offense in IIG
+                 return scenario.play_type
+                 
+        # Phase 2
+        # In Standard: Offense picks Play (0-1)
+        # In IIG: Defense picks Box (0-4)
+        if phase == 2:
+             if 'offense' in str(self.role): # If we are offense in Standard
+                 return scenario.play_type
+             else: # If we are defense in IIG
+                 return scenario.box_count
+                 
+        return 0 # Should not happen
 
     def eval_step(self, state):
-        probs = [0 for _ in range(self.num_actions)]
-        for i in state['legal_actions']:
-            probs[i] = 1/len(state['legal_actions'])
-        info = {}
-        return self.step(state), info
+        return self.step(state), {}
 
-def load_agent(env, agent_type, env_name, device, seed=42):
-    """Load a trained agent or return evaluation baseline."""
+def load_agent_with_scenarios(env, agent_type, env_name, device, scenarios, role):
+    """Load agent, injecting scenarios if random."""
     if agent_type == 'random':
-        return SeededRandomAgent(num_actions=env.num_actions, seed=seed)
+        return ScenarioRandomAgent(scenarios, role)
     
-    # Construct paths
-    base_dir = f"experiments/{env_name}_{agent_type}"
-    checkpoint_dir = os.path.join(base_dir, "checkpoints")
-    
-    # Initialize Agent Structure
-    if agent_type == 'ppo':
-        agent = PPOAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape,
-            device=device
-        )
-        # Load latest checkpoint
-        path = os.path.join(checkpoint_dir, "agent_0.pt")
-        if os.path.exists(path):
-            checkpoint = torch.load(path, map_location=device, weights_only=False)
-            agent.load(checkpoint)
-        else:
-            print(f"  [Warning] PPO model not found at {path}")
-            return None
+    # ... (Reuse existing logic for trained agents) ...
+    return load_agent(env, agent_type, env_name, device, seed=42)
 
-    elif agent_type == 'nfsp':
-        agent = NFSPAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape,
-            hidden_layers_sizes=[64, 64],
-            q_mlp_layers=[64, 64],
-            device=device
-        )
-        path = os.path.join(checkpoint_dir, "agent_0.pt") # Checkpoint folder
-        if os.path.exists(path):
-            agent.load(path)
-        else:
-             print(f"  [Warning] NFSP model not found at {path}")
-             return None
-
-    elif agent_type == 'deep_cfr':
-        agent = DeepCFRAgent(
-            env,
-            device=device
-        )
-        # DeepCFR Path Logic (Fixed)
-        path = os.path.join(checkpoint_dir, 'model.pt')
-        if not os.path.exists(path):
-            path = os.path.join(base_dir, 'model.pt')
-        
-        if os.path.exists(path):
-            agent.model_path = os.path.dirname(path)
-            if not agent.load():
-                 print(f"  [Error] DeepCFR internal load failed for {path}")
-                 return None
-        else:
-            print(f"  [Warning] DeepCFR model not found at {path}")
-            return None
-    
-    else:
-        return None
-        
-    return agent
-
-def run_head_to_head(env, offense_agent, defense_agent, num_games=2000):
-    """Run a specific matchups and return average Payoff (EPA)."""
-    # Set agents
+def run_head_to_head(env, offense_agent, defense_agent, scenarios):
+    """Run matchups using shared scenarios."""
     env.set_agents([offense_agent, defense_agent])
-    
     total_epa = 0.0
     
-    for _ in range(num_games):
+    # Reset scenario counters if they are ScenarioAgents
+    if hasattr(offense_agent, 'reset_counter'): offense_agent.reset_counter()
+    if hasattr(defense_agent, 'reset_counter'): defense_agent.reset_counter()
+    
+    for i in range(len(scenarios)):
+        # Increment counters manually at start of game loop (since step calls logic is stateless)
+        # Actually ScenarioAgent needs to know current game index
+        if hasattr(offense_agent, 'game_idx'): offense_agent.game_idx = i
+        if hasattr(defense_agent, 'game_idx'): defense_agent.game_idx = i
+        
+        # We should also seed the environment for outcome generation consistency
+        env.seed(scenarios[i].seed)
+        
         state, player_id = env.init_game()
         while not env.is_over():
-            action = env.agents[player_id].eval_step(state) # Use eval_step
-            # Handle different return formats (DeepCFR returns int, PPO returns tuple)
-            if isinstance(action, tuple):
-                 action = action[0]
-            
+            action = env.agents[player_id].eval_step(state)
+            if isinstance(action, tuple): action = action[0]
             state, player_id = env.step(action)
         
-        # Game over - get offense payoff (index 0)
         total_epa += env.get_payoffs()[0]
         
-    return total_epa / num_games
+    return total_epa / len(scenarios)
 
-def run_league(league_name, env_name, agent_names, num_games=2000):
+# Define Scenarios Global
+NUM_GAMES = 5000
+GLOBAL_SCENARIOS = [Scenario(seed=42+i) for i in range(NUM_GAMES)]
+
+# Updated run_league signature to use scenarios
+def run_league(league_name, env_name, agent_names):
     print(f"\n{'='*60}")
     print(f"Starting {league_name} (Env: {env_name})")
     print(f"{'='*60}")
@@ -120,13 +116,9 @@ def run_league(league_name, env_name, agent_names, num_games=2000):
     print(f"Using device: {device}")
     
     # 1. Initialize Environment
-    # We create a dummy env just to initialize agents
     if 'iig' in env_name:
         from rlcard.envs.nfl_iig import NFLIIGEnv
-        env = NFLIIGEnv(config={'allow_step_back':False, 'seed':42}) # Raw env for now/wrapper later
-        # Actually use make to get correct wrappers if needed, but wrapper often changes state shape
-        # Let's use raw class to avoid registration issues for now, or use make if registered
-        # Re-using direct class instantiation for safety as in train script
+        env = NFLIIGEnv(config={'allow_step_back':False, 'seed':42})
     else:
         from rlcard.envs.nfl import NFLEnv
         env = NFLEnv(config={'allow_step_back':False, 'seed':42})
@@ -134,25 +126,11 @@ def run_league(league_name, env_name, agent_names, num_games=2000):
     # Enable Cached Model for Speed
     env.game.use_cached_model = True
     env.game.use_simple_model = False
-    
-    # 2. Load All Agents
-    agents = {}
-    for name in agent_names:
-        print(f"Loading {name}...")
-        agent = load_agent(env, name.lower(), env_name, device)
-        if agent is None:
-            print(f"  FAILED to load {name}")
-        else:
-            # Set to eval mode if applicable
-            if hasattr(agent, 'set_mode'):
-                agent.set_mode(rlcard.agents.Agent.EVAL)
-            agents[name] = agent
             
-    # 3. Round Robin
-    # Row = Offense, Col = Defense
+    # 2. Round Robin
     matrix = np.zeros((len(agent_names), len(agent_names)))
     
-    print("\nRunning Matchups...")
+    print("\nRunning Matchups (Scenario Based)...")
     header = f"{'Off / Def':<12} | " + " | ".join([f"{name:^10}" for name in agent_names])
     print("-" * len(header))
     print(header)
@@ -161,15 +139,21 @@ def run_league(league_name, env_name, agent_names, num_games=2000):
     for i, off_name in enumerate(agent_names):
         row_str = f"{off_name:<12} | "
         for j, def_name in enumerate(agent_names):
-            if off_name not in agents or def_name not in agents:
+            # Load Agents FRESH for every matchup to ensure clean state
+            # Pass Role for Random Agent scenario interpretation
+            off_agent = load_agent_with_scenarios(env, off_name.lower(), env_name, device, GLOBAL_SCENARIOS, role='offense')
+            def_agent = load_agent_with_scenarios(env, def_name.lower(), env_name, device, GLOBAL_SCENARIOS, role='defense')
+            
+            if off_agent is None or def_agent is None:
                 matrix[i, j] = np.nan
                 row_str += f"{'N/A':^10} | "
                 continue
-                
-            off_agent = agents[off_name]
-            def_agent = agents[def_name]
+
+            # Set Eval Mode
+            if hasattr(off_agent, 'set_mode'): off_agent.set_mode(rlcard.agents.Agent.EVAL)
+            if hasattr(def_agent, 'set_mode'): def_agent.set_mode(rlcard.agents.Agent.EVAL)
             
-            avg_epa = run_head_to_head(env, off_agent, def_agent, num_games)
+            avg_epa = run_head_to_head(env, off_agent, def_agent, GLOBAL_SCENARIOS)
             matrix[i, j] = avg_epa
             row_str += f"{avg_epa:^10.3f} | "
             
@@ -182,7 +166,8 @@ if __name__ == '__main__':
     agent_list = ['PPO', 'NFSP', 'Deep_CFR', 'Random']
     
     # Run Standard League
-    run_league("Standard League (Perfect Info)", "nfl-bucketed", agent_list, num_games=5000)
+    run_league("Standard League (Perfect Info)", "nfl-bucketed", agent_list)
     
     # Run IIG League
-    run_league("IIG League (Hidden Info)", "nfl-iig-bucketed", agent_list, num_games=5000)
+    run_league("IIG League (Hidden Info)", "nfl-iig-bucketed", agent_list)
+
