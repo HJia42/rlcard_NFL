@@ -11,15 +11,22 @@ import sys
 class Quiet:
     def __enter__(self):
         self._original_stdout = sys.stdout
+        self._original_stderr = sys.stderr
         sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
     def __exit__(self, exc_type, exc_val, exc_tb):
         sys.stdout.close()
+        sys.stderr.close()
         sys.stdout = self._original_stdout
+        sys.stderr = self._original_stderr
 
 def load_agent(env_name, agent_type, device='cpu'):
     """Load a trained agent helper."""
+    # We can rely on Quiet in main() covering this, or wrap here too.
+    # Let's clean up this function to not create env if not needed or just be quiet.
     with Quiet():
         env = rlcard.make(env_name, config={'single_play': True})
+    
     if isinstance(env.state_shape, list) and isinstance(env.state_shape[0], list):
          agent_state_shape = env.state_shape[0]
     else:
@@ -31,7 +38,6 @@ def load_agent(env_name, agent_type, device='cpu'):
     try:
         if agent_type == 'ppo':
             agent = PPOAgent(state_shape=agent_state_shape, num_actions=env.num_actions, hidden_dims=[128, 128], device=device)
-            # PPO Load with weights_only=False fix if needed (default in older torch is fine warning)
             with Quiet():
                 agent.load(os.path.join(checkpoint_dir, 'agent_0.pt'))
         elif agent_type == 'deep_cfr':
@@ -43,8 +49,7 @@ def load_agent(env_name, agent_type, device='cpu'):
         else:
             return None
         return agent
-    except Exception as e:
-        # print(f"Error loading {agent_type}: {e}")
+    except Exception:
         return None
 
 def get_action_prob(agent, state):
@@ -83,8 +88,6 @@ def main():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     # Define interesting Situations (Down, Distance)
-    # We fix Formation to SHOTGUN (Neutral/Passing baseline) 
-    # and Yardline to 40 (Mid-field, avoiding Redzone edge cases initially)
     situations = [
         (1, 10, "1st & 10"),
         (2, 10, "2nd & Long (10)"),
@@ -106,6 +109,11 @@ def main():
     print(f"{'Agent':<10} | {'Situation':<20} | {'Std Pass%':<10} | {'IIG Pass%':<10} | {'Delta':<10}")
     print("-" * 75)
 
+    # Pre-load environments ONCE to avoid repeated "Loaded..." logs
+    with Quiet():
+        std_env_instance = rlcard.make('nfl-bucketed', config={'single_play': True})
+        iig_env_instance = rlcard.make('nfl-iig-bucketed', config={'single_play': True})
+
     for agent_name in agents:
         std_agent = load_agent('nfl-bucketed', agent_name, device)
         iig_agent = load_agent('nfl-iig-bucketed', agent_name, device)
@@ -114,8 +122,7 @@ def main():
         results = []
         
         for down, dist, label in situations:
-            def get_state(env_name, d, dst):
-                env = rlcard.make(env_name, config={'single_play': True})
+            def get_state(env, d, dst):
                 env.reset()
                 env.game.down = d
                 env.game.ydstogo = dst
@@ -123,18 +130,43 @@ def main():
                 env.game.pending_formation = fixed_formation 
                 env.game.current_player = 0
                 
-                if 'iig' in env_name:
+                # Check based on env properties or name if we had it. 
+                # Better to just use the instance logic
+                if isinstance(env.game, rlcard.games.nfl.game_iig.NFLGameIIG): # Safe instance check if imported
                     env.game.phase = 1 
-                    state = env.get_state(0)
+                # Or just duck typing/attribute check
+                elif hasattr(env.game, 'committed_play_type'):
+                     env.game.phase = 1
                 else: 
-                    env.game.phase = 2 
-                    # Neutral Box for Standard
-                    env.game.pending_defense_action = (6, 'Standard') 
-                    state = env.get_state(0)
-                return state
+                     env.game.phase = 2 
+                     env.game.pending_defense_action = (6, 'Standard') 
+                
+                # Actually, simpliest way since we pass explicit envs:
+                # We know std_env is std, iig is iig.
+                # Just logic based on caller.
+                return env.get_state(0)
+
+            # Manual setup for known env types
+            # Std Env
+            std_env_instance.reset()
+            std_env_instance.game.down = down
+            std_env_instance.game.ydstogo = dist
+            std_env_instance.game.yardline = fixed_yardline
+            std_env_instance.game.pending_formation = fixed_formation
+            std_env_instance.game.current_player = 0
+            std_env_instance.game.phase = 2
+            std_env_instance.game.pending_defense_action = (6, 'Standard')
+            std_state = std_env_instance.get_state(0)
             
-            std_state = get_state('nfl-bucketed', down, dist)
-            iig_state = get_state('nfl-iig-bucketed', down, dist)
+            # IIG Env
+            iig_env_instance.reset()
+            iig_env_instance.game.down = down
+            iig_env_instance.game.ydstogo = dist
+            iig_env_instance.game.yardline = fixed_yardline
+            iig_env_instance.game.pending_formation = fixed_formation
+            iig_env_instance.game.current_player = 0
+            iig_env_instance.game.phase = 1 
+            iig_state = iig_env_instance.get_state(0)
             
             std_probs = get_action_prob(std_agent, std_state)
             iig_probs = get_action_prob(iig_agent, iig_state)
