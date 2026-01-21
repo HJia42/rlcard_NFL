@@ -69,7 +69,8 @@ def get_action_prob(agent, state):
              # DeepCFR output is keyed by action index, we need valid list
              full_probs = np.zeros(agent.num_actions)
              for a, p in info['probs'].items():
-                 full_probs[a] = p
+                 # Keys might be str or np.int, cast to native int
+                 full_probs[int(a)] = p
              return full_probs
     
     return np.zeros(2)
@@ -80,13 +81,15 @@ def main():
     # Define interesting States (Formations)
     # We fix Down/Distance to standard 1st & 10 to isolate Formation effect
     # Formation Indices: 0: Shotgun, 1: Singleback, 2: I_Form, 3: Pistol, 4: Empty (Example mapping)
-    formations = {
-        0: 'Shotgun',
-        1: 'Singleback',
-        2: 'I_Form',
-        3: 'Pistol', 
-        4: 'Empty'
-    }
+    # MUST match game.py definition: ("SHOTGUN", "SINGLEBACK", "UNDER CENTER", "I_FORM", "EMPTY")
+    # Note: "Pistol" is not in default game.py? Let's check keys.
+    # User's formation map in main() was:
+    # 0: 'Shotgun', 1: 'Singleback', 2: 'I_Form', 3: 'Pistol', 4: 'Empty'
+    # Actual game.py: SHOTGUN, SINGLEBACK, UNDER CENTER, I_FORM, EMPTY.
+    # We should match the indices to the strings the game uses.
+    
+    game_formations = ["SHOTGUN", "SINGLEBACK", "UNDER CENTER", "I_FORM", "EMPTY"]
+    formations = {i: name for i, name in enumerate(game_formations)}
     
     agents = ['ppo', 'deep_cfr'] # NFSP output is Q-values, less comparable directly to prob
     
@@ -106,21 +109,17 @@ def main():
             # We must use the REAL environment to generate the state to be safe.
             
             # Helper to generate state
-            def get_state(env_name, formation_idx):
+            def get_state(env_name, formation_name):
                 env = rlcard.make(env_name, config={'single_play': True})
                 env.reset()
                 # Hack: Force the state to match our criteria
                 # We need to simulate being in the Phase where Offense chooses Play Type
                 # Std: Phase 2 (After Def Box). IIG: Phase 1 (Before Def Box).
                 
-                # ... This is tricky because Std Agent expects Box Count in state, IIG does not.
-                # If we compare them, we must give Std Agent a "Average" box or iterate all boxes?
-                # Let's assume Box Count 2 (Neutral/Nickel) for Std Agent comparison.
-                
                 env.game.down = 1
                 env.game.ydstogo = 10
                 env.game.yardline = 25
-                env.game.pending_formation = formation_idx # Set formation
+                env.game.pending_formation = formation_name # Set formation STRING
                 env.game.current_player = 0
                 
                 if 'iig' in env_name:
@@ -136,8 +135,8 @@ def main():
                     
                 return state
             
-            std_state = get_state('nfl-bucketed', f_idx)
-            iig_state = get_state('nfl-iig-bucketed', f_idx)
+            std_state = get_state('nfl-bucketed', f_name)
+            iig_state = get_state('nfl-iig-bucketed', f_name)
             
             # Predict
             # Actions: 0=Pass, 1=Run (Check specific mapping in game.py PLAY_TYPE_ACTIONS)
