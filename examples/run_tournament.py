@@ -5,14 +5,30 @@ import numpy as np
 import rlcard
 from rlcard.agents.ppo_agent import PPOAgent
 from rlcard.agents.nfsp_agent import NFSPAgent
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.utils import set_seed
 
-def load_agent(env, agent_type, env_name, device):
+class SeededRandomAgent(object):
+    '''Random agent with fixed seed for fair comparison.'''
+    def __init__(self, num_actions, seed=None):
+        self.num_actions = num_actions
+        self.use_raw = False
+        self.rng = np.random.RandomState(seed) if seed is not None else np.random
+
+    def step(self, state):
+        return self.rng.choice(list(state['legal_actions'].keys()))
+
+    def eval_step(self, state):
+        probs = [0 for _ in range(self.num_actions)]
+        for i in state['legal_actions']:
+            probs[i] = 1/len(state['legal_actions'])
+        info = {}
+        return self.step(state), info
+
+def load_agent(env, agent_type, env_name, device, seed=42):
     """Load a trained agent or return evaluation baseline."""
     if agent_type == 'random':
-        return RandomAgent(num_actions=env.num_actions)
+        return SeededRandomAgent(num_actions=env.num_actions, seed=seed)
     
     # Construct paths
     base_dir = f"experiments/{env_name}_{agent_type}"
