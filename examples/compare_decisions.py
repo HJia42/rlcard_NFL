@@ -128,7 +128,9 @@ def main():
                 else: 
                     # Standard
                     env.game.phase = 2 # Play Type Selection
-                    env.game.pending_defense_action = (2, 0) # Box Count 2 (Neutral)
+                    # Defense Action must be valid (Box, Personnel) tuple from DEFENSE_ACTIONS
+                    # Box 6 is neutral-ish. Personnel is 'Standard'.
+                    env.game.pending_defense_action = (6, 'Standard') 
                     state = env.get_state(0)
                     
                 return state
