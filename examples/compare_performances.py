@@ -111,62 +111,82 @@ def extract_payoff(payoffs, player_id):
     # Standard Case: payoffs[i] is the scalar for player i
     return float(payoffs[player_id])
 
-def evaluate_margin(agent, env_name, num_games):
+def evaluate_margin(agent, env_name, num_games, num_iterations):
     """
-    Calculate EPA Margin against Standard Random Baseline.
-    Returns: (Offense Margin, Defense Margin)
+    Calculate EPA Margin against Standard Random Baseline with Confidence Intervals.
+    Returns: 
+        off_margin: Mean Offense Margin
+        off_ci: 95% CI for Offense
+        def_margin: Mean Defense Margin
+        def_ci: 95% CI for Defense
     """
     env = rlcard.make(env_name, config={'single_play': True})
     
-    # 1. Agent vs Random (Agent is Offense/Player 0)
-    # -----------------------------------------------
+    # Lists to store mean results from each iteration
+    off_means = []
+    def_means = []
+    
     random_agent = RandomAgent(num_actions=env.num_actions)
-    env.set_agents([agent, random_agent])
     
-    payoffs_off_sum = 0.0
-    
-    # Simple Loop
-    for _ in range(num_games):
-         state, player_id = env.reset()
-         while not env.is_over():
-             action = env.agents[player_id].eval_step(state)
-             if isinstance(action, tuple): action = action[0]
-             state, player_id = env.step(action)
+    # Run N Iterations
+    for it in range(num_iterations):
+        # 1. Agent vs Random (Agent is Offense/Player 0)
+        # -----------------------------------------------
+        env.set_agents([agent, random_agent])
+        payoffs_off_sum = 0.0
         
-         # Extract Player 0 Payoff
-         payoffs_off_sum += env.get_payoffs()[0]
-         
-    off_margin = payoffs_off_sum / num_games
-    print(f"DEBUG: {env_name} Off Margin: {off_margin}")
-
-    # 2. Random vs Agent (Agent is Defense/Player 1)
-    # -----------------------------------------------
-    env.set_agents([random_agent, agent])
-    
-    payoffs_def_sum = 0.0
-    
-    for _ in range(num_games):
-         state, player_id = env.reset()
-         while not env.is_over():
-             action = env.agents[player_id].eval_step(state)
-             if isinstance(action, tuple): action = action[0]
-             state, player_id = env.step(action)
+        for _ in range(num_games):
+             state, player_id = env.reset()
+             while not env.is_over():
+                 action = env.agents[player_id].eval_step(state)
+                 if isinstance(action, tuple): action = action[0]
+                 state, player_id = env.step(action)
+            
+             payoffs_off_sum += env.get_payoffs()[0]
              
-         # Extract Player 1 Payoff
-         payoffs_def_sum += env.get_payoffs()[1]
-         
-    def_margin = payoffs_def_sum / num_games
-    print(f"DEBUG: {env_name} Def Margin: {def_margin}")
+        off_means.append(payoffs_off_sum / num_games)
+        
+        # 2. Random vs Agent (Agent is Defense/Player 1)
+        # -----------------------------------------------
+        env.set_agents([random_agent, agent])
+        payoffs_def_sum = 0.0
+        
+        for _ in range(num_games):
+             state, player_id = env.reset()
+             while not env.is_over():
+                 action = env.agents[player_id].eval_step(state)
+                 if isinstance(action, tuple): action = action[0]
+                 state, player_id = env.step(action)
+                 
+             payoffs_def_sum += env.get_payoffs()[1]
+             
+        def_means.append(payoffs_def_sum / num_games)
+        print(f"  Iteration {it+1}/{num_iterations} complete...", end='\r')
+
+    # Calculate Statistics
+    off_mean = np.mean(off_means)
+    off_std = np.std(off_means, ddof=1) # Sample STD
+    off_ci = 1.96 * (off_std / np.sqrt(num_iterations)) # 95% CI
     
-    return off_margin, def_margin
+    def_mean = np.mean(def_means)
+    def_std = np.std(def_means, ddof=1)
+    def_ci = 1.96 * (def_std / np.sqrt(num_iterations))
+    
+    print(f"  Completed {num_iterations} iterations.                              ")
+    print(f"DEBUG: {env_name} Off: {off_mean:.3f} +/- {off_ci:.3f}")
+    print(f"DEBUG: {env_name} Def: {def_mean:.3f} +/- {def_ci:.3f}")
+    
+    return off_mean, off_ci, def_mean, def_ci
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--num_games', type=int, default=1000)
+    parser.add_argument('--num_games', type=int, default=10000, help="Games per iteration")
+    parser.add_argument('--num_iterations', type=int, default=100, help="Number of iterations for CI")
     args = parser.parse_args()
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"Using device: {device}")
+    print(f"Config: {args.num_iterations} iterations of {args.num_games} games each.")
     
     envs = [
         ('nfl-bucketed', "Standard (Perfect Info)"), 
@@ -177,9 +197,9 @@ def main():
     
     results = {}
     
-    print(f"\n{'='*80}")
-    print(f"{'Environment':<25} | {'Agent':<10} | {'Off Margin':<10} | {'Def Margin':<10} | {'Total':<10}")
-    print(f"{'-'*80}")
+    print(f"\n{'='*100}")
+    print(f"{'Environment':<25} | {'Agent':<10} | {'Off Margin (95% CI)':<20} | {'Def Margin (95% CI)':<20} | {'Total':<10}")
+    print(f"{'-'*100}")
     
     for env_name, env_label in envs:
         for agent_name in agents:
@@ -188,14 +208,18 @@ def main():
             agent = load_agent(env_name, agent_name, device)
             
             if agent:
-                off, def_ = evaluate_margin(agent, env_name, args.num_games)
-                total = off + def_
+                off_m, off_ci, def_m, def_ci = evaluate_margin(agent, env_name, args.num_games, args.num_iterations)
+                total = off_m + def_m
                 
-                results[(env_name, agent_name)] = total
+                # Store Mean and CI for both Offense and Defense for later analysis if needed
+                results[(env_name, agent_name)] = {'total': total, 'off': off_m, 'def': def_m}
                 
-                print(f"{env_label:<25} | {agent_name.upper():<10} | {off:>10.3f} | {def_:>10.3f} | {total:>10.3f}")
+                off_str = f"{off_m:.3f} +/- {off_ci:.3f}"
+                def_str = f"{def_m:.3f} +/- {def_ci:.3f}"
+                
+                print(f"{env_label:<25} | {agent_name.upper():<10} | {off_str:>20} | {def_str:>20} | {total:>10.3f}")
             else:
-                print(f"{env_label:<25} | {agent_name.upper():<10} | {'N/A':>10} | {'N/A':>10} | {'N/A':>10}")
+                print(f"{env_label:<25} | {agent_name.upper():<10} | {'N/A':>20} | {'N/A':>20} | {'N/A':>10}")
                 
     print(f"{'='*80}\n")
     
