@@ -3,7 +3,10 @@ import os
 import torch
 import numpy as np
 import rlcard
-from rlcard.agents import PPOAgent, NFSPAgent, RandomAgent, DeepCFRAgent
+from rlcard.agents.ppo_agent import PPOAgent
+from rlcard.agents.nfsp_agent import NFSPAgent
+from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 from rlcard.utils import set_seed
 
 def load_agent(env, agent_type, env_name, device):
