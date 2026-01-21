@@ -224,19 +224,31 @@ def main():
     print(f"{'='*80}\n")
     
     # Value of Information Analysis
-    print("Value of Information Analysis (Standard Margin - IIG Margin)")
-    print("Positive = Value of knowing current play/formation vs pre-commitment")
-    print(f"{'-'*60}")
+    print("\nValue of Information Analysis (Standard - IIG)")
+    print("Positive Delta = Agent performed BETTER in Standard Env")
+    print(f"{'-'*80}")
+    print(f"{'Agent':<10} | {'Offense Delta':<15} | {'Defense Delta':<15} | {'Net Impact':<15}")
+    print(f"{'-'*80}")
     
     for agent_name in agents:
         std_res = results.get(('nfl-bucketed', agent_name))
         iig_res = results.get(('nfl-iig-bucketed', agent_name))
         
         if std_res is not None and iig_res is not None:
-             delta = std_res['total'] - iig_res['total']
-             print(f"{agent_name.upper()}: {delta:+.3f} EPA")
+             # Offense Delta: Std Off - IIG Off
+             off_delta = std_res['off'] - iig_res['off']
+             
+             # Defense Delta: Std Def - IIG Def
+             # Note: Defense scores are negative (EPA allowed). 
+             # A more negative score is better for defense? No, usually closer to 0 or negative is good for D.
+             # Let's keep it simple: Raw EPA Difference.
+             def_delta = std_res['def'] - iig_res['def']
+             
+             net_impact = off_delta + def_delta
+             
+             print(f"{agent_name.upper():<10} | {off_delta:>15.3f} | {def_delta:>15.3f} | {net_impact:>15.3f}")
         else:
-             print(f"{agent_name.upper()}: Insufficient data")
+             print(f"{agent_name.upper():<10} | {'Insufficient data':>45}")
 
 if __name__ == '__main__':
     main()
