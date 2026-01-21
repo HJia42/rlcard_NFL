@@ -6,9 +6,20 @@ from rlcard.agents.ppo_agent import PPOAgent
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.deep_cfr_agent import DeepCFRAgent
 
+import sys
+
+class Quiet:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+
 def load_agent(env_name, agent_type, device='cpu'):
     """Load a trained agent helper."""
-    env = rlcard.make(env_name, config={'single_play': True})
+    with Quiet():
+        env = rlcard.make(env_name, config={'single_play': True})
     if isinstance(env.state_shape, list) and isinstance(env.state_shape[0], list):
          agent_state_shape = env.state_shape[0]
     else:
@@ -21,12 +32,14 @@ def load_agent(env_name, agent_type, device='cpu'):
         if agent_type == 'ppo':
             agent = PPOAgent(state_shape=agent_state_shape, num_actions=env.num_actions, hidden_dims=[128, 128], device=device)
             # PPO Load with weights_only=False fix if needed (default in older torch is fine warning)
-            agent.load(os.path.join(checkpoint_dir, 'agent_0.pt'))
+            with Quiet():
+                agent.load(os.path.join(checkpoint_dir, 'agent_0.pt'))
         elif agent_type == 'deep_cfr':
             agent = DeepCFRAgent(env, device=device)
             path = os.path.join(checkpoint_dir, 'model.pt')
             agent.model_path = os.path.dirname(path) if os.path.exists(path) else base_dir
-            if not agent.load(): return None
+            with Quiet():
+                if not agent.load(): return None
         else:
             return None
         return agent
