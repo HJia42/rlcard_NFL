@@ -122,7 +122,7 @@ def train(args):
     
     # Initialize Environment
     config = {
-        'single_play': True,
+        'single_play': not args.full_game,
         'reward_type': args.reward_type,
         'use_distribution_model': True, # Use cached distribution model
         'seed': 42,
@@ -269,6 +269,11 @@ if __name__ == '__main__':
         default='epa',
         choices=['epa', 'yards', 'touchdown', 'score'],
         help='Reward function type (epa, yards, touchdown, score)'
+    )
+    parser.add_argument(
+        '--full_game',
+        action='store_true',
+        help='Train on full drives (continue after first down) instead of single plays'
     )
     
     args = parser.parse_args()

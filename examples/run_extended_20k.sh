@@ -6,22 +6,22 @@ export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export TORCH_NUM_THREADS=1
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent ppo --num_episodes 4000000 --resume > logs/ppo_standard_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent ppo --num_episodes 500000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/ppo_standard_score_full_500k.log 2>&1 &
 echo "Started PPO (Standard) [PID $!]"
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent nfsp --num_episodes 4000000 --resume > logs/nfsp_standard_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent nfsp --num_episodes 500000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/nfsp_standard_score_full_500k.log 2>&1 &
 echo "Started NFSP (Standard) [PID $!]"
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent deep_cfr --num_episodes 40000 --resume > logs/deep_cfr_standard_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-bucketed --agent deep_cfr --num_episodes 50000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/deep_cfr_standard_score_full_50k.log 2>&1 &
 echo "Started DeepCFR (Standard) [PID $!]"
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent ppo --num_episodes 4000000 --resume > logs/ppo_iig_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent ppo --num_episodes 500000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/ppo_iig_score_full_500k.log 2>&1 &
 echo "Started PPO (IIG) [PID $!]"
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent nfsp --num_episodes 4000000 --resume > logs/nfsp_iig_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent nfsp --num_episodes 500000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/nfsp_iig_score_full_500k.log 2>&1 &
 echo "Started NFSP (IIG) [PID $!]"
 
-nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent deep_cfr --num_episodes 40000 --resume > logs/deep_cfr_iig_40k.log 2>&1 &
+nohup python3 examples/train_bucketed_agents.py --env nfl-iig-bucketed --agent deep_cfr --num_episodes 50000 --reward_type score --full_game --log_dir experiments/nfl_score_full --resume > logs/deep_cfr_iig_score_full_50k.log 2>&1 &
 echo "Started DeepCFR (IIG) [PID $!]"
 
 echo "---------------------------------------------------"
