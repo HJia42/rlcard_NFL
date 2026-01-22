@@ -117,14 +117,13 @@ def reorganize_trajectories(trajectories, payoffs):
 
 def train(args):
     # Make models directory
-    log_dir = f'experiments/{args.env}_{args.agent}'
+    log_dir = args.log_dir
     os.makedirs(log_dir, exist_ok=True)
     
     # Initialize Environment
-    # We force 'epa' reward as requested
     config = {
         'single_play': True,
-        'reward_type': 'epa',
+        'reward_type': args.reward_type,
         'use_distribution_model': True, # Use cached distribution model
         'seed': 42,
         'allow_step_back': args.agent == 'deep_cfr', # DeepCFR requires step_back
@@ -258,6 +257,19 @@ if __name__ == '__main__':
     parser.add_argument('--evaluate_every', type=int, default=100)
     parser.add_argument('--checkpoint_every', type=int, default=500, help="Save checkpoint every N episodes")
     parser.add_argument('--resume', action='store_true', help="Resume from last checkpoint if available")
+    parser.add_argument(
+        '--log_dir', 
+        type=str, 
+        default='experiments/nfl_experiment',
+        help='Directory for saving logs and checkpoints'
+    )
+    parser.add_argument(
+        '--reward_type',
+        type=str,
+        default='epa',
+        choices=['epa', 'yards', 'touchdown', 'score'],
+        help='Reward function type (epa, yards, touchdown, score)'
+    )
     
     args = parser.parse_args()
     train(args)

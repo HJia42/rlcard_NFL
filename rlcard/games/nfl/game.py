@@ -270,6 +270,10 @@ class NFLGame:
                             # Opponent gets ball 100 - yardline
                             ep_after = -self._calculate_ep(1, 10, 100 - self.yardline)
                             reward_offense = ep_after - self.ep_before
+                        elif self.reward_type == 'score':
+                            # Opponent gets ball at 100 - yardline
+                            ep_opp = self._calculate_ep(1, 10, 100 - self.yardline)
+                            reward_offense = -ep_opp
                             
                         self.payoffs = [float(reward_offense), -float(reward_offense)]
                         self.is_over_flag = True
@@ -292,6 +296,25 @@ class NFLGame:
         
         elif self.reward_type == 'touchdown':
             return 0.0 # Handled in step()
+            
+        elif self.reward_type == 'score':
+            # Score-based reward (Hybrid)
+            # - Touchdown: +7.0 (Simulates 6 + XP)
+            # - Turnover: -EP(Opponent Start). Penalize giving ball back.
+            # - Safety: -2.0 (Not fully implemented, but concept holds)
+            # - Intermediate: 0.0 (Sparse)
+            
+            if is_touchdown:
+                return 7.0
+            
+            if turnover:
+                current_yl = self.yardline + yards_gained
+                # Opponent starts at '100 - current_yl'
+                # Opponent EP is calculated from their perspective
+                ep_opp = self._calculate_ep(1, 10, 100 - current_yl)
+                return -ep_opp
+                
+            return 0.0
             
         else: # 'epa' (Default)
             if turnover:
