@@ -126,14 +126,30 @@ class NFLGameBucketed(NFLGame):
             obs_tuple = (self.phase, down_bucket, distance_bucket, field_bucket, formation_idx, defense_idx)
         
         # Override obs with bucketed version for neural networks
-        obs_array = np.zeros(12, dtype=np.float32)
+        # Fixed (2025-01-27): Expanded to 22 dimensions to include contest (Formation/Defense)
+        # 0-2: Buckets (Down, Dist, Field)
+        # 3-7: Formation One-Hot (5)
+        # 8-12: Defense One-Hot (5)
+        # 21: Phase
+        obs_array = np.zeros(22, dtype=np.float32)
         obs_array[0] = down_bucket / 3.0
         obs_array[1] = distance_bucket / 3.0
         obs_array[2] = field_bucket / 19.0
-        obs_array[11] = self.phase / 2.0
+        obs_array[21] = self.phase / 2.0
+
+        # Add Formation Context (visible in Phase 1 & 2)
+        if self.phase >= 1 and self.pending_formation in INITIAL_ACTIONS:
+            form_idx = INITIAL_ACTIONS.index(self.pending_formation)
+            obs_array[3 + form_idx] = 1.0
+        
+        # Add Defense Context (visible in Phase 2)
+        if self.phase == 2 and self.pending_defense_action in DEFENSE_ACTIONS:
+            def_idx = DEFENSE_ACTIONS.index(self.pending_defense_action)
+            obs_array[8 + def_idx] = 1.0
         
         # Start with base state and add bucketed extras
         state = base_state.copy()
+
         state['obs'] = obs_array
         state['obs_tuple'] = obs_tuple
         state['phase'] = self.phase  # Ensure int phase
