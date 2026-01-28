@@ -27,9 +27,17 @@ class NFLBucketedEnv(Env):
         super().__init__(config)
         
         # Bucketed observations are smaller
-        # 3 dims: [down_bucket, distance_bucket, field_bucket] + phase
-        # Padded to 12 for consistency with standard NFL env (with phase encoding)
-        self.state_shape = [[12], [12]]
+        # 3 dims: [down_bucket, distance_bucket, field_bucket] = 3
+        # Phase = 1
+        # Formation One-Hot = 5 (Visible in Phase 1 & 2)
+        # Defense One-Hot = 5 (Visible in Phase 2)
+        # Total = 3 + 1 + 5 + 5 = 14 -> Padded to 22 for safety/future buffer or alignment
+        # Actually, let's correspond exactly:
+        # [0-2] Buckets
+        # [3-7] Formation
+        # [8-12] Defense
+        # [21] Phase (at end)
+        self.state_shape = [[22], [22]]
         self.action_shape = [None, None]
         
         # Encoding mappings
