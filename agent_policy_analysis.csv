@@ -1,0 +1,1681 @@
+Env,Agent,Down,Dist,Field,Top_Choice,Top_Prob,Pass_Prob,Run_Prob,Punt_Prob,FG_Prob
+nfl-bucketed,ppo,1,Short,Own 3,UNDER CENTER,0.948,0.021,0.979,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 8,UNDER CENTER,0.805,0.018,0.982,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 13,UNDER CENTER,0.409,0.016,0.983,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 18,SINGLEBACK,0.645,0.014,0.985,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 23,SINGLEBACK,0.785,0.02,0.98,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 28,SINGLEBACK,0.793,0.038,0.962,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 33,SINGLEBACK,0.598,0.089,0.911,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 38,EMPTY,0.619,0.162,0.838,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 43,EMPTY,0.81,0.298,0.702,0.0,0.0
+nfl-bucketed,ppo,1,Short,Own 48,EMPTY,0.918,0.534,0.466,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 47,EMPTY,0.962,0.76,0.24,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 42,EMPTY,0.979,0.887,0.112,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 37,EMPTY,0.986,0.949,0.051,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 32,EMPTY,0.99,0.976,0.023,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 27,EMPTY,0.993,0.988,0.012,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 22,EMPTY,0.995,0.994,0.006,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 17,EMPTY,0.996,0.997,0.003,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 12,EMPTY,0.997,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 7,EMPTY,0.998,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,1,Short,Opp 2,EMPTY,0.998,0.998,0.0,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 3,UNDER CENTER,0.996,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 8,UNDER CENTER,0.984,0.996,0.004,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 13,UNDER CENTER,0.923,0.984,0.016,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 18,UNDER CENTER,0.602,0.926,0.073,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 23,EMPTY,0.587,0.734,0.265,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 28,SINGLEBACK,0.621,0.458,0.542,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 33,SINGLEBACK,0.806,0.349,0.651,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 38,SINGLEBACK,0.788,0.4,0.599,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 43,SINGLEBACK,0.547,0.598,0.402,0.0,0.0
+nfl-bucketed,ppo,1,Med,Own 48,EMPTY,0.648,0.786,0.214,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 47,EMPTY,0.812,0.903,0.096,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 42,EMPTY,0.884,0.956,0.044,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 37,EMPTY,0.924,0.98,0.019,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 32,EMPTY,0.947,0.991,0.009,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 27,EMPTY,0.961,0.995,0.004,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 22,EMPTY,0.969,0.998,0.002,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 17,EMPTY,0.974,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 12,EMPTY,0.977,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 7,EMPTY,0.979,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,1,Med,Opp 2,EMPTY,0.979,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 3,UNDER CENTER,1.0,0.003,0.997,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 8,UNDER CENTER,0.999,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 13,UNDER CENTER,0.992,0.001,0.998,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 18,UNDER CENTER,0.95,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 23,UNDER CENTER,0.585,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 28,SINGLEBACK,0.525,0.002,0.998,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 33,SINGLEBACK,0.523,0.004,0.996,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 38,EMPTY,0.555,0.007,0.993,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 43,EMPTY,0.697,0.013,0.987,0.0,0.0
+nfl-bucketed,ppo,2,Short,Own 48,EMPTY,0.786,0.028,0.972,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 47,EMPTY,0.847,0.081,0.919,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 42,EMPTY,0.893,0.25,0.75,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 37,EMPTY,0.916,0.587,0.412,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 32,EMPTY,0.929,0.847,0.151,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 27,EMPTY,0.933,0.95,0.049,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 22,EMPTY,0.938,0.983,0.017,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 17,EMPTY,0.941,0.993,0.007,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 12,EMPTY,0.941,0.997,0.003,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 7,EMPTY,0.94,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,2,Short,Opp 2,EMPTY,0.94,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 18,UNDER CENTER,1.0,0.998,0.002,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 23,UNDER CENTER,0.996,0.988,0.012,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 28,UNDER CENTER,0.928,0.9,0.1,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 33,UNDER CENTER,0.372,0.567,0.433,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 38,SINGLEBACK,0.459,0.35,0.65,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 43,I_FORM,0.309,0.338,0.662,0.0,0.0
+nfl-bucketed,ppo,2,Med,Own 48,I_FORM,0.593,0.511,0.489,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 47,I_FORM,0.742,0.76,0.239,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 42,I_FORM,0.783,0.915,0.085,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 37,I_FORM,0.786,0.971,0.029,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 32,I_FORM,0.77,0.988,0.011,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 27,I_FORM,0.76,0.995,0.004,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 22,I_FORM,0.75,0.998,0.002,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 17,I_FORM,0.737,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 12,I_FORM,0.717,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 7,I_FORM,0.697,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Med,Opp 2,I_FORM,0.687,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 18,UNDER CENTER,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 23,UNDER CENTER,0.994,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 28,UNDER CENTER,0.926,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 33,UNDER CENTER,0.504,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 38,SHOTGUN,0.472,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 43,SHOTGUN,0.496,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Own 48,I_FORM,0.552,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 47,I_FORM,0.763,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 42,I_FORM,0.863,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 37,I_FORM,0.906,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 32,I_FORM,0.932,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 27,I_FORM,0.945,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 22,I_FORM,0.95,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 17,I_FORM,0.952,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 12,I_FORM,0.947,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 7,I_FORM,0.939,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,Long,Opp 2,I_FORM,0.931,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 18,UNDER CENTER,0.996,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 23,UNDER CENTER,0.961,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 28,UNDER CENTER,0.728,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 33,SHOTGUN,0.733,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 38,SHOTGUN,0.906,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 43,SHOTGUN,0.897,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Own 48,SHOTGUN,0.772,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 47,SHOTGUN,0.558,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 42,I_FORM,0.692,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 37,I_FORM,0.821,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 32,I_FORM,0.879,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 27,I_FORM,0.912,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 22,I_FORM,0.938,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 17,I_FORM,0.955,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 12,I_FORM,0.965,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 7,I_FORM,0.97,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,2,V.Long,Opp 2,I_FORM,0.973,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 3,UNDER CENTER,1.0,0.012,0.988,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 8,UNDER CENTER,1.0,0.003,0.997,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 13,UNDER CENTER,1.0,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 18,UNDER CENTER,1.0,0.0,1.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 23,UNDER CENTER,1.0,0.0,1.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 28,UNDER CENTER,0.998,0.0,0.998,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 33,UNDER CENTER,0.983,0.0,1.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 38,UNDER CENTER,0.777,0.0,0.999,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 43,SHOTGUN,0.802,0.0,1.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Own 48,SHOTGUN,0.964,0.0,1.0,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 47,SHOTGUN,0.974,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 42,SHOTGUN,0.963,0.002,0.997,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 37,SHOTGUN,0.948,0.006,0.994,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 32,SHOTGUN,0.931,0.022,0.978,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 27,SHOTGUN,0.921,0.099,0.9,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 22,SHOTGUN,0.913,0.414,0.586,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 17,SHOTGUN,0.902,0.8,0.199,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 12,SHOTGUN,0.893,0.955,0.045,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 7,SHOTGUN,0.884,0.988,0.012,0.0,0.0
+nfl-bucketed,ppo,3,Short,Opp 2,SHOTGUN,0.875,0.996,0.004,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 18,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 23,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 28,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 33,UNDER CENTER,0.988,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 38,UNDER CENTER,0.606,0.997,0.002,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 43,SHOTGUN,0.959,0.996,0.004,0.0,0.0
+nfl-bucketed,ppo,3,Med,Own 48,SHOTGUN,0.988,0.995,0.005,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 47,SHOTGUN,0.975,0.994,0.006,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 42,SHOTGUN,0.943,0.994,0.006,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 37,SHOTGUN,0.902,0.995,0.005,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 32,SHOTGUN,0.869,0.997,0.003,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 27,SHOTGUN,0.829,0.998,0.001,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 22,SHOTGUN,0.779,0.999,0.001,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 17,SHOTGUN,0.722,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 12,SHOTGUN,0.668,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 7,SHOTGUN,0.636,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Med,Opp 2,SHOTGUN,0.618,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 18,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 23,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 28,UNDER CENTER,0.988,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 33,UNDER CENTER,0.784,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 38,SHOTGUN,0.883,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 43,SHOTGUN,0.994,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Own 48,SHOTGUN,0.996,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 47,SHOTGUN,0.988,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 42,SHOTGUN,0.971,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 37,SHOTGUN,0.945,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 32,SHOTGUN,0.91,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 27,SHOTGUN,0.866,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 22,SHOTGUN,0.807,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 17,SHOTGUN,0.735,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 12,SHOTGUN,0.66,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 7,SHOTGUN,0.577,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,Long,Opp 2,SHOTGUN,0.504,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 18,UNDER CENTER,0.997,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 23,UNDER CENTER,0.961,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 28,UNDER CENTER,0.663,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 33,SHOTGUN,0.877,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 38,SHOTGUN,0.99,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 43,SHOTGUN,0.999,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Own 48,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 47,SHOTGUN,0.999,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 42,SHOTGUN,0.996,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 37,SHOTGUN,0.987,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 32,SHOTGUN,0.966,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 27,SHOTGUN,0.934,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 22,SHOTGUN,0.895,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 17,SHOTGUN,0.849,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 12,SHOTGUN,0.794,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 7,SHOTGUN,0.73,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,3,V.Long,Opp 2,SHOTGUN,0.651,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 3,UNDER CENTER,1.0,0.093,0.907,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 8,UNDER CENTER,1.0,0.028,0.972,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 13,UNDER CENTER,1.0,0.012,0.988,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 18,UNDER CENTER,1.0,0.006,0.994,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 23,UNDER CENTER,1.0,0.003,0.997,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 28,UNDER CENTER,1.0,0.002,0.998,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 33,UNDER CENTER,1.0,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 38,UNDER CENTER,0.999,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 43,UNDER CENTER,0.974,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Own 48,UNDER CENTER,0.518,0.0,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 47,SHOTGUN,0.967,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 42,SHOTGUN,0.998,0.001,0.999,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 37,SHOTGUN,1.0,0.002,0.998,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 32,SHOTGUN,1.0,0.004,0.996,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 27,SHOTGUN,0.999,0.009,0.99,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 22,SHOTGUN,0.999,0.032,0.967,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 17,SHOTGUN,0.999,0.119,0.881,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 12,SHOTGUN,0.998,0.384,0.616,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 7,SHOTGUN,0.997,0.744,0.256,0.0,0.0
+nfl-bucketed,ppo,4,Short,Opp 2,SHOTGUN,0.996,0.919,0.081,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 18,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 23,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 28,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 33,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 38,UNDER CENTER,0.993,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 43,UNDER CENTER,0.722,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Own 48,SHOTGUN,0.942,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 47,SHOTGUN,0.998,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 42,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 37,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 32,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 27,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 22,SHOTGUN,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 17,SHOTGUN,0.999,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 12,SHOTGUN,0.998,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 7,SHOTGUN,0.997,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Med,Opp 2,SHOTGUN,0.996,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 18,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 23,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 28,UNDER CENTER,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 33,UNDER CENTER,0.989,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 38,UNDER CENTER,0.822,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 43,SHOTGUN,0.875,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Own 48,SHOTGUN,0.994,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 47,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 42,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 37,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 32,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 27,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 22,SHOTGUN,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 17,SHOTGUN,0.999,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 12,SHOTGUN,0.998,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 7,SHOTGUN,0.996,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,Long,Opp 2,SHOTGUN,0.994,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 3,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 8,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 13,UNDER CENTER,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 18,UNDER CENTER,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 23,UNDER CENTER,0.989,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 28,UNDER CENTER,0.875,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 33,SHOTGUN,0.695,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 38,SHOTGUN,0.972,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 43,SHOTGUN,0.998,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Own 48,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 47,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 42,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 37,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 32,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 27,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 22,SHOTGUN,1.0,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 17,SHOTGUN,0.999,0.999,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 12,SHOTGUN,0.998,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 7,SHOTGUN,0.997,1.0,0.0,0.0,0.0
+nfl-bucketed,ppo,4,V.Long,Opp 2,SHOTGUN,0.995,1.0,0.0,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 3,SINGLEBACK,0.294,0.002,0.998,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 8,SINGLEBACK,0.3,0.142,0.858,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 13,SINGLEBACK,0.307,0.158,0.842,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 18,SINGLEBACK,0.313,0.176,0.824,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 23,SINGLEBACK,0.319,0.196,0.804,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 28,SINGLEBACK,0.326,0.217,0.783,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 33,SINGLEBACK,0.332,0.239,0.761,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 38,SINGLEBACK,0.333,0.264,0.736,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 43,SINGLEBACK,0.319,0.289,0.711,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Own 48,SINGLEBACK,0.305,0.316,0.684,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 47,SINGLEBACK,0.291,0.345,0.655,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 42,SINGLEBACK,0.277,0.363,0.637,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 37,SINGLEBACK,0.276,0.376,0.624,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 32,SINGLEBACK,0.275,0.391,0.609,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 27,SINGLEBACK,0.275,0.406,0.594,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 22,SINGLEBACK,0.272,0.421,0.579,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 17,SINGLEBACK,0.266,0.437,0.563,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 12,SINGLEBACK,0.259,0.453,0.547,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 7,SINGLEBACK,0.253,0.469,0.531,0.0,0.0
+nfl-bucketed,nfsp,1,Short,Opp 2,SINGLEBACK,0.246,0.484,0.516,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 3,SINGLEBACK,0.31,0.154,0.846,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 8,SINGLEBACK,0.322,0.171,0.829,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 13,SINGLEBACK,0.329,0.19,0.81,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 18,SINGLEBACK,0.336,0.211,0.789,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 23,SINGLEBACK,0.342,0.233,0.767,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 28,SINGLEBACK,0.338,0.257,0.743,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 33,SINGLEBACK,0.323,0.282,0.718,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 38,SINGLEBACK,0.309,0.309,0.691,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 43,SINGLEBACK,0.301,0.311,0.689,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Own 48,SINGLEBACK,0.301,0.312,0.688,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 47,SINGLEBACK,0.301,0.313,0.687,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 42,SINGLEBACK,0.3,0.314,0.686,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 37,SINGLEBACK,0.3,0.315,0.685,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 32,SINGLEBACK,0.299,0.316,0.684,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 27,SINGLEBACK,0.299,0.317,0.683,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 22,SINGLEBACK,0.299,0.318,0.682,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 17,SINGLEBACK,0.298,0.319,0.681,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 12,SINGLEBACK,0.298,0.319,0.681,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 7,SINGLEBACK,0.297,0.32,0.68,0.0,0.0
+nfl-bucketed,nfsp,1,Med,Opp 2,SINGLEBACK,0.297,0.321,0.679,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 3,SINGLEBACK,0.348,0.089,0.911,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 8,SINGLEBACK,0.36,0.096,0.904,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 13,SINGLEBACK,0.372,0.103,0.897,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 18,SINGLEBACK,0.384,0.116,0.884,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 23,SINGLEBACK,0.396,0.131,0.869,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 28,SINGLEBACK,0.409,0.147,0.853,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 33,SINGLEBACK,0.417,0.165,0.835,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 38,SINGLEBACK,0.401,0.185,0.815,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 43,SINGLEBACK,0.385,0.203,0.797,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Own 48,SINGLEBACK,0.38,0.205,0.795,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 47,SINGLEBACK,0.378,0.207,0.793,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 42,SINGLEBACK,0.377,0.209,0.791,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 37,SINGLEBACK,0.375,0.216,0.784,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 32,SINGLEBACK,0.372,0.227,0.773,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 27,SINGLEBACK,0.365,0.238,0.762,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 22,SINGLEBACK,0.358,0.25,0.75,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 17,SINGLEBACK,0.351,0.262,0.738,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 12,SINGLEBACK,0.344,0.274,0.726,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 7,SINGLEBACK,0.337,0.287,0.713,0.0,0.0
+nfl-bucketed,nfsp,2,Short,Opp 2,SINGLEBACK,0.33,0.301,0.699,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 3,SINGLEBACK,0.315,0.169,0.831,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 8,SINGLEBACK,0.326,0.18,0.82,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 13,SINGLEBACK,0.338,0.192,0.808,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 18,SINGLEBACK,0.35,0.204,0.796,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 23,SINGLEBACK,0.355,0.217,0.783,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 28,SINGLEBACK,0.35,0.215,0.785,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 33,SINGLEBACK,0.355,0.207,0.793,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 38,SINGLEBACK,0.36,0.2,0.8,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 43,SINGLEBACK,0.366,0.193,0.807,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Own 48,SINGLEBACK,0.371,0.186,0.814,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 47,SINGLEBACK,0.376,0.179,0.821,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 42,SINGLEBACK,0.381,0.172,0.828,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 37,SINGLEBACK,0.386,0.166,0.834,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 32,SINGLEBACK,0.392,0.16,0.84,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 27,SINGLEBACK,0.397,0.154,0.846,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 22,SINGLEBACK,0.402,0.148,0.852,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 17,SINGLEBACK,0.407,0.147,0.853,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 12,SINGLEBACK,0.412,0.149,0.851,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 7,SINGLEBACK,0.418,0.151,0.849,0.0,0.0
+nfl-bucketed,nfsp,2,Med,Opp 2,SINGLEBACK,0.421,0.153,0.847,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 3,SHOTGUN,0.346,0.715,0.285,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 8,SHOTGUN,0.332,0.718,0.282,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 13,SHOTGUN,0.321,0.704,0.296,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 18,SHOTGUN,0.314,0.689,0.311,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 23,SHOTGUN,0.304,0.674,0.326,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 28,SHOTGUN,0.294,0.659,0.341,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 33,SHOTGUN,0.284,0.643,0.357,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 38,SHOTGUN,0.274,0.628,0.372,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 43,SHOTGUN,0.265,0.611,0.389,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Own 48,SHOTGUN,0.255,0.595,0.405,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 47,SHOTGUN,0.246,0.578,0.422,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 42,SHOTGUN,0.237,0.561,0.439,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 37,SHOTGUN,0.229,0.544,0.456,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 32,SINGLEBACK,0.223,0.527,0.473,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 27,SINGLEBACK,0.229,0.51,0.49,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 22,SINGLEBACK,0.236,0.493,0.507,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 17,SINGLEBACK,0.243,0.475,0.525,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 12,SINGLEBACK,0.25,0.458,0.542,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 7,SINGLEBACK,0.258,0.441,0.559,0.0,0.0
+nfl-bucketed,nfsp,2,Long,Opp 2,SINGLEBACK,0.265,0.424,0.576,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 3,SHOTGUN,0.795,0.782,0.218,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 8,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 13,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 18,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 23,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 28,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 33,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 38,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 43,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Own 48,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 47,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 42,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 37,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 32,SHOTGUN,0.446,0.568,0.432,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 27,SHOTGUN,0.446,0.011,0.989,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 22,SHOTGUN,0.446,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 17,SHOTGUN,0.446,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 12,SINGLEBACK,0.747,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 7,SINGLEBACK,0.997,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,2,V.Long,Opp 2,SINGLEBACK,1.0,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 3,SINGLEBACK,0.329,0.162,0.838,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 8,SINGLEBACK,0.335,0.16,0.84,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 13,SINGLEBACK,0.34,0.179,0.821,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 18,SINGLEBACK,0.346,0.2,0.8,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 23,SINGLEBACK,0.351,0.223,0.777,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 28,SINGLEBACK,0.357,0.247,0.753,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 33,SINGLEBACK,0.351,0.25,0.75,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 38,SINGLEBACK,0.349,0.253,0.747,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 43,SINGLEBACK,0.348,0.255,0.745,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Own 48,SINGLEBACK,0.346,0.258,0.742,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 47,SINGLEBACK,0.345,0.26,0.74,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 42,SINGLEBACK,0.343,0.263,0.737,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 37,SINGLEBACK,0.342,0.266,0.734,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 32,SINGLEBACK,0.341,0.268,0.732,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 27,SINGLEBACK,0.339,0.271,0.729,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 22,SINGLEBACK,0.338,0.274,0.726,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 17,SINGLEBACK,0.336,0.277,0.723,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 12,SINGLEBACK,0.335,0.279,0.721,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 7,SINGLEBACK,0.333,0.282,0.718,0.0,0.0
+nfl-bucketed,nfsp,3,Short,Opp 2,SINGLEBACK,0.332,0.285,0.715,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 3,SINGLEBACK,0.279,0.301,0.699,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 8,SINGLEBACK,0.293,0.299,0.701,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 13,SINGLEBACK,0.308,0.295,0.705,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 18,SINGLEBACK,0.333,0.281,0.719,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 23,SINGLEBACK,0.341,0.268,0.732,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 28,SINGLEBACK,0.348,0.254,0.746,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 33,SINGLEBACK,0.356,0.241,0.759,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 38,SINGLEBACK,0.364,0.237,0.763,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 43,SINGLEBACK,0.372,0.235,0.765,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Own 48,SINGLEBACK,0.38,0.233,0.767,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 47,SINGLEBACK,0.386,0.232,0.768,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 42,SINGLEBACK,0.387,0.23,0.77,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 37,SINGLEBACK,0.388,0.228,0.772,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 32,SINGLEBACK,0.389,0.227,0.773,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 27,SINGLEBACK,0.39,0.225,0.775,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 22,SINGLEBACK,0.391,0.223,0.777,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 17,SINGLEBACK,0.392,0.222,0.778,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 12,SINGLEBACK,0.39,0.22,0.78,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 7,SINGLEBACK,0.389,0.218,0.782,0.0,0.0
+nfl-bucketed,nfsp,3,Med,Opp 2,SINGLEBACK,0.387,0.217,0.783,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 3,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 8,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 13,SHOTGUN,0.442,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 18,SHOTGUN,0.43,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 23,SHOTGUN,0.419,0.812,0.188,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 28,SHOTGUN,0.408,0.801,0.199,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 33,SHOTGUN,0.397,0.79,0.21,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 38,SHOTGUN,0.385,0.778,0.222,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 43,SHOTGUN,0.374,0.766,0.234,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Own 48,SHOTGUN,0.363,0.754,0.246,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 47,SHOTGUN,0.353,0.741,0.259,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 42,SHOTGUN,0.342,0.727,0.273,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 37,SHOTGUN,0.331,0.713,0.287,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 32,SHOTGUN,0.321,0.699,0.301,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 27,SHOTGUN,0.311,0.684,0.316,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 22,SHOTGUN,0.301,0.669,0.331,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 17,SHOTGUN,0.291,0.654,0.346,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 12,SHOTGUN,0.281,0.638,0.362,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 7,SHOTGUN,0.271,0.622,0.378,0.0,0.0
+nfl-bucketed,nfsp,3,Long,Opp 2,SHOTGUN,0.262,0.606,0.394,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 3,SHOTGUN,0.723,0.714,0.286,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 8,SHOTGUN,0.773,0.771,0.229,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 13,SHOTGUN,0.813,0.817,0.181,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 18,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 23,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 28,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 33,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 38,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 43,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Own 48,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 47,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 42,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 37,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 32,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 27,SHOTGUN,0.446,0.066,0.934,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 22,SHOTGUN,0.446,0.001,0.999,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 17,SHOTGUN,0.446,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 12,SHOTGUN,0.684,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 7,SINGLEBACK,0.982,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,3,V.Long,Opp 2,SINGLEBACK,1.0,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 3,SINGLEBACK,0.276,0.329,0.671,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 8,SINGLEBACK,0.281,0.269,0.731,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 13,SINGLEBACK,0.286,0.295,0.705,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 18,SINGLEBACK,0.296,0.301,0.699,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 23,SINGLEBACK,0.315,0.304,0.696,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 28,SINGLEBACK,0.319,0.307,0.693,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 33,SINGLEBACK,0.318,0.31,0.69,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 38,SINGLEBACK,0.316,0.313,0.687,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 43,SINGLEBACK,0.315,0.316,0.684,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Own 48,SINGLEBACK,0.313,0.319,0.681,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 47,SINGLEBACK,0.312,0.322,0.678,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 42,SINGLEBACK,0.311,0.325,0.675,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 37,SINGLEBACK,0.309,0.328,0.672,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 32,SINGLEBACK,0.308,0.331,0.669,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 27,SINGLEBACK,0.306,0.334,0.666,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 22,SINGLEBACK,0.305,0.337,0.663,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 17,SINGLEBACK,0.303,0.34,0.66,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 12,SINGLEBACK,0.302,0.343,0.657,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 7,SINGLEBACK,0.3,0.346,0.654,0.0,0.0
+nfl-bucketed,nfsp,4,Short,Opp 2,SINGLEBACK,0.299,0.349,0.651,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 3,SHOTGUN,0.255,0.626,0.374,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 8,SHOTGUN,0.224,0.54,0.46,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 13,SINGLEBACK,0.238,0.537,0.463,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 18,SINGLEBACK,0.239,0.535,0.465,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 23,SINGLEBACK,0.24,0.532,0.468,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 28,SINGLEBACK,0.241,0.53,0.47,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 33,SINGLEBACK,0.243,0.528,0.472,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 38,SINGLEBACK,0.244,0.525,0.475,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 43,SINGLEBACK,0.245,0.523,0.477,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Own 48,SINGLEBACK,0.246,0.521,0.479,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 47,SINGLEBACK,0.247,0.518,0.482,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 42,SINGLEBACK,0.248,0.516,0.484,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 37,SINGLEBACK,0.249,0.513,0.487,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 32,SINGLEBACK,0.25,0.511,0.489,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 27,SINGLEBACK,0.251,0.509,0.491,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 22,SINGLEBACK,0.252,0.506,0.494,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 17,SINGLEBACK,0.253,0.504,0.496,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 12,SINGLEBACK,0.254,0.501,0.499,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 7,SINGLEBACK,0.255,0.499,0.501,0.0,0.0
+nfl-bucketed,nfsp,4,Med,Opp 2,SINGLEBACK,0.256,0.497,0.503,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 3,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 8,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 13,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 18,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 23,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 28,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 33,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 38,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 43,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Own 48,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 47,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 42,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 37,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 32,SHOTGUN,0.438,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 27,SHOTGUN,0.428,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 22,SHOTGUN,0.427,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 17,SHOTGUN,0.425,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 12,SHOTGUN,0.423,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 7,SHOTGUN,0.422,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,Long,Opp 2,SHOTGUN,0.42,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 3,SHOTGUN,0.636,0.961,0.039,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 8,SHOTGUN,0.695,0.773,0.227,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 13,SHOTGUN,0.748,0.776,0.224,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 18,SHOTGUN,0.795,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 23,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 28,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 33,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 38,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 43,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Own 48,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 47,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 42,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 37,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 32,SHOTGUN,0.446,0.818,0.182,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 27,SHOTGUN,0.446,0.327,0.673,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 22,SHOTGUN,0.446,0.004,0.996,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 17,SHOTGUN,0.446,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 12,SHOTGUN,0.446,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 7,SINGLEBACK,0.896,0.0,1.0,0.0,0.0
+nfl-bucketed,nfsp,4,V.Long,Opp 2,SINGLEBACK,0.999,0.0,0.999,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 3,SINGLEBACK,0.211,0.533,0.467,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 8,SINGLEBACK,0.211,0.529,0.471,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 13,SINGLEBACK,0.211,0.526,0.474,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 18,SHOTGUN,0.389,0.524,0.476,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 23,SHOTGUN,0.431,0.522,0.478,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 28,SHOTGUN,0.423,0.52,0.48,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 33,SHOTGUN,0.4,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 38,SHOTGUN,0.256,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 43,UNDER CENTER,0.275,0.543,0.457,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Own 48,UNDER CENTER,0.24,0.657,0.343,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 47,UNDER CENTER,0.217,0.657,0.343,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 42,SINGLEBACK,0.211,0.618,0.382,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 37,SINGLEBACK,0.211,0.572,0.428,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 32,SINGLEBACK,0.211,0.545,0.455,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 27,SINGLEBACK,0.211,0.546,0.454,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 22,SINGLEBACK,0.25,0.54,0.46,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 17,SINGLEBACK,0.213,0.532,0.468,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 12,I_FORM,0.22,0.523,0.477,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 7,I_FORM,0.221,0.514,0.486,0.0,0.0
+nfl-bucketed,deep_cfr,1,Short,Opp 2,I_FORM,0.224,0.497,0.503,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 3,SINGLEBACK,0.211,0.528,0.472,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 8,SINGLEBACK,0.217,0.522,0.478,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 13,SINGLEBACK,0.214,0.516,0.484,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 18,SINGLEBACK,0.211,0.514,0.486,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 23,SINGLEBACK,0.211,0.513,0.487,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 28,SINGLEBACK,0.211,0.511,0.489,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 33,SINGLEBACK,0.211,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 38,SINGLEBACK,0.211,0.508,0.492,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 43,UNDER CENTER,0.208,0.506,0.494,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Own 48,UNDER CENTER,0.215,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 47,SINGLEBACK,0.211,0.504,0.496,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 42,SINGLEBACK,0.211,0.508,0.492,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 37,SINGLEBACK,0.211,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 32,SINGLEBACK,0.211,0.526,0.474,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 27,SINGLEBACK,0.211,0.529,0.471,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 22,SINGLEBACK,0.211,0.529,0.471,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 17,SINGLEBACK,0.211,0.525,0.475,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 12,SINGLEBACK,0.211,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 7,SINGLEBACK,0.211,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,1,Med,Opp 2,SINGLEBACK,0.211,0.502,0.498,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 3,SINGLEBACK,0.267,0.535,0.465,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 8,SINGLEBACK,0.277,0.525,0.475,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 13,SINGLEBACK,0.275,0.522,0.478,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 18,EMPTY,0.255,0.518,0.482,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 23,EMPTY,0.309,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 28,SHOTGUN,0.354,0.513,0.487,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 33,SHOTGUN,0.464,0.512,0.488,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 38,SHOTGUN,0.51,0.511,0.489,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 43,SHOTGUN,0.26,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Own 48,EMPTY,0.207,0.508,0.492,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 47,SHOTGUN,0.233,0.649,0.351,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 42,EMPTY,0.258,0.613,0.387,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 37,SINGLEBACK,0.222,0.569,0.431,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 32,EMPTY,0.223,0.511,0.489,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 27,EMPTY,0.261,0.502,0.498,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 22,SINGLEBACK,0.291,0.484,0.516,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 17,I_FORM,0.238,0.475,0.525,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 12,UNDER CENTER,0.236,0.564,0.436,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 7,I_FORM,0.224,0.516,0.484,0.0,0.0
+nfl-bucketed,deep_cfr,2,Short,Opp 2,UNDER CENTER,0.211,0.512,0.488,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 3,SINGLEBACK,0.211,0.521,0.479,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 8,EMPTY,0.286,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 13,EMPTY,0.263,0.512,0.488,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 18,EMPTY,0.233,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 23,UNDER CENTER,0.221,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 28,UNDER CENTER,0.207,0.506,0.494,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 33,SINGLEBACK,0.211,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 38,SINGLEBACK,0.211,0.503,0.497,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 43,SINGLEBACK,0.211,0.502,0.498,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Own 48,SINGLEBACK,0.225,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 47,SINGLEBACK,0.215,0.499,0.501,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 42,SINGLEBACK,0.273,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 37,SINGLEBACK,0.259,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 32,SINGLEBACK,0.215,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 27,SINGLEBACK,0.261,0.484,0.516,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 22,SINGLEBACK,0.248,0.446,0.554,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 17,SINGLEBACK,0.242,0.479,0.521,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 12,EMPTY,0.214,0.528,0.472,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 7,SINGLEBACK,0.211,0.514,0.486,0.0,0.0
+nfl-bucketed,deep_cfr,2,Med,Opp 2,UNDER CENTER,0.239,0.435,0.565,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 3,SINGLEBACK,0.237,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 8,SINGLEBACK,0.267,0.511,0.489,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 13,SINGLEBACK,0.295,0.506,0.494,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 18,SINGLEBACK,0.247,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 23,SINGLEBACK,0.211,0.496,0.504,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 28,SINGLEBACK,0.211,0.494,0.506,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 33,UNDER CENTER,0.21,0.493,0.507,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 38,SINGLEBACK,0.211,0.491,0.509,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 43,SINGLEBACK,0.208,0.49,0.51,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Own 48,UNDER CENTER,0.208,0.489,0.511,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 47,EMPTY,0.206,0.487,0.513,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 42,SINGLEBACK,0.232,0.485,0.515,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 37,SINGLEBACK,0.214,0.484,0.516,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 32,I_FORM,0.233,0.49,0.51,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 27,SINGLEBACK,0.212,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 22,SINGLEBACK,0.218,0.483,0.517,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 17,UNDER CENTER,0.208,0.457,0.543,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 12,I_FORM,0.207,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 7,I_FORM,0.256,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,2,Long,Opp 2,I_FORM,0.259,0.485,0.515,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 3,UNDER CENTER,0.23,0.536,0.464,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 8,UNDER CENTER,0.229,0.529,0.471,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 13,I_FORM,0.26,0.522,0.478,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 18,UNDER CENTER,0.863,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 23,UNDER CENTER,0.986,0.461,0.538,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 28,UNDER CENTER,0.512,0.467,0.533,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 33,EMPTY,0.802,0.482,0.517,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 38,EMPTY,0.62,0.397,0.602,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 43,UNDER CENTER,0.625,0.05,0.95,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Own 48,UNDER CENTER,0.844,0.042,0.958,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 47,UNDER CENTER,0.967,0.234,0.766,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 42,UNDER CENTER,0.542,0.292,0.708,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 37,SINGLEBACK,0.676,0.314,0.686,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 32,UNDER CENTER,0.487,0.348,0.652,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 27,UNDER CENTER,0.96,0.606,0.394,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 22,UNDER CENTER,0.994,0.622,0.378,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 17,UNDER CENTER,0.987,0.667,0.332,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 12,UNDER CENTER,0.975,0.585,0.413,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 7,UNDER CENTER,0.958,0.221,0.779,0.0,0.0
+nfl-bucketed,deep_cfr,2,V.Long,Opp 2,UNDER CENTER,0.496,0.27,0.73,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 3,SINGLEBACK,0.286,0.585,0.415,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 8,SINGLEBACK,0.276,0.564,0.436,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 13,SINGLEBACK,0.287,0.544,0.456,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 18,SINGLEBACK,0.279,0.525,0.475,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 23,EMPTY,0.296,0.52,0.48,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 28,EMPTY,0.316,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 33,EMPTY,0.271,0.484,0.516,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 38,EMPTY,0.232,0.473,0.527,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 43,EMPTY,0.216,0.477,0.523,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Own 48,EMPTY,0.251,0.481,0.519,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 47,EMPTY,0.231,0.485,0.515,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 42,EMPTY,0.215,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 37,SINGLEBACK,0.226,0.53,0.47,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 32,SHOTGUN,0.389,0.53,0.47,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 27,SINGLEBACK,0.328,0.532,0.468,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 22,EMPTY,0.327,0.53,0.47,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 17,UNDER CENTER,0.239,0.526,0.474,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 12,UNDER CENTER,0.287,0.418,0.582,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 7,UNDER CENTER,0.254,0.53,0.47,0.0,0.0
+nfl-bucketed,deep_cfr,3,Short,Opp 2,EMPTY,0.224,0.509,0.491,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 3,SINGLEBACK,0.209,0.52,0.48,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 8,SINGLEBACK,0.209,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 13,SINGLEBACK,0.211,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 18,SINGLEBACK,0.211,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 23,SINGLEBACK,0.211,0.513,0.487,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 28,SINGLEBACK,0.211,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 33,SINGLEBACK,0.211,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 38,SINGLEBACK,0.244,0.506,0.494,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 43,SINGLEBACK,0.241,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Own 48,SINGLEBACK,0.23,0.504,0.496,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 47,SINGLEBACK,0.221,0.503,0.497,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 42,SHOTGUN,0.224,0.503,0.497,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 37,SINGLEBACK,0.265,0.506,0.494,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 32,EMPTY,0.254,0.512,0.488,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 27,SHOTGUN,0.636,0.65,0.35,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 22,SINGLEBACK,0.356,0.491,0.509,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 17,SINGLEBACK,0.284,0.398,0.602,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 12,UNDER CENTER,0.217,0.4,0.6,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 7,EMPTY,0.216,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,3,Med,Opp 2,UNDER CENTER,0.273,0.4,0.6,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 3,UNDER CENTER,0.251,0.509,0.491,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 8,UNDER CENTER,0.241,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 13,UNDER CENTER,0.229,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 18,UNDER CENTER,0.219,0.504,0.496,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 23,UNDER CENTER,0.209,0.502,0.498,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 28,SINGLEBACK,0.21,0.499,0.501,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 33,UNDER CENTER,0.343,0.496,0.504,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 38,UNDER CENTER,0.282,0.495,0.505,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 43,SINGLEBACK,0.23,0.494,0.506,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Own 48,I_FORM,0.213,0.493,0.507,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 47,SINGLEBACK,0.236,0.492,0.508,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 42,SINGLEBACK,0.22,0.471,0.529,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 37,SINGLEBACK,0.257,0.463,0.537,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 32,SINGLEBACK,0.307,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 27,EMPTY,0.354,0.541,0.459,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 22,SINGLEBACK,0.231,0.535,0.465,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 17,UNDER CENTER,0.255,0.529,0.471,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 12,SHOTGUN,0.238,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 7,I_FORM,0.313,0.582,0.418,0.0,0.0
+nfl-bucketed,deep_cfr,3,Long,Opp 2,I_FORM,0.418,0.403,0.597,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 3,UNDER CENTER,0.271,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 8,UNDER CENTER,0.258,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 13,UNDER CENTER,0.245,0.512,0.488,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 18,UNDER CENTER,0.748,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 23,UNDER CENTER,0.913,0.507,0.493,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 28,UNDER CENTER,0.637,0.478,0.522,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 33,EMPTY,0.916,0.297,0.703,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 38,EMPTY,0.84,0.047,0.953,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 43,EMPTY,0.696,0.009,0.991,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Own 48,EMPTY,0.487,0.054,0.946,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 47,UNDER CENTER,0.625,0.481,0.519,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 42,UNDER CENTER,0.717,0.754,0.246,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 37,SINGLEBACK,0.697,0.847,0.153,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 32,SINGLEBACK,0.604,0.898,0.102,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 27,SINGLEBACK,0.345,0.958,0.042,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 22,UNDER CENTER,0.645,0.928,0.072,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 17,UNDER CENTER,0.783,0.865,0.135,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 12,UNDER CENTER,0.54,0.761,0.239,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 7,I_FORM,0.373,0.255,0.745,0.0,0.0
+nfl-bucketed,deep_cfr,3,V.Long,Opp 2,SINGLEBACK,0.73,0.026,0.973,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 3,SINGLEBACK,0.336,0.651,0.349,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 8,SINGLEBACK,0.328,0.632,0.368,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 13,SINGLEBACK,0.32,0.613,0.387,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 18,SINGLEBACK,0.305,0.594,0.406,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 23,SINGLEBACK,0.32,0.574,0.426,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 28,SINGLEBACK,0.324,0.553,0.447,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 33,SINGLEBACK,0.318,0.528,0.472,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 38,SINGLEBACK,0.306,0.466,0.534,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 43,EMPTY,0.258,0.414,0.586,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Own 48,SINGLEBACK,0.211,0.413,0.587,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 47,SINGLEBACK,0.212,0.44,0.56,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 42,SINGLEBACK,0.214,0.478,0.522,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 37,UNDER CENTER,0.229,0.515,0.485,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 32,SINGLEBACK,0.218,0.496,0.504,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 27,EMPTY,0.268,0.358,0.642,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 22,EMPTY,0.262,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 17,EMPTY,0.225,0.519,0.481,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 12,EMPTY,0.34,0.516,0.484,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 7,I_FORM,0.251,0.509,0.491,0.0,0.0
+nfl-bucketed,deep_cfr,4,Short,Opp 2,I_FORM,0.236,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 3,SINGLEBACK,0.211,0.546,0.454,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 8,SINGLEBACK,0.212,0.527,0.473,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 13,SINGLEBACK,0.215,0.518,0.482,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 18,SINGLEBACK,0.214,0.516,0.484,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 23,SINGLEBACK,0.211,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 28,SINGLEBACK,0.211,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 33,SINGLEBACK,0.211,0.517,0.483,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 38,SINGLEBACK,0.211,0.48,0.52,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 43,EMPTY,0.236,0.434,0.566,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Own 48,SINGLEBACK,0.255,0.434,0.566,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 47,SINGLEBACK,0.325,0.475,0.525,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 42,I_FORM,0.26,0.554,0.446,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 37,I_FORM,0.253,0.611,0.389,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 32,I_FORM,0.251,0.508,0.492,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 27,EMPTY,0.377,0.598,0.402,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 22,EMPTY,0.25,0.409,0.591,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 17,SINGLEBACK,0.407,0.438,0.562,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 12,I_FORM,0.317,0.369,0.631,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 7,EMPTY,0.289,0.51,0.49,0.0,0.0
+nfl-bucketed,deep_cfr,4,Med,Opp 2,SINGLEBACK,0.427,0.283,0.717,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 3,UNDER CENTER,0.242,0.503,0.497,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 8,UNDER CENTER,0.234,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 13,UNDER CENTER,0.225,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 18,UNDER CENTER,0.217,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 23,UNDER CENTER,0.209,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 28,EMPTY,0.527,0.498,0.502,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 33,SINGLEBACK,0.208,0.499,0.501,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 38,SINGLEBACK,0.207,0.499,0.501,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 43,I_FORM,0.23,0.494,0.506,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Own 48,SHOTGUN,0.212,0.487,0.513,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 47,EMPTY,0.229,0.548,0.452,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 42,SINGLEBACK,0.27,0.477,0.523,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 37,SHOTGUN,0.241,0.528,0.472,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 32,SINGLEBACK,0.279,0.57,0.43,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 27,SINGLEBACK,0.235,0.511,0.489,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 22,I_FORM,0.237,0.5,0.5,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 17,UNDER CENTER,0.259,0.324,0.676,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 12,EMPTY,0.29,0.481,0.519,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 7,SINGLEBACK,0.408,0.313,0.686,0.0,0.0
+nfl-bucketed,deep_cfr,4,Long,Opp 2,SINGLEBACK,0.796,0.1,0.899,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 3,UNDER CENTER,0.281,0.508,0.492,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 8,UNDER CENTER,0.274,0.505,0.495,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 13,UNDER CENTER,0.267,0.502,0.498,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 18,UNDER CENTER,0.261,0.499,0.501,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 23,EMPTY,0.373,0.022,0.978,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 28,UNDER CENTER,0.545,0.0,1.0,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 33,EMPTY,0.909,0.0,1.0,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 38,EMPTY,0.94,0.0,0.999,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 43,EMPTY,0.41,0.0,1.0,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Own 48,I_FORM,0.294,0.0,1.0,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 47,I_FORM,0.33,0.005,0.995,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 42,SINGLEBACK,0.336,0.558,0.442,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 37,SINGLEBACK,0.591,0.895,0.104,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 32,SHOTGUN,0.464,0.9,0.1,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 27,I_FORM,0.589,0.918,0.082,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 22,I_FORM,0.713,0.982,0.018,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 17,I_FORM,0.499,0.978,0.022,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 12,I_FORM,0.868,0.863,0.137,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 7,I_FORM,0.915,0.353,0.647,0.0,0.0
+nfl-bucketed,deep_cfr,4,V.Long,Opp 2,I_FORM,0.854,0.021,0.979,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 3,I_FORM,0.353,0.678,0.322,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 8,I_FORM,0.338,0.683,0.317,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 13,I_FORM,0.322,0.686,0.314,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 18,I_FORM,0.304,0.691,0.309,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 23,I_FORM,0.285,0.697,0.303,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 28,I_FORM,0.265,0.707,0.293,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 33,I_FORM,0.242,0.721,0.279,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 38,I_FORM,0.219,0.744,0.256,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 43,UNDER CENTER,0.222,0.772,0.228,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Own 48,UNDER CENTER,0.246,0.808,0.192,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 47,UNDER CENTER,0.276,0.848,0.152,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 42,UNDER CENTER,0.308,0.886,0.114,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 37,UNDER CENTER,0.344,0.919,0.081,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 32,UNDER CENTER,0.392,0.947,0.053,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 27,UNDER CENTER,0.443,0.966,0.034,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 22,UNDER CENTER,0.494,0.979,0.021,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 17,UNDER CENTER,0.541,0.988,0.012,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 12,UNDER CENTER,0.581,0.993,0.007,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 7,UNDER CENTER,0.616,0.996,0.004,0.0,0.0
+nfl-iig-bucketed,ppo,1,Short,Opp 2,UNDER CENTER,0.648,0.997,0.003,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 3,I_FORM,0.363,0.95,0.05,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 8,I_FORM,0.349,0.943,0.057,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 13,I_FORM,0.334,0.936,0.064,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 18,I_FORM,0.316,0.93,0.07,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 23,I_FORM,0.297,0.925,0.075,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 28,I_FORM,0.277,0.921,0.079,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 33,I_FORM,0.256,0.922,0.078,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 38,I_FORM,0.234,0.93,0.07,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 43,UNDER CENTER,0.223,0.94,0.06,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Own 48,UNDER CENTER,0.239,0.949,0.051,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 47,UNDER CENTER,0.269,0.959,0.041,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 42,UNDER CENTER,0.309,0.97,0.03,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 37,UNDER CENTER,0.359,0.98,0.02,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 32,UNDER CENTER,0.42,0.988,0.012,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 27,UNDER CENTER,0.479,0.993,0.007,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 22,UNDER CENTER,0.525,0.996,0.004,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 17,UNDER CENTER,0.564,0.998,0.002,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 12,UNDER CENTER,0.598,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 7,UNDER CENTER,0.626,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,1,Med,Opp 2,UNDER CENTER,0.649,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 3,I_FORM,0.379,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 8,I_FORM,0.365,0.509,0.491,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 13,I_FORM,0.351,0.522,0.478,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 18,I_FORM,0.336,0.537,0.463,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 23,I_FORM,0.319,0.552,0.448,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 28,I_FORM,0.3,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 33,I_FORM,0.277,0.596,0.404,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 38,I_FORM,0.251,0.631,0.369,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 43,UNDER CENTER,0.237,0.671,0.329,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Own 48,UNDER CENTER,0.246,0.711,0.289,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 47,UNDER CENTER,0.263,0.754,0.246,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 42,UNDER CENTER,0.296,0.802,0.198,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 37,UNDER CENTER,0.338,0.854,0.146,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 32,UNDER CENTER,0.392,0.905,0.095,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 27,UNDER CENTER,0.454,0.943,0.057,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 22,UNDER CENTER,0.51,0.967,0.033,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 17,UNDER CENTER,0.564,0.982,0.018,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 12,UNDER CENTER,0.611,0.99,0.01,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 7,UNDER CENTER,0.65,0.995,0.005,0.0,0.0
+nfl-iig-bucketed,ppo,2,Short,Opp 2,UNDER CENTER,0.681,0.997,0.003,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 3,I_FORM,0.383,0.996,0.004,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 8,I_FORM,0.37,0.995,0.005,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 13,I_FORM,0.357,0.995,0.005,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 18,I_FORM,0.343,0.994,0.006,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 23,I_FORM,0.33,0.993,0.007,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 28,I_FORM,0.316,0.993,0.007,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 33,I_FORM,0.3,0.992,0.008,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 38,I_FORM,0.28,0.992,0.008,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 43,I_FORM,0.256,0.992,0.008,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Own 48,UNDER CENTER,0.238,0.992,0.008,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 47,UNDER CENTER,0.248,0.992,0.008,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 42,UNDER CENTER,0.266,0.993,0.007,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 37,UNDER CENTER,0.302,0.994,0.006,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 32,UNDER CENTER,0.343,0.996,0.004,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 27,UNDER CENTER,0.414,0.997,0.003,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 22,UNDER CENTER,0.483,0.998,0.002,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 17,UNDER CENTER,0.541,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 12,UNDER CENTER,0.586,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 7,UNDER CENTER,0.618,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Med,Opp 2,UNDER CENTER,0.64,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 3,I_FORM,0.394,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 8,I_FORM,0.386,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 13,I_FORM,0.377,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 18,I_FORM,0.367,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 23,I_FORM,0.355,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 28,I_FORM,0.341,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 33,I_FORM,0.325,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 38,I_FORM,0.306,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 43,I_FORM,0.285,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Own 48,I_FORM,0.262,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 47,UNDER CENTER,0.24,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 42,UNDER CENTER,0.25,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 37,UNDER CENTER,0.267,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 32,UNDER CENTER,0.296,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 27,UNDER CENTER,0.337,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 22,UNDER CENTER,0.394,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 17,UNDER CENTER,0.46,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 12,UNDER CENTER,0.522,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 7,UNDER CENTER,0.566,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,Long,Opp 2,UNDER CENTER,0.594,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 3,I_FORM,0.376,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 8,I_FORM,0.372,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 13,I_FORM,0.368,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 18,I_FORM,0.363,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 23,I_FORM,0.357,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 28,I_FORM,0.348,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 33,I_FORM,0.34,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 38,I_FORM,0.329,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 43,I_FORM,0.314,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Own 48,I_FORM,0.298,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 47,I_FORM,0.279,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 42,I_FORM,0.256,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 37,UNDER CENTER,0.258,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 32,UNDER CENTER,0.267,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 27,UNDER CENTER,0.289,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 22,UNDER CENTER,0.316,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 17,UNDER CENTER,0.356,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 12,UNDER CENTER,0.403,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 7,UNDER CENTER,0.452,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,2,V.Long,Opp 2,UNDER CENTER,0.491,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 3,I_FORM,0.436,0.115,0.885,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 8,I_FORM,0.419,0.102,0.898,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 13,I_FORM,0.402,0.09,0.91,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 18,I_FORM,0.385,0.084,0.916,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 23,I_FORM,0.368,0.082,0.918,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 28,I_FORM,0.347,0.083,0.917,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 33,I_FORM,0.327,0.087,0.913,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 38,I_FORM,0.305,0.091,0.909,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 43,I_FORM,0.279,0.1,0.9,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Own 48,SINGLEBACK,0.296,0.113,0.887,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 47,SINGLEBACK,0.318,0.132,0.868,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 42,SINGLEBACK,0.338,0.158,0.842,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 37,SINGLEBACK,0.35,0.205,0.795,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 32,SINGLEBACK,0.354,0.28,0.72,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 27,SINGLEBACK,0.349,0.389,0.611,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 22,UNDER CENTER,0.354,0.529,0.471,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 17,UNDER CENTER,0.416,0.678,0.322,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 12,UNDER CENTER,0.496,0.814,0.186,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 7,UNDER CENTER,0.576,0.905,0.095,0.0,0.0
+nfl-iig-bucketed,ppo,3,Short,Opp 2,UNDER CENTER,0.642,0.954,0.046,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 3,I_FORM,0.412,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 8,I_FORM,0.407,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 13,I_FORM,0.4,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 18,I_FORM,0.393,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 23,I_FORM,0.385,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 28,I_FORM,0.375,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 33,I_FORM,0.363,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 38,I_FORM,0.35,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 43,I_FORM,0.335,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Own 48,I_FORM,0.317,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 47,I_FORM,0.294,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 42,UNDER CENTER,0.273,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 37,UNDER CENTER,0.271,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 32,UNDER CENTER,0.277,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 27,UNDER CENTER,0.289,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 22,UNDER CENTER,0.318,0.999,0.001,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 17,UNDER CENTER,0.364,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 12,UNDER CENTER,0.44,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 7,UNDER CENTER,0.515,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Med,Opp 2,UNDER CENTER,0.574,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 3,I_FORM,0.349,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 8,I_FORM,0.35,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 13,I_FORM,0.352,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 18,I_FORM,0.353,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 23,I_FORM,0.353,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 28,I_FORM,0.354,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 33,I_FORM,0.353,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 38,I_FORM,0.346,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 43,I_FORM,0.338,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Own 48,I_FORM,0.329,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 47,I_FORM,0.319,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 42,I_FORM,0.305,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 37,UNDER CENTER,0.291,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 32,UNDER CENTER,0.288,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 27,UNDER CENTER,0.291,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 22,UNDER CENTER,0.297,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 17,UNDER CENTER,0.316,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 12,UNDER CENTER,0.346,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 7,UNDER CENTER,0.405,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,Long,Opp 2,UNDER CENTER,0.464,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 3,SHOTGUN,0.444,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 8,SHOTGUN,0.434,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 13,SHOTGUN,0.425,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 18,SHOTGUN,0.414,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 23,SHOTGUN,0.405,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 28,SHOTGUN,0.403,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 33,SHOTGUN,0.405,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 38,SHOTGUN,0.41,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 43,SHOTGUN,0.415,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Own 48,SHOTGUN,0.42,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 47,SHOTGUN,0.423,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 42,SHOTGUN,0.431,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 37,SHOTGUN,0.437,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 32,SHOTGUN,0.441,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 27,SHOTGUN,0.45,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 22,SHOTGUN,0.463,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 17,SHOTGUN,0.48,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 12,SHOTGUN,0.492,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 7,SHOTGUN,0.506,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,3,V.Long,Opp 2,SHOTGUN,0.508,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 3,I_FORM,0.49,0.015,0.985,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 8,I_FORM,0.472,0.012,0.988,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 13,I_FORM,0.452,0.011,0.989,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 18,I_FORM,0.432,0.009,0.991,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 23,I_FORM,0.411,0.008,0.992,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 28,I_FORM,0.391,0.007,0.993,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 33,I_FORM,0.371,0.006,0.994,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 38,SINGLEBACK,0.365,0.006,0.994,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 43,SINGLEBACK,0.387,0.005,0.995,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Own 48,SINGLEBACK,0.414,0.005,0.995,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 47,SINGLEBACK,0.441,0.005,0.995,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 42,SINGLEBACK,0.471,0.005,0.995,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 37,SINGLEBACK,0.501,0.005,0.995,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 32,SINGLEBACK,0.536,0.006,0.994,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 27,SINGLEBACK,0.572,0.007,0.993,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 22,SINGLEBACK,0.603,0.008,0.992,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 17,SINGLEBACK,0.62,0.01,0.99,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 12,SINGLEBACK,0.626,0.015,0.985,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 7,SINGLEBACK,0.627,0.023,0.977,0.0,0.0
+nfl-iig-bucketed,ppo,4,Short,Opp 2,SINGLEBACK,0.61,0.039,0.961,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 3,I_FORM,0.499,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 8,I_FORM,0.5,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 13,I_FORM,0.499,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 18,I_FORM,0.498,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 23,I_FORM,0.495,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 28,I_FORM,0.493,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 33,I_FORM,0.489,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 38,I_FORM,0.485,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 43,I_FORM,0.479,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Own 48,I_FORM,0.473,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 47,I_FORM,0.463,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 42,I_FORM,0.452,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 37,I_FORM,0.44,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 32,I_FORM,0.421,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 27,I_FORM,0.401,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 22,I_FORM,0.372,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 17,I_FORM,0.334,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 12,UNDER CENTER,0.32,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 7,UNDER CENTER,0.339,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Med,Opp 2,UNDER CENTER,0.363,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 3,SHOTGUN,0.373,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 8,SHOTGUN,0.357,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 13,SHOTGUN,0.341,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 18,I_FORM,0.335,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 23,I_FORM,0.343,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 28,I_FORM,0.35,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 33,I_FORM,0.353,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 38,I_FORM,0.356,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 43,I_FORM,0.358,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Own 48,I_FORM,0.357,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 47,I_FORM,0.357,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 42,I_FORM,0.358,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 37,I_FORM,0.358,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 32,I_FORM,0.359,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 27,I_FORM,0.357,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 22,I_FORM,0.35,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 17,I_FORM,0.337,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 12,I_FORM,0.314,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 7,UNDER CENTER,0.298,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,Long,Opp 2,UNDER CENTER,0.307,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 3,SHOTGUN,0.655,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 8,SHOTGUN,0.641,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 13,SHOTGUN,0.624,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 18,SHOTGUN,0.607,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 23,SHOTGUN,0.599,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 28,SHOTGUN,0.597,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 33,SHOTGUN,0.596,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 38,SHOTGUN,0.596,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 43,SHOTGUN,0.597,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Own 48,SHOTGUN,0.598,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 47,SHOTGUN,0.602,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 42,SHOTGUN,0.601,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 37,SHOTGUN,0.606,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 32,SHOTGUN,0.61,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 27,SHOTGUN,0.613,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 22,SHOTGUN,0.614,0.999,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 17,SHOTGUN,0.613,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 12,SHOTGUN,0.614,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 7,SHOTGUN,0.622,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,ppo,4,V.Long,Opp 2,SHOTGUN,0.636,1.0,0.0,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 3,EMPTY,0.233,0.557,0.443,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 8,EMPTY,0.235,0.558,0.442,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 13,EMPTY,0.236,0.56,0.44,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 18,EMPTY,0.237,0.561,0.439,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 23,EMPTY,0.238,0.562,0.438,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 28,EMPTY,0.24,0.563,0.437,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 33,EMPTY,0.241,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 38,EMPTY,0.242,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 43,EMPTY,0.244,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Own 48,EMPTY,0.245,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 47,EMPTY,0.246,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 42,EMPTY,0.247,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 37,EMPTY,0.248,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 32,EMPTY,0.249,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 27,EMPTY,0.25,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 22,EMPTY,0.251,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 17,EMPTY,0.252,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 12,EMPTY,0.254,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 7,EMPTY,0.256,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Short,Opp 2,EMPTY,0.258,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 3,EMPTY,0.232,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 8,EMPTY,0.233,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 13,EMPTY,0.235,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 18,EMPTY,0.236,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 23,EMPTY,0.237,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 28,EMPTY,0.238,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 33,EMPTY,0.239,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 38,EMPTY,0.24,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 43,EMPTY,0.242,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Own 48,EMPTY,0.243,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 47,EMPTY,0.245,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 42,EMPTY,0.247,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 37,EMPTY,0.248,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 32,EMPTY,0.249,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 27,EMPTY,0.251,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 22,EMPTY,0.252,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 17,EMPTY,0.253,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 12,EMPTY,0.255,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 7,EMPTY,0.258,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,1,Med,Opp 2,EMPTY,0.26,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 3,EMPTY,0.222,0.556,0.444,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 8,EMPTY,0.223,0.558,0.442,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 13,EMPTY,0.224,0.559,0.441,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 18,EMPTY,0.225,0.561,0.439,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 23,EMPTY,0.226,0.562,0.438,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 28,EMPTY,0.227,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 33,EMPTY,0.229,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 38,EMPTY,0.23,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 43,EMPTY,0.232,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Own 48,EMPTY,0.234,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 47,EMPTY,0.236,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 42,EMPTY,0.237,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 37,EMPTY,0.239,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 32,EMPTY,0.24,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 27,EMPTY,0.241,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 22,EMPTY,0.243,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 17,EMPTY,0.244,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 12,EMPTY,0.246,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 7,EMPTY,0.248,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Short,Opp 2,EMPTY,0.249,0.583,0.417,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 3,EMPTY,0.225,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 8,EMPTY,0.226,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 13,EMPTY,0.227,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 18,EMPTY,0.228,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 23,EMPTY,0.229,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 28,EMPTY,0.23,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 33,EMPTY,0.231,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 38,EMPTY,0.232,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 43,EMPTY,0.233,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Own 48,EMPTY,0.235,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 47,EMPTY,0.236,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 42,EMPTY,0.237,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 37,EMPTY,0.239,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 32,EMPTY,0.241,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 27,EMPTY,0.243,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 22,EMPTY,0.245,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 17,EMPTY,0.247,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 12,EMPTY,0.25,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 7,EMPTY,0.252,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Med,Opp 2,EMPTY,0.254,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 3,EMPTY,0.231,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 8,EMPTY,0.232,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 13,EMPTY,0.233,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 18,EMPTY,0.234,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 23,EMPTY,0.236,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 28,EMPTY,0.237,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 33,EMPTY,0.238,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 38,EMPTY,0.24,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 43,EMPTY,0.242,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Own 48,EMPTY,0.243,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 47,EMPTY,0.245,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 42,EMPTY,0.247,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 37,EMPTY,0.248,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 32,EMPTY,0.249,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 27,EMPTY,0.25,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 22,EMPTY,0.251,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 17,EMPTY,0.252,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 12,EMPTY,0.254,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 7,EMPTY,0.256,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,Long,Opp 2,EMPTY,0.258,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 3,EMPTY,0.237,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 8,EMPTY,0.238,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 13,EMPTY,0.24,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 18,EMPTY,0.242,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 23,EMPTY,0.243,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 28,EMPTY,0.245,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 33,EMPTY,0.247,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 38,EMPTY,0.248,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 43,EMPTY,0.25,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Own 48,EMPTY,0.251,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 47,EMPTY,0.253,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 42,EMPTY,0.254,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 37,EMPTY,0.255,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 32,EMPTY,0.257,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 27,EMPTY,0.258,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 22,EMPTY,0.259,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 17,EMPTY,0.261,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 12,EMPTY,0.262,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 7,EMPTY,0.264,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,2,V.Long,Opp 2,EMPTY,0.265,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 3,SHOTGUN,0.218,0.561,0.439,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 8,SHOTGUN,0.219,0.562,0.438,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 13,SHOTGUN,0.219,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 18,SHOTGUN,0.22,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 23,SHOTGUN,0.22,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 28,SHOTGUN,0.221,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 33,SHOTGUN,0.221,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 38,EMPTY,0.223,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 43,EMPTY,0.224,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Own 48,EMPTY,0.226,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 47,EMPTY,0.227,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 42,EMPTY,0.229,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 37,EMPTY,0.231,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 32,EMPTY,0.233,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 27,EMPTY,0.235,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 22,EMPTY,0.237,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 17,EMPTY,0.239,0.583,0.417,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 12,EMPTY,0.241,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 7,EMPTY,0.243,0.585,0.415,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Short,Opp 2,EMPTY,0.244,0.586,0.414,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 3,EMPTY,0.219,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 8,EMPTY,0.22,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 13,EMPTY,0.221,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 18,EMPTY,0.222,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 23,EMPTY,0.223,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 28,EMPTY,0.224,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 33,EMPTY,0.226,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 38,EMPTY,0.227,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 43,EMPTY,0.229,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Own 48,EMPTY,0.231,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 47,EMPTY,0.232,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 42,EMPTY,0.234,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 37,EMPTY,0.235,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 32,EMPTY,0.236,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 27,EMPTY,0.238,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 22,EMPTY,0.239,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 17,EMPTY,0.24,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 12,EMPTY,0.242,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 7,EMPTY,0.244,0.583,0.417,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Med,Opp 2,EMPTY,0.246,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 3,EMPTY,0.229,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 8,EMPTY,0.23,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 13,EMPTY,0.23,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 18,EMPTY,0.232,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 23,EMPTY,0.233,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 28,EMPTY,0.234,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 33,EMPTY,0.234,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 38,EMPTY,0.236,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 43,EMPTY,0.237,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Own 48,EMPTY,0.238,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 47,EMPTY,0.239,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 42,EMPTY,0.24,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 37,EMPTY,0.241,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 32,EMPTY,0.242,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 27,EMPTY,0.244,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 22,EMPTY,0.245,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 17,EMPTY,0.246,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 12,EMPTY,0.248,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 7,EMPTY,0.249,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,3,Long,Opp 2,EMPTY,0.25,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 3,EMPTY,0.236,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 8,EMPTY,0.237,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 13,EMPTY,0.238,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 18,EMPTY,0.24,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 23,EMPTY,0.241,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 28,EMPTY,0.242,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 33,EMPTY,0.243,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 38,EMPTY,0.244,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 43,EMPTY,0.245,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Own 48,EMPTY,0.246,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 47,EMPTY,0.247,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 42,EMPTY,0.248,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 37,EMPTY,0.249,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 32,EMPTY,0.25,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 27,EMPTY,0.251,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 22,EMPTY,0.252,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 17,EMPTY,0.253,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 12,EMPTY,0.254,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 7,EMPTY,0.255,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,3,V.Long,Opp 2,EMPTY,0.256,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 3,I_FORM,0.223,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 8,I_FORM,0.223,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 13,I_FORM,0.223,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 18,I_FORM,0.223,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 23,I_FORM,0.223,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 28,I_FORM,0.223,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 33,I_FORM,0.223,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 38,I_FORM,0.222,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 43,I_FORM,0.222,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Own 48,EMPTY,0.222,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 47,EMPTY,0.223,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 42,EMPTY,0.225,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 37,EMPTY,0.226,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 32,EMPTY,0.228,0.583,0.417,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 27,EMPTY,0.23,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 22,EMPTY,0.232,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 17,EMPTY,0.234,0.585,0.415,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 12,EMPTY,0.236,0.586,0.414,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 7,EMPTY,0.237,0.587,0.413,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Short,Opp 2,EMPTY,0.239,0.588,0.412,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 3,SHOTGUN,0.22,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 8,SHOTGUN,0.22,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 13,SHOTGUN,0.221,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 18,SHOTGUN,0.221,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 23,SHOTGUN,0.222,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 28,EMPTY,0.223,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 33,EMPTY,0.224,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 38,EMPTY,0.226,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 43,EMPTY,0.227,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Own 48,EMPTY,0.229,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 47,EMPTY,0.23,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 42,EMPTY,0.231,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 37,EMPTY,0.232,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 32,EMPTY,0.233,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 27,EMPTY,0.234,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 22,EMPTY,0.235,0.583,0.417,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 17,EMPTY,0.237,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 12,EMPTY,0.239,0.584,0.416,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 7,EMPTY,0.24,0.585,0.415,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Med,Opp 2,EMPTY,0.242,0.586,0.414,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 3,EMPTY,0.226,0.563,0.437,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 8,EMPTY,0.227,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 13,EMPTY,0.228,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 18,EMPTY,0.228,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 23,EMPTY,0.229,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 28,EMPTY,0.23,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 33,EMPTY,0.231,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 38,EMPTY,0.232,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 43,EMPTY,0.233,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Own 48,EMPTY,0.234,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 47,EMPTY,0.235,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 42,EMPTY,0.236,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 37,EMPTY,0.237,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 32,EMPTY,0.239,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 27,EMPTY,0.24,0.577,0.423,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 22,EMPTY,0.241,0.578,0.422,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 17,EMPTY,0.242,0.579,0.421,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 12,EMPTY,0.244,0.58,0.42,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 7,EMPTY,0.245,0.581,0.419,0.0,0.0
+nfl-iig-bucketed,nfsp,4,Long,Opp 2,EMPTY,0.246,0.582,0.418,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 3,EMPTY,0.234,0.56,0.44,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 8,EMPTY,0.235,0.561,0.439,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 13,EMPTY,0.236,0.562,0.438,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 18,EMPTY,0.237,0.562,0.438,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 23,EMPTY,0.238,0.563,0.437,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 28,EMPTY,0.239,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 33,EMPTY,0.24,0.564,0.436,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 38,EMPTY,0.241,0.565,0.435,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 43,EMPTY,0.241,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Own 48,EMPTY,0.242,0.566,0.434,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 47,EMPTY,0.243,0.567,0.433,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 42,EMPTY,0.244,0.568,0.432,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 37,EMPTY,0.245,0.569,0.431,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 32,EMPTY,0.246,0.57,0.43,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 27,EMPTY,0.247,0.571,0.429,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 22,EMPTY,0.248,0.572,0.428,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 17,EMPTY,0.249,0.573,0.427,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 12,EMPTY,0.25,0.574,0.426,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 7,EMPTY,0.251,0.575,0.425,0.0,0.0
+nfl-iig-bucketed,nfsp,4,V.Long,Opp 2,EMPTY,0.252,0.576,0.424,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 3,SHOTGUN,0.2,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 8,SINGLEBACK,0.201,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 13,SINGLEBACK,0.203,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 18,SINGLEBACK,0.204,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 23,SINGLEBACK,0.205,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 28,SINGLEBACK,0.207,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 33,SINGLEBACK,0.208,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 38,SINGLEBACK,0.21,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 43,SINGLEBACK,0.211,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Own 48,SINGLEBACK,0.212,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 47,SINGLEBACK,0.214,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 42,SINGLEBACK,0.215,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 37,SINGLEBACK,0.217,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 32,SINGLEBACK,0.218,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 27,SINGLEBACK,0.219,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 22,SINGLEBACK,0.221,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 17,SINGLEBACK,0.222,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 12,SINGLEBACK,0.224,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 7,SINGLEBACK,0.225,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Short,Opp 2,SINGLEBACK,0.226,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 3,SHOTGUN,0.205,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 8,SHOTGUN,0.205,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 13,SHOTGUN,0.206,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 18,SINGLEBACK,0.207,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 23,SINGLEBACK,0.208,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 28,SINGLEBACK,0.21,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 33,SINGLEBACK,0.211,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 38,SINGLEBACK,0.213,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 43,SINGLEBACK,0.214,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Own 48,SINGLEBACK,0.215,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 47,SINGLEBACK,0.217,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 42,SINGLEBACK,0.218,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 37,SINGLEBACK,0.22,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 32,SINGLEBACK,0.221,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 27,SINGLEBACK,0.223,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 22,SINGLEBACK,0.224,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 17,SINGLEBACK,0.225,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 12,SINGLEBACK,0.227,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 7,SINGLEBACK,0.228,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,1,Med,Opp 2,SINGLEBACK,0.229,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 3,SHOTGUN,0.209,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 8,SHOTGUN,0.209,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 13,SHOTGUN,0.208,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 18,SHOTGUN,0.207,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 23,SINGLEBACK,0.207,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 28,SINGLEBACK,0.208,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 33,SINGLEBACK,0.209,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 38,SINGLEBACK,0.21,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 43,SINGLEBACK,0.211,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Own 48,SINGLEBACK,0.213,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 47,SINGLEBACK,0.214,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 42,SINGLEBACK,0.215,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 37,SINGLEBACK,0.217,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 32,SINGLEBACK,0.219,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 27,SINGLEBACK,0.22,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 22,SINGLEBACK,0.222,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 17,SINGLEBACK,0.223,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 12,SINGLEBACK,0.225,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 7,SINGLEBACK,0.226,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Short,Opp 2,SINGLEBACK,0.228,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 3,SHOTGUN,0.214,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 8,SHOTGUN,0.213,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 13,SHOTGUN,0.213,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 18,SHOTGUN,0.212,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 23,SINGLEBACK,0.215,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 28,SINGLEBACK,0.217,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 33,SINGLEBACK,0.22,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 38,SINGLEBACK,0.222,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 43,SINGLEBACK,0.223,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Own 48,SINGLEBACK,0.225,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 47,SINGLEBACK,0.226,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 42,SINGLEBACK,0.227,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 37,SINGLEBACK,0.228,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 32,SINGLEBACK,0.229,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 27,SINGLEBACK,0.23,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 22,SINGLEBACK,0.23,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 17,SINGLEBACK,0.231,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 12,SINGLEBACK,0.232,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 7,SINGLEBACK,0.233,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Med,Opp 2,SINGLEBACK,0.234,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 3,SHOTGUN,0.219,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 8,SHOTGUN,0.219,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 13,SHOTGUN,0.219,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 18,SHOTGUN,0.219,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 23,SINGLEBACK,0.219,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 28,SINGLEBACK,0.222,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 33,SINGLEBACK,0.224,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 38,SINGLEBACK,0.226,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 43,SINGLEBACK,0.228,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Own 48,SINGLEBACK,0.229,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 47,SINGLEBACK,0.231,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 42,SINGLEBACK,0.233,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 37,SINGLEBACK,0.234,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 32,SINGLEBACK,0.235,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 27,SINGLEBACK,0.237,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 22,SINGLEBACK,0.238,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 17,SINGLEBACK,0.24,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 12,SINGLEBACK,0.241,0.487,0.513,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 7,SINGLEBACK,0.242,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,Long,Opp 2,SINGLEBACK,0.243,0.485,0.515,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 3,SHOTGUN,0.225,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 8,SHOTGUN,0.224,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 13,SHOTGUN,0.224,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 18,SHOTGUN,0.223,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 23,SHOTGUN,0.223,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 28,SINGLEBACK,0.225,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 33,SINGLEBACK,0.227,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 38,SINGLEBACK,0.228,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 43,SINGLEBACK,0.23,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Own 48,SINGLEBACK,0.232,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 47,SINGLEBACK,0.234,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 42,SINGLEBACK,0.236,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 37,SINGLEBACK,0.237,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 32,SINGLEBACK,0.239,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 27,SINGLEBACK,0.241,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 22,SINGLEBACK,0.243,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 17,SINGLEBACK,0.244,0.487,0.513,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 12,SINGLEBACK,0.246,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 7,SINGLEBACK,0.248,0.485,0.515,0.0,0.0
+nfl-iig-bucketed,deep_cfr,2,V.Long,Opp 2,SINGLEBACK,0.249,0.485,0.515,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 3,SHOTGUN,0.219,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 8,SHOTGUN,0.218,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 13,SHOTGUN,0.218,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 18,SHOTGUN,0.217,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 23,SHOTGUN,0.216,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 28,SHOTGUN,0.216,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 33,SHOTGUN,0.215,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 38,SHOTGUN,0.214,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 43,SINGLEBACK,0.214,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Own 48,SINGLEBACK,0.215,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 47,SINGLEBACK,0.217,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 42,SINGLEBACK,0.218,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 37,SINGLEBACK,0.219,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 32,SINGLEBACK,0.22,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 27,SINGLEBACK,0.221,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 22,SINGLEBACK,0.222,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 17,SINGLEBACK,0.223,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 12,SINGLEBACK,0.224,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 7,SINGLEBACK,0.226,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Short,Opp 2,SINGLEBACK,0.227,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 3,SHOTGUN,0.223,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 8,SHOTGUN,0.222,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 13,SHOTGUN,0.221,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 18,SHOTGUN,0.221,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 23,SHOTGUN,0.22,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 28,SHOTGUN,0.219,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 33,SINGLEBACK,0.219,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 38,SINGLEBACK,0.221,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 43,SINGLEBACK,0.224,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Own 48,SINGLEBACK,0.226,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 47,SINGLEBACK,0.228,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 42,SINGLEBACK,0.23,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 37,SINGLEBACK,0.231,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 32,SINGLEBACK,0.233,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 27,SINGLEBACK,0.234,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 22,SINGLEBACK,0.236,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 17,SINGLEBACK,0.237,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 12,SINGLEBACK,0.238,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 7,SINGLEBACK,0.239,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Med,Opp 2,SINGLEBACK,0.24,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 3,SHOTGUN,0.228,0.512,0.488,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 8,SHOTGUN,0.228,0.51,0.49,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 13,SHOTGUN,0.227,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 18,SHOTGUN,0.227,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 23,SHOTGUN,0.226,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 28,SHOTGUN,0.225,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 33,SHOTGUN,0.225,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 38,SINGLEBACK,0.227,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 43,SINGLEBACK,0.229,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Own 48,SINGLEBACK,0.232,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 47,SINGLEBACK,0.235,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 42,SINGLEBACK,0.238,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 37,SINGLEBACK,0.24,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 32,SINGLEBACK,0.243,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 27,SINGLEBACK,0.245,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 22,SINGLEBACK,0.246,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 17,SINGLEBACK,0.248,0.487,0.513,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 12,SINGLEBACK,0.249,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 7,SINGLEBACK,0.251,0.485,0.515,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,Long,Opp 2,SINGLEBACK,0.252,0.484,0.516,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 3,SHOTGUN,0.233,0.517,0.483,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 8,SHOTGUN,0.233,0.515,0.485,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 13,SHOTGUN,0.233,0.514,0.486,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 18,SHOTGUN,0.232,0.512,0.488,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 23,SHOTGUN,0.232,0.51,0.49,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 28,SHOTGUN,0.232,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 33,SHOTGUN,0.231,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 38,SINGLEBACK,0.232,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 43,SINGLEBACK,0.235,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Own 48,SINGLEBACK,0.237,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 47,SINGLEBACK,0.24,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 42,SINGLEBACK,0.243,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 37,SINGLEBACK,0.245,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 32,SINGLEBACK,0.247,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 27,SINGLEBACK,0.249,0.489,0.511,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 22,SINGLEBACK,0.251,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 17,SINGLEBACK,0.252,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 12,SINGLEBACK,0.254,0.485,0.515,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 7,SINGLEBACK,0.256,0.483,0.517,0.0,0.0
+nfl-iig-bucketed,deep_cfr,3,V.Long,Opp 2,SINGLEBACK,0.257,0.482,0.518,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 3,SHOTGUN,0.228,0.513,0.487,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 8,SHOTGUN,0.228,0.512,0.488,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 13,SHOTGUN,0.228,0.511,0.489,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 18,SHOTGUN,0.227,0.509,0.491,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 23,SHOTGUN,0.226,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 28,SHOTGUN,0.226,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 33,SHOTGUN,0.225,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 38,SHOTGUN,0.224,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 43,SHOTGUN,0.224,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Own 48,SHOTGUN,0.223,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 47,SHOTGUN,0.222,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 42,SHOTGUN,0.221,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 37,SINGLEBACK,0.22,0.501,0.499,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 32,SINGLEBACK,0.222,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 27,SINGLEBACK,0.224,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 22,SINGLEBACK,0.225,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 17,SINGLEBACK,0.226,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 12,SINGLEBACK,0.227,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 7,SINGLEBACK,0.228,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Short,Opp 2,SINGLEBACK,0.229,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 3,SHOTGUN,0.232,0.516,0.484,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 8,SHOTGUN,0.231,0.515,0.485,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 13,SHOTGUN,0.23,0.513,0.487,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 18,SHOTGUN,0.229,0.512,0.488,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 23,SHOTGUN,0.228,0.51,0.49,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 28,SHOTGUN,0.227,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 33,SHOTGUN,0.227,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 38,SHOTGUN,0.226,0.506,0.494,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 43,SHOTGUN,0.225,0.504,0.496,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Own 48,SHOTGUN,0.224,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 47,SINGLEBACK,0.226,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 42,SINGLEBACK,0.228,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 37,SINGLEBACK,0.23,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 32,SINGLEBACK,0.232,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 27,SINGLEBACK,0.235,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 22,SINGLEBACK,0.236,0.495,0.505,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 17,SINGLEBACK,0.238,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 12,SINGLEBACK,0.239,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 7,SINGLEBACK,0.241,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Med,Opp 2,SINGLEBACK,0.242,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 3,SHOTGUN,0.237,0.522,0.478,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 8,SHOTGUN,0.237,0.521,0.479,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 13,SHOTGUN,0.236,0.519,0.481,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 18,SHOTGUN,0.236,0.517,0.483,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 23,SHOTGUN,0.235,0.514,0.486,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 28,SHOTGUN,0.234,0.512,0.488,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 33,SHOTGUN,0.233,0.509,0.491,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 38,SHOTGUN,0.233,0.507,0.493,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 43,SHOTGUN,0.232,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Own 48,SINGLEBACK,0.231,0.503,0.497,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 47,SINGLEBACK,0.234,0.5,0.5,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 42,SINGLEBACK,0.236,0.498,0.502,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 37,SINGLEBACK,0.239,0.496,0.504,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 32,SINGLEBACK,0.242,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 27,SINGLEBACK,0.244,0.493,0.507,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 22,SINGLEBACK,0.247,0.491,0.509,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 17,SINGLEBACK,0.249,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 12,SINGLEBACK,0.251,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 7,SINGLEBACK,0.253,0.487,0.513,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,Long,Opp 2,SINGLEBACK,0.255,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 3,SHOTGUN,0.243,0.526,0.474,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 8,SHOTGUN,0.242,0.524,0.476,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 13,SHOTGUN,0.242,0.522,0.478,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 18,SHOTGUN,0.241,0.52,0.48,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 23,SHOTGUN,0.241,0.518,0.482,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 28,SHOTGUN,0.24,0.515,0.485,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 33,SHOTGUN,0.239,0.513,0.487,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 38,SHOTGUN,0.239,0.51,0.49,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 43,SHOTGUN,0.238,0.508,0.492,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Own 48,SHOTGUN,0.237,0.505,0.495,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 47,SINGLEBACK,0.238,0.502,0.498,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 42,SINGLEBACK,0.242,0.499,0.501,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 37,SINGLEBACK,0.244,0.497,0.503,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 32,SINGLEBACK,0.247,0.494,0.506,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 27,SINGLEBACK,0.25,0.492,0.508,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 22,SINGLEBACK,0.253,0.49,0.51,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 17,SINGLEBACK,0.256,0.488,0.512,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 12,SINGLEBACK,0.259,0.486,0.514,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 7,SINGLEBACK,0.261,0.484,0.516,0.0,0.0
+nfl-iig-bucketed,deep_cfr,4,V.Long,Opp 2,SINGLEBACK,0.264,0.482,0.518,0.0,0.0
