@@ -188,7 +188,8 @@ def train(args):
                 agents[0].train() 
                 
                 if i % args.evaluate_every == 0:
-                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+                    # Select Player 0's reward (scalar) to prevent list/array logging issues
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0][0])
                 
                 if i % args.checkpoint_every == 0 and i > 0:
                     save_checkpoint(log_dir, i, agents, args.agent)
@@ -207,7 +208,8 @@ def train(args):
                         agents[p_id].feed(ts)
 
                 if i % args.evaluate_every == 0:
-                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+                    # Select Player 0's reward (scalar) to prevent list/array logging issues
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0][0])
 
                 if i % args.checkpoint_every == 0 and i > 0:
                     save_checkpoint(log_dir, i, agents, args.agent)
@@ -233,7 +235,8 @@ def train(args):
                     step_counter = 0
 
                 if i % args.evaluate_every == 0:
-                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0])
+                    # Select Player 0's reward (scalar) to prevent list/array logging issues
+                    logger.log_performance(i, tournament(eval_env, args.num_eval_games)[0][0])
 
                 if i % args.checkpoint_every == 0 and i > 0:
                     save_checkpoint(log_dir, i, agents, args.agent)
