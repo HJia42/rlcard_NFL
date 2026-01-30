@@ -194,8 +194,7 @@ def train(args):
                     save_checkpoint(log_dir, i, agents, args.agent)
                     
             # Save Final
-            agents[0].save_path = log_dir
-            agents[0].save_model(args.num_episodes)
+            save_checkpoint(log_dir, args.num_episodes, agents, args.agent)
 
         elif args.agent == 'nfsp' or args.agent == 'dqn':
             # NFSP Loop
