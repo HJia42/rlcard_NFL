@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting Extended Training (Version 3 - Fix Std Env - Parallel)"
+echo "Starting Extended Training (Version 3.1 - Fix Std Env - Parallel)"
 
 # Parallel execution with reduced episodes for Speed
 export OMP_NUM_THREADS=1
