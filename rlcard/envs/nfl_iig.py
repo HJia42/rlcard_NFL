@@ -54,7 +54,7 @@ class NFLIIGEnv(Env):
     
     def get_payoffs(self):
         """Return the EPA payoffs."""
-        return np.array(self.game.payoffs) if hasattr(self.game, 'payoffs') else np.zeros(2)
+        return self.game.get_payoffs()
     
     def _decode_action(self, action_id):
         """Decode action ID to game action."""
